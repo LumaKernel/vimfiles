@@ -138,7 +138,7 @@ vmap <C-K> <Plug>(caw:hatpos:toggle)
 "}}}
 
 " Tab系{{{
-set list listchars=tab:\▸\- " 不可視文字を可視化(タブが「▸-」と表示される)
+set list listchars=tab:\>\- " 不可視文字を可視化(タブが「>-」と表示される)
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
 set shiftwidth=2 " 行頭でのTab文字の表示幅
