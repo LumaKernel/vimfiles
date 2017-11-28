@@ -4,8 +4,8 @@
 
 ```
 cd ~
-git clone https://github.com/LumaKernel/dotfiles
-cd dotfiles
+git clone https://github.com/LumaKernel/vimfiles
+cd vimfiles
 chmod +x viminit.sh
 ./viminit.sh
 ```
