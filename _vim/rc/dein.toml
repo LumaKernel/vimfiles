@@ -28,6 +28,9 @@ repo = 'tomasr/molokai'
 [[plugins]]
 repo = 'tyru/restart.vim'
 
+[[plugins]]
+repo = 'vim-scripts/TwitVim'
+
 # vimproc
 [[plugins]]
 repo = 'Shougo/vimproc.vim'

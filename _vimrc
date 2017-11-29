@@ -3,10 +3,6 @@ augroup myvimrc
   autocmd!
 augroup END
 
-" reset key maps
-" for reload
-mapclear
-
 "}}}
 
 " バンドルのセットアップ {{{
@@ -82,6 +78,8 @@ set foldmethod=marker
 " + 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
+nnoremap <C-J> j
+nmap <C-K> j
 
 " + vimrcをすぐに編集
 nnoremap <F5><F5> :vsplit $MYVIMRC<CR>
@@ -132,11 +130,6 @@ cnoremap <C-D> <DEL>
 
 " }}}
 
-" caw.vimの設定{{{
-nmap <C-K> <Plug>(caw:hatpos:toggle)
-vmap <C-K> <Plug>(caw:hatpos:toggle)
-"}}}
-
 " Tab系{{{
 set list listchars=tab:\▸\- " 不可視文字を可視化(タブが「▸-」と表示される)
 set expandtab " Tab文字を半角スペースにする
@@ -157,5 +150,24 @@ set wrapscan
 set hlsearch
 " ESC連打でハイライト解除
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
+"}}}
+
+" プラグイン各種の設定{{{
+
+" + caw.vimの設定{{{
+nnoremap <C-K> <Plug>(caw:hatpos:toggle)
+vmap <C-K> <Plug>(caw:hatpos:toggle)
+" + }}}
+
+" + TwitVim{{{
+if has('mac')
+  let twitvim_browser_cmd = 'open'
+endif
+let twitvim_force_ssl = 1
+let twitvim_count = 40
+
+nnoremap <SPACE>t :PosttoTwitter<CR>
+" +}}}
+
 "}}}
 
