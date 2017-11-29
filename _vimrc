@@ -1,9 +1,3 @@
-" vimrc 再読込の設定{{{
-augroup myvimrc
-  autocmd!
-augroup END
-"}}}
-
 " バンドルのセットアップ {{{
 " + プラグインが実際にインストールされるディレクトリ
 let s:dein_dir = expand('~/.cache/dein')
@@ -85,7 +79,6 @@ nnoremap <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
 " + タブ切り替えなど{{{
 nnoremap <expr> ts ":split "
 nnoremap <expr> tv ":vsplit "
-nnoremap <expr> tt ":tabnew "
 
 nnoremap th <C-w>h
 nnoremap tj <C-w>j
@@ -143,28 +136,17 @@ set incsearch
 set wrapscan
 " 検索語をハイライト表示
 set hlsearch
-" ESC連打でハイライト解除
+" ハイライト解除
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 "}}}
 
-" プラグイン各種の設定{{{
-
-" + caw.vimの設定{{{
-nnoremap <C-K> <Plug>(caw:hatpos:toggle)
-vmap <C-K> <Plug>(caw:hatpos:toggle)
-" + }}}
-
-" + TwitVim{{{
-if has('mac')
-  let twitvim_browser_cmd = 'open'
-endif
-let twitvim_force_ssl = 1
-let twitvim_count = 40
-
-nnoremap <SPACE>t :PosttoTwitter<CR>
-" +}}}
-
-"}}}
+" 行末スペースハイライト{{{
+augroup HighlightTrailingSpaces
+  autocmd!
+  autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
+  autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
+augroup END
+" }}}
 
 " GVIMの設定{{{
 if has('gui')

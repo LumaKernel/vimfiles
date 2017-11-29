@@ -19,6 +19,10 @@ on_ft = 'toml'
 # comment out
 [[plugins]]
 repo = 'tyru/caw.vim'
+hook_add = '''
+nnoremap <C-K> <Plug>(caw:hatpos:toggle)
+vmap <C-K> <Plug>(caw:hatpos:toggle)
+'''
 
 # molokai
 [[plugins]]
@@ -30,6 +34,32 @@ repo = 'tyru/restart.vim'
 
 [[plugins]]
 repo = 'vim-scripts/TwitVim'
+hook_add = '''
+  if has('mac')
+    let twitvim_browser_cmd = 'open'
+  endif
+  " TODO : for windows
+  let twitvim_force_ssl = 1
+  let twitvim_count = 40
+
+  nnoremap <SPACE>t :PosttoTwitter<CR>
+'''
+
+# Haskell{{{
+
+[[plugins]]
+repo = 'dag/vim2hs'
+
+[[plugins]]
+repo = 'eagletmt/ghcmod-vim'
+hook_add = '''
+  augroup ghcmodcheck
+    " autocmd! BufWritePost <buffer> GhcModCheckAsync
+    " Todo :
+  augroup END
+'''
+
+# }}}
 
 # vimproc
 [[plugins]]
