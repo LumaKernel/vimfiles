@@ -2,7 +2,6 @@
 augroup myvimrc
   autocmd!
 augroup END
-
 "}}}
 
 " バンドルのセットアップ {{{
@@ -16,7 +15,7 @@ if &runtimepath !~# '/dein.vim'
   if !isdirectory(s:dein_repo_dir)
     execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
   endif
-  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+  execute 'set runtimepath^=' . s:dein_repo_dir
 endif
 
 " + プラグイン初期化
@@ -45,11 +44,6 @@ endif
 
 " 基本的な見た目の設定{{{
 syntax on
-colorscheme molokai
-set guifont=Osaka-Mono:h14
-set t_Co=256
-set lines=55
-set columns=160
 
 set number " 行番号を表示
 set cursorline " 現在の行を強調表示
@@ -81,11 +75,12 @@ nnoremap k gk
 nnoremap <C-J> j
 nmap <C-K> j
 
-" + vimrcをすぐに編集
+" + vimrc関係をすぐに編集
 nnoremap <F5><F5> :vsplit $MYVIMRC<CR>
+nnoremap <F5>g :vsplit $MYGVIMRC<CR>
 nnoremap <F5>d :execute "vsplit" g:dein<CR>
 nnoremap <F5>l :execute "vsplit" g:dein_lazy<CR>
-nnoremap <F6> :source $MYVIMRC<CR>
+nnoremap <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
 
 " + タブ切り替えなど{{{
 nnoremap <expr> ts ":split "
@@ -131,7 +126,7 @@ cnoremap <C-D> <DEL>
 " }}}
 
 " Tab系{{{
-set list listchars=tab:\▸\- " 不可視文字を可視化(タブが「▸-」と表示される)
+set list listchars=tab:\>\- " 不可視文字を可視化(タブが「>-」と表示される)
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
 set shiftwidth=2 " 行頭でのTab文字の表示幅
@@ -170,4 +165,17 @@ nnoremap <SPACE>t :PosttoTwitter<CR>
 " +}}}
 
 "}}}
+
+" GVIMの設定{{{
+if has('gui')
+  set guioptions+=e
+  set guioptions-=m " メニューバーを消す
+  set guioptions-=T " ツールバーを消す
+  " スクロールバーを消す
+  set guioptions-=r
+  set guioptions-=R
+  set guioptions-=l
+  set guioptions-=L
+endif
+" }}}
 
