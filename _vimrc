@@ -143,9 +143,14 @@ nmap <Esc><Esc> :nohlsearch<CR><Esc>
 " 行末スペースハイライト{{{
 augroup HighlightTrailingSpaces
   autocmd!
+  au InsertEnter * call StartHighlightTrailingSpaces()
   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
   autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
 augroup END
+
+function! StartHighlightTrailingSpaces()
+  echo "test"
+endfunction
 " }}}
 
 " GVIMの設定{{{
