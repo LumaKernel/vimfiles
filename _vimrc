@@ -161,3 +161,11 @@ if has('gui')
 endif
 " }}}
 
+" 見た目の設定 for CUI{{{
+colorscheme molokai
+set guifont=Myrica\ M:h12,Osaka-Mono:h14
+set t_Co=256
+set lines=55
+set columns=160
+"}}}
+

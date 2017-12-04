@@ -20,7 +20,7 @@ on_ft = 'toml'
 [[plugins]]
 repo = 'tyru/caw.vim'
 hook_add = '''
-  nnoremap <C-K> <Plug>(caw:hatpos:toggle)
+  nmap <C-K> <Plug>(caw:hatpos:toggle)
   vmap <C-K> <Plug>(caw:hatpos:toggle)
 '''
 
