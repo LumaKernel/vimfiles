@@ -60,6 +60,8 @@ set hidden " バッファが編集中でもその他のファイルを開ける�
 set showcmd " 入力中のコマンドをステータスに表示する
 
 set foldmethod=marker
+
+cd ~
 "}}}
 
 " キーバインド{{{

@@ -49,7 +49,7 @@ hook_add = '''
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-  nnoremap <SPACE>n :NERDTreeToggle<CR>
+  nnoremap <silent> <SPACE>n :NERDTreeToggle<CR>
 '''
 
 # Haskell{{{
