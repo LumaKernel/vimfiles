@@ -48,6 +48,7 @@ set visualbell " ビープ音を可視化
 set showmatch " 括弧入力時の対応する括弧を表示
 set laststatus=2 " ステータスラインを常に表示
 set wildmode=list:longest " コマンドラインの補完
+set notitle
 "}}}
 
 " 基本設定{{{
@@ -68,6 +69,17 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <C-J> j
 nmap <C-K> j
+
+" + 矢印キー禁止
+noremap <LEFT> <NOP>
+noremap <RIGHT> <NOP>
+noremap <UP> <NOP>
+noremap <DOWN> <NOP>
+
+noremap! <LEFT> <NOP>
+noremap! <RIGHT> <NOP>
+noremap! <UP> <NOP>
+noremap! <DOWN> <NOP>
 
 " + vimrc関係をすぐに編集
 nnoremap <F5><F5> :vsplit $MYVIMRC<CR>
@@ -98,24 +110,26 @@ nnoremap t< <C-w><
 nnoremap t+ <C-w>+
 nnoremap t- <C-w>-
 
-nnoremap tn gt 
-nnoremap tp gT 
+nnoremap tn gt
+nnoremap tp gT
 
 nnoremap tq :q<CR>
+
+" タブで開く、を上書き
+nnoremap tt <Nop>
 " + }}}
 
 " + スペースキー関係
 nnoremap <SPACE> <Nop>
 nnoremap <SPACE>r :reg<CR>
 
-" + コマンドモード中はCTRLで移動できるように
-cnoremap <C-H> <LEFT>
-cnoremap <C-J> <DOWN>
-cnoremap <C-K> <UP>
-cnoremap <C-L> <RIGHT>
+" + コマンド/インサート モード中はCTRLで移動できるように
+noremap! <C-H> <LEFT>
+noremap! <C-J> <DOWN>
+noremap! <C-K> <UP>
+noremap! <C-L> <RIGHT>
 " + Delキー
-cnoremap <C-D> <DEL>
-
+noremap! <C-D> <DEL>
 " }}}
 
 " Tab系{{{
