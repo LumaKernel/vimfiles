@@ -68,6 +68,13 @@ hook_add = '''
 
 # }}}
 
+# C++{{{
+[[plugins]]
+repo = 'vim-jp/cpp-vim'
+
+
+# }}}
+
 # vimproc
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
