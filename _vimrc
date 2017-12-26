@@ -69,8 +69,6 @@ cd ~
 " + 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
-nnoremap <C-J> j
-nmap <C-K> j
 
 " + 矢印キー禁止
 noremap <LEFT> <NOP>
@@ -126,10 +124,10 @@ nnoremap <SPACE> <Nop>
 nnoremap <SPACE>r :reg<CR>
 
 " + コマンド/インサート モード中はCTRLで移動できるように
-noremap! <C-H> <LEFT>
-noremap! <C-J> <DOWN>
-noremap! <C-K> <UP>
-noremap! <C-L> <RIGHT>
+cnoremap <C-H> <LEFT>
+cnoremap <C-J> <DOWN>
+cnoremap <C-K> <UP>
+cnoremap <C-L> <RIGHT>
 " + Delキー
 noremap! <C-D> <DEL>
 " }}}
