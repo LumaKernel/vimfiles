@@ -63,6 +63,7 @@ set showcmd " 入力中のコマンドをステータスに表示する
 set foldmethod=marker
 
 cd ~
+set mouse=
 "}}}
 
 " キーバインド{{{
