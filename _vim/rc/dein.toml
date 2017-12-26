@@ -57,6 +57,10 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'Xuyuanp/nerdtree-git-plugin'
+depends = ['nerdtree']
+
+[[plugins]]
 repo = 'Shougo/vimshell.vim'
 depends = ['vimproc.vim']
 
