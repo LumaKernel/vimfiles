@@ -49,6 +49,10 @@ hook_add = '''
   nnoremap <SPACE>t :PosttoTwitter<CR>
 '''
 
+# gitgutter
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
 # NERDTree
 [[plugins]]
 repo = 'scrooloose/nerdtree'
