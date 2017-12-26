@@ -133,6 +133,10 @@ cnoremap <C-L> <RIGHT>
 noremap! <C-D> <DEL>
 " }}}
 
+" NERDTree {{{
+au FileType nerdtree nmap <buffer> za o
+" }}}
+
 " Tab系{{{
 set list listchars=tab:\>\- " 不可視文字を可視化(タブが「>-」と表示される)
 set expandtab " Tab文字を半角スペースにする
@@ -158,7 +162,6 @@ nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
 " 行末スペースハイライト{{{
 augroup HighlightTrailingSpaces
   autocmd!
-  au InsertEnter * call StartHighlightTrailingSpaces()
   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
   autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
 augroup END

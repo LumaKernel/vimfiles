@@ -28,6 +28,10 @@ hook_add = '''
 [[plugins]]
 repo = 'tomasr/molokai'
 
+# typescript
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+
 # restart
 [[plugins]]
 repo = 'tyru/restart.vim'
