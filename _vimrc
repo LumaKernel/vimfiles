@@ -164,7 +164,14 @@ augroup HighlightTrailingSpaces
 augroup END
 " }}}
 
+" vimとFinder, terminalへの橋渡し{{{
+if has('mac')
+  command! Term silent !open -a Terminal.app .
+endif
 
+nnoremap <silent> <SPACE>e :!open .<CR>
+nnoremap <silent> <SPACE>o :Term<CR>
+"}}}
 
 " GVIMの設定{{{
 if has('gui')
