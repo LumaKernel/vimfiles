@@ -83,11 +83,11 @@ noremap! <UP> <NOP>
 noremap! <DOWN> <NOP>
 
 " + vimrc関係をすぐに編集
-nnoremap <F5><F5> :vsplit $MYVIMRC<CR>
-nnoremap <F5>g :vsplit $MYGVIMRC<CR>
-nnoremap <F5>d :execute "vsplit" g:dein<CR>
-nnoremap <F5>l :execute "vsplit" g:dein_lazy<CR>
-nnoremap <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
+nnoremap <silent> <F5><F5> :vsplit $MYVIMRC<CR>
+nnoremap <silent> <F5>g :vsplit $MYGVIMRC<CR>
+nnoremap <silent> <F5>d :execute "vsplit" g:dein<CR>
+nnoremap <silent> <F5>l :execute "vsplit" g:dein_lazy<CR>
+nnoremap <silent> <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
 
 " + タブ切り替えなど{{{
 nnoremap <expr> ts ":split "
@@ -122,7 +122,7 @@ nnoremap tt <Nop>
 
 " + スペースキー関係
 nnoremap <SPACE> <Nop>
-nnoremap <SPACE>r :reg<CR>
+nnoremap <silent> <SPACE>r :reg<CR>
 
 " + コマンド/インサート モード中はCTRLで移動できるように
 cnoremap <C-H> <LEFT>
@@ -152,7 +152,7 @@ set wrapscan
 " 検索語をハイライト表示
 set hlsearch
 " ハイライト解除
-nmap <Esc><Esc> :nohlsearch<CR><Esc>
+nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
 "}}}
 
 " 行末スペースハイライト{{{
