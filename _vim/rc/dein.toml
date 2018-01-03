@@ -20,8 +20,8 @@ on_ft = 'toml'
 [[plugins]]
 repo = 'tyru/caw.vim'
 hook_add = '''
-  nmap <C-K> <Plug>(caw:hatpos:toggle)
-  vmap <C-K> <Plug>(caw:hatpos:toggle)
+  nmap <C-I> <Plug>(caw:hatpos:toggle)
+  vmap <C-I> <Plug>(caw:hatpos:toggle)
 '''
 
 # molokai
