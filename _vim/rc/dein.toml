@@ -72,6 +72,9 @@ depends = ['vimproc.vim']
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets']
+hook_add = '''
+  let g:neosnippet#snippets_directory='~/vimfiles/snippets/'
+'''
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'

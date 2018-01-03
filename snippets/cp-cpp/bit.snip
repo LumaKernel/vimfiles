@@ -1,0 +1,38 @@
+snippet bit
+options head
+abbr bit
+    /// --- BIT Library {{{ ///
+
+    template<int SIZE, typename T = ll>
+    struct BIT{
+      T data[SIZE+1];
+      int n = SIZE;
+
+      BIT(){
+        REP(i, n+1) data[i] = 0;
+      }
+
+      void add(int i, T x) {
+        i++;
+        while(i<=n){
+          data[i] += x;
+          i += i&-i;
+        }
+      }
+      ll sum(int i) {
+        if(i<0) return 0;
+        i++;
+        ll s = 0;
+        while(i>0){
+          s += data[i];
+          i -= i&-i;
+        }
+        return s;
+      }
+      ll range(int a, int b) {
+        return sum(b) - sum(a-1);
+      }
+    };
+
+    /// }}}--- ///
+
