@@ -176,13 +176,13 @@ augroup END
 
 " vimとFinder, terminalへの橋渡し{{{
 if has('mac')
-  command! Term silent !open -a Terminal.app .
+  nnoremap <silent> <SPACE>e :!open .<CR>
+  nnoremap <silent> <SPACE>o :!open -a Terminal.app .<CR>
 elseif has('win32')
-  command! Term silent !cmd
+  nnoremap <silent> <expr> "\<SPACE>e :!explorer\<CR>"
+  nnoremap <silent> <SPACE>o :!cmd<CR>
 endif
 
-nnoremap <silent> <SPACE>e :!open .<CR>
-nnoremap <silent> <SPACE>o :Term<CR>
 "}}}
 
 " GVIMの設定{{{
