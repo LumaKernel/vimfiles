@@ -52,6 +52,7 @@ set showmatch " 括弧入力時の対応する括弧を表示
 set laststatus=2 " ステータスラインを常に表示
 set wildmode=list:longest " コマンドラインの補完
 set notitle
+set nowrap
 "}}}
 
 " 基本設定{{{
@@ -130,13 +131,14 @@ nnoremap tt <Nop>
 nnoremap <SPACE> <Nop>
 nnoremap <silent> <SPACE>r :reg<CR>
 
-" + コマンド/インサート モード中はCTRLで移動できるように
+" + コマンド モード中はCTRLで移動できるように
 cnoremap <C-H> <LEFT>
 cnoremap <C-J> <DOWN>
 cnoremap <C-K> <UP>
 cnoremap <C-L> <RIGHT>
 " + Delキー
-noremap! <C-D> <DEL>
+inoremap <C-L> <DEL>
+cnoremap <C-D> <DEL>
 
 nnoremap <SPACE>c ggVG"*y
 
@@ -149,7 +151,7 @@ au FileType nerdtree nnoremap <buffer> <silent> <SPACE>n :q<CR>
 
 " Tab系{{{
 set list " 不可視文字表示
-set listchars=tab:\»-,trail:-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化(タブが「>-」と表示される)
+set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化(タブが「>-」と表示される)
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
 set shiftwidth=2 " 行頭でのTab文字の表示幅
@@ -219,4 +221,10 @@ set t_Co=256
 set lines=55
 set columns=160
 "}}}
+
+" 競プロ向け設定{{{
+
+au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
+
+" }}}
 
