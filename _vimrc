@@ -1,3 +1,6 @@
+" エンコーディング次第でうまくいかないプラグイン対策
+set encoding=utf-8
+
 " バンドルのセットアップ {{{
 " + プラグインが実際にインストールされるディレクトリ
 let s:dein_dir = expand('~/.cache/dein')
@@ -62,6 +65,9 @@ set showcmd " 入力中のコマンドをステータスに表示する
 
 set foldmethod=marker
 
+" undofileが作られるディレクトリを調整
+set undodir=~/var/vim/undo
+
 cd ~
 set mouse=
 "}}}
@@ -83,10 +89,10 @@ noremap! <UP> <NOP>
 noremap! <DOWN> <NOP>
 
 " + vimrc関係をすぐに編集
-nnoremap <silent> <F5><F5> :vsplit $MYVIMRC<CR>
-nnoremap <silent> <F5>g :vsplit $MYGVIMRC<CR>
-nnoremap <silent> <F5>d :execute "vsplit" g:dein<CR>
-nnoremap <silent> <F5>l :execute "vsplit" g:dein_lazy<CR>
+nnoremap <silent> <F5><F5> :vsplit ~/vimfiles/_vimrc<CR>
+nnoremap <silent> <F5>g :vsplit ~/vimfiels/_gvimrc<CR>
+nnoremap <silent> <F5>d :execute "vsplit ~/vimfiles/_vim/rc/dein.toml"<CR>
+nnoremap <silent> <F5>l :execute "vsplit ~/vimfiles/_vim/rc/dein_lazy.toml"<CR>
 nnoremap <silent> <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
 
 " + タブ切り替えなど{{{
@@ -135,6 +141,7 @@ noremap! <C-D> <DEL>
 
 " NERDTree {{{
 au FileType nerdtree nmap <buffer> za o
+au FileType nerdtree nnoremap <buffer> <silent> <SPACE>n :q<CR>
 " }}}
 
 " Tab系{{{
@@ -170,6 +177,8 @@ augroup END
 " vimとFinder, terminalへの橋渡し{{{
 if has('mac')
   command! Term silent !open -a Terminal.app .
+elseif has('win32')
+  command! Term silent !cmd
 endif
 
 nnoremap <silent> <SPACE>e :!open .<CR>

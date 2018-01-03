@@ -57,7 +57,7 @@ repo = 'airblade/vim-gitgutter'
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-  nnoremap <silent> <SPACE>n :NERDTreeToggle<CR>
+  nnoremap <silent> <SPACE>n :NERDTree<CR>
 '''
 
 [[plugins]]
@@ -81,8 +81,8 @@ hook_add = '''
   xmap <C-k> <Plug>(neosnippet_expand_or_target)
 '''
 
-# neocomplete
-[[plugins]]# {{{
+# neocomplete {{{
+[[plugins]]
 repo = 'Shougo/neocomplete.vim'
 hook_add = '''
 	let g:acp_enableAtStartup = 0
@@ -199,13 +199,14 @@ hook_add = '''
 repo = 'vim-jp/cpp-vim'
 
 [[plugins]]
-repo = 'osho-manga/vim-snowdrop'
+repo = 'osyo-manga/vim-snowdrop'
 depends = ['neocomplete.vim']
 
 # }}}
 
-# vimproc
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
-build = 'make'
+hook_add = '''
+  let g:vimproc#download_windows_dll = 1
+'''
 
