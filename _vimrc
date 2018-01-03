@@ -145,10 +145,29 @@ au FileType nerdtree nnoremap <buffer> <silent> <SPACE>n :q<CR>
 " }}}
 
 " Tab系{{{
-set list listchars=tab:\>\- " 不可視文字を可視化(タブが「>-」と表示される)
+set list " 不可視文字表示
+set listchars=tab:\»-,trail:-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化(タブが「>-」と表示される)
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
 set shiftwidth=2 " 行頭でのTab文字の表示幅
+
+" 全角スペース・行末のスペース・タブの可視化
+" 全角スペース可視化のみ抜粋
+if has("syntax")
+    syntax on
+    " PODバグ対策
+    syn sync fromstart
+    function! ActivateInvisibleIndicator()
+        " 下の行の"　"は全角スペース
+        syntax match InvisibleJISX0208Space "　" display containedin=ALL
+        highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
+    endfunction
+    augroup invisible
+        autocmd! invisible
+        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+    augroup END
+endif
+
 "}}}
 
 " 検索系{{{
@@ -165,14 +184,6 @@ set hlsearch
 " ハイライト解除
 nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
 "}}}
-
-" 行末スペースハイライト{{{
-augroup HighlightTrailingSpaces
-  autocmd!
-  autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
-  autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
-augroup END
-" }}}
 
 " vimとFinder, terminalへの橋渡し{{{
 if has('mac')
