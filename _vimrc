@@ -90,7 +90,7 @@ noremap! <DOWN> <NOP>
 
 " + vimrc関係をすぐに編集
 nnoremap <silent> <F5><F5> :vsplit ~/vimfiles/_vimrc<CR>
-nnoremap <silent> <F5>g :vsplit ~/vimfiels/_gvimrc<CR>
+nnoremap <silent> <F5>g :vsplit ~/vimfiles/_gvimrc<CR>
 nnoremap <silent> <F5>d :execute "vsplit ~/vimfiles/_vim/rc/dein.toml"<CR>
 nnoremap <silent> <F5>l :execute "vsplit ~/vimfiles/_vim/rc/dein_lazy.toml"<CR>
 nnoremap <silent> <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
