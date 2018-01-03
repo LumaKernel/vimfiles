@@ -137,6 +137,9 @@ cnoremap <C-K> <UP>
 cnoremap <C-L> <RIGHT>
 " + Delキー
 noremap! <C-D> <DEL>
+
+nnoremap <SPACE>c ggVG"*y
+
 " }}}
 
 " NERDTree {{{
