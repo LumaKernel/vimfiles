@@ -1,6 +1,6 @@
 snippet     c
-options     word indent
-  g++ main.cpp -o a
+options     word
+  g++ main${0:TARGET}.cpp -o a -O0 -std=c++14 -Wall -Wextra -static-libstdc++
 
 snippet     r
 options     word

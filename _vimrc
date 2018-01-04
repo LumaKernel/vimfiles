@@ -53,6 +53,7 @@ set laststatus=2 " ステータスラインを常に表示
 set wildmode=list:longest " コマンドラインの補完
 set notitle
 set nowrap
+set noundofile
 "}}}
 
 " 基本設定{{{
@@ -140,8 +141,6 @@ cnoremap <C-L> <RIGHT>
 inoremap <C-L> <DEL>
 cnoremap <C-D> <DEL>
 
-nnoremap <SPACE>c ggVG"*y
-
 " }}}
 
 " NERDTree {{{
@@ -225,6 +224,12 @@ set columns=160
 " 競プロ向け設定{{{
 
 au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
+
+nnoremap <SPACE>c ggVG"*y
+nnoremap <SPACE>v ggVGs<ESC>"*p
+nmap <SPACE>t ggVGstemp
+nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
+nnoremap <silent> <SPACE>b :Unite buffer<CR>
 
 " }}}
 
