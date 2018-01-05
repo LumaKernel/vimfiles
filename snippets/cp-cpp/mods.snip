@@ -1,0 +1,36 @@
+snippet     mods
+options     head
+  /// --- MOD Library {{{ ///
+  // N
+  
+  int modadd(int a, int b) { return (((a + b) % MOD ) + MOD ) % MOD; }
+  void sadd(int &a, int b) { a = modadd(a, b); }
+  int modmul(int a, int b) { return (ll) a * b % MOD; }
+  void smul(int &a, int b) { a = modmul(a, b); }
+  int pow(int a, ll b) {
+    int res = 1;
+    while(b){
+      if(b & 1) smul(res, a);
+      smul(a, a);
+    }
+    return res;
+  }
+  int inv(int a) {
+    return pow(a, MOD - 2);
+  }
+  
+  int fact[N], invFact[N];
+  
+  void initFactorial() {
+    fact[0] = 1;
+    FOR(i, 1, N) fact[i] = mul(fact[i - 1], i);
+    invFact[N-1] = inv(fact[N - 1]);
+    RREP(i, N-1) invFact[i] = mul(invFact[i + 1], i + 1);
+  }
+  
+  int C(int n, int r) {
+    return mul(fact[n], mul(invFact[r], invFact[n - r]));
+  }
+  
+  /// }}}--- ///
+

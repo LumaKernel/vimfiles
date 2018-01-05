@@ -1,3 +1,6 @@
+" エンコーディング次第でうまくいかないプラグイン対策
+set encoding=utf-8
+
 " バンドルのセットアップ {{{
 " + プラグインが実際にインストールされるディレクトリ
 let s:dein_dir = expand('~/.cache/dein')
@@ -49,6 +52,8 @@ set showmatch " 括弧入力時の対応する括弧を表示
 set laststatus=2 " ステータスラインを常に表示
 set wildmode=list:longest " コマンドラインの補完
 set notitle
+set nowrap
+set noundofile
 "}}}
 
 " 基本設定{{{
@@ -61,6 +66,9 @@ set hidden " バッファが編集中でもその他のファイルを開ける�
 set showcmd " 入力中のコマンドをステータスに表示する
 
 set foldmethod=marker
+
+" undofileが作られるディレクトリを調整
+set undodir=~/var/vim/undo
 
 cd ~
 set mouse=
@@ -83,10 +91,10 @@ noremap! <UP> <NOP>
 noremap! <DOWN> <NOP>
 
 " + vimrc関係をすぐに編集
-nnoremap <silent> <F5><F5> :vsplit $MYVIMRC<CR>
-nnoremap <silent> <F5>g :vsplit $MYGVIMRC<CR>
-nnoremap <silent> <F5>d :execute "vsplit" g:dein<CR>
-nnoremap <silent> <F5>l :execute "vsplit" g:dein_lazy<CR>
+nnoremap <silent> <F5><F5> :vsplit ~/vimfiles/_vimrc<CR>
+nnoremap <silent> <F5>g :vsplit ~/vimfiles/_gvimrc<CR>
+nnoremap <silent> <F5>d :execute "vsplit ~/vimfiles/_vim/rc/dein.toml"<CR>
+nnoremap <silent> <F5>l :execute "vsplit ~/vimfiles/_vim/rc/dein_lazy.toml"<CR>
 nnoremap <silent> <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
 
 " + タブ切り替えなど{{{
@@ -124,24 +132,46 @@ nnoremap tt <Nop>
 nnoremap <SPACE> <Nop>
 nnoremap <silent> <SPACE>r :reg<CR>
 
-" + コマンド/インサート モード中はCTRLで移動できるように
+" + コマンド モード中はCTRLで移動できるように
 cnoremap <C-H> <LEFT>
 cnoremap <C-J> <DOWN>
 cnoremap <C-K> <UP>
 cnoremap <C-L> <RIGHT>
 " + Delキー
-noremap! <C-D> <DEL>
+inoremap <C-L> <DEL>
+cnoremap <C-D> <DEL>
+
 " }}}
 
 " NERDTree {{{
 au FileType nerdtree nmap <buffer> za o
+au FileType nerdtree nnoremap <buffer> <silent> <SPACE>n :q<CR>
 " }}}
 
 " Tab系{{{
-set list listchars=tab:\>\- " 不可視文字を可視化(タブが「>-」と表示される)
+set list " 不可視文字表示
+set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化(タブが「>-」と表示される)
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
 set shiftwidth=2 " 行頭でのTab文字の表示幅
+
+" 全角スペース・行末のスペース・タブの可視化
+" 全角スペース可視化のみ抜粋
+if has("syntax")
+    syntax on
+    " PODバグ対策
+    syn sync fromstart
+    function! ActivateInvisibleIndicator()
+        " 下の行の"　"は全角スペース
+        syntax match InvisibleJISX0208Space "　" display containedin=ALL
+        highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
+    endfunction
+    augroup invisible
+        autocmd! invisible
+        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+    augroup END
+endif
+
 "}}}
 
 " 検索系{{{
@@ -159,21 +189,15 @@ set hlsearch
 nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
 "}}}
 
-" 行末スペースハイライト{{{
-augroup HighlightTrailingSpaces
-  autocmd!
-  autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
-  autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
-augroup END
-" }}}
-
 " vimとFinder, terminalへの橋渡し{{{
 if has('mac')
-  command! Term silent !open -a Terminal.app .
+  nnoremap <silent> <SPACE>e :!open .<CR>
+  nnoremap <silent> <SPACE>o :!open -a Terminal.app .<CR>
+elseif has('win32')
+  nnoremap <silent> <expr> <SPACE>e ":!explorer .\<CR>"
+  nnoremap <silent> <SPACE>o :!cmd<CR>
 endif
 
-nnoremap <silent> <SPACE>e :!open .<CR>
-nnoremap <silent> <SPACE>o :Term<CR>
 "}}}
 
 " GVIMの設定{{{
@@ -196,4 +220,16 @@ set t_Co=256
 set lines=55
 set columns=160
 "}}}
+
+" 競プロ向け設定{{{
+
+au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
+
+nnoremap <SPACE>c ggVG"*y
+nnoremap <SPACE>v ggVGs<ESC>"*p
+nmap <SPACE>t ggVGstemp
+nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
+nnoremap <silent> <SPACE>b :Unite buffer<CR>
+
+" }}}
 
