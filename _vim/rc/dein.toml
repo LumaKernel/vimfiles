@@ -28,9 +28,21 @@ hook_add = '''
 [[plugins]]
 repo = 'tomasr/molokai'
 
-# typescript
+# typescript{{{
+[[plugins]]
+repo = 'Quramy/tsuquyomi'
+hook_add = '''
+  augroup typescript_key_mapping
+    au!
+    autocmd FileType typescript nmap <buffer> <SPACE>c <Plug>(TsuquyomiRenameSymbol)
+  augroup END
+'''
+
+# + highlight
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
+
+# }}}
 
 # restart
 [[plugins]]
