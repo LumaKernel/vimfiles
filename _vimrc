@@ -150,7 +150,7 @@ au FileType nerdtree nnoremap <buffer> <silent> <SPACE>n :q<CR>
 
 " Tab系{{{
 set list " 不可視文字表示
-set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化(タブが「>-」と表示される)
+set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
 set shiftwidth=2 " 行頭でのTab文字の表示幅

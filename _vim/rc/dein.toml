@@ -35,9 +35,11 @@ depends = ['unite.vim']
 # ステータスバー改造{{{
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
+if = '''!has('gui_macvim')'''
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
+if = '''!has('gui_macvim')'''
 depends = ['ale', 'vim-airline-themes']
 hook_add = '''
   let g:airline_mode_map = {
@@ -55,7 +57,9 @@ hook_add = '''
       \ }
 
   " パワーラインでかっこよく
-  let g:airline_powerline_fonts = 1
+  if !has('mac')
+    let g:airline_powerline_fonts = 1
+  endif
   " カラーテーマ指定してかっこよく
   let g:airline_theme = 'badwolf'
   " タブバーをかっこよく
