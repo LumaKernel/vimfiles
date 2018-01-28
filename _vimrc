@@ -226,10 +226,13 @@ set columns=160
 au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
 nnoremap <SPACE>c ggVG"*y
-nnoremap <SPACE>v ggVGs<ESC>"*p
+nnoremap <silent> <SPACE>v ggVGs<ESC>"*p:w!<CR>
 nmap <SPACE>t ggVGstemp
 nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
 nnoremap <silent> <SPACE>b :Unite buffer<CR>
+
+" F1押し間違えるので
+nnoremap <F1> <Nop>
 
 " }}}
 

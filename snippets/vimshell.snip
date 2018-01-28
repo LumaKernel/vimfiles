@@ -1,6 +1,6 @@
 snippet     c
 options     word
-  `(has('mac') ? 'g++ main${0:TARGET}.cpp -o a -O0 -std=c++14 -Wall -Wextra' : 'g++ main${0:TARGET}.cpp -o a -O0 -std=c++14 -Wall -Wextra -static-libstdc++')`
+  `(has('mac') ? 'g++ main${0:TARGET}.cpp -o a -O0 -std=c++14 -Wall -Wextra -DDEBUG' : 'g++ main${0:TARGET}.cpp -o a -O0 -std=c++14 -Wall -Wextra -DDEBUG -static-libstdc++')`
 
 snippet     r
 options     word

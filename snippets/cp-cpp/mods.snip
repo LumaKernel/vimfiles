@@ -1,7 +1,6 @@
 snippet     mods
 options     head
   /// --- MOD Library {{{ ///
-  // N
   
   int modadd(int a, int b) { return (((a + b) % MOD ) + MOD ) % MOD; }
   void sadd(int &a, int b) { a = modadd(a, b); }
@@ -12,12 +11,20 @@ options     head
     while(b){
       if(b & 1) smul(res, a);
       smul(a, a);
+      b>>=1;
     }
     return res;
   }
   int inv(int a) {
     return pow(a, MOD - 2);
   }
+  
+  // }}}---
+
+snippet     conbination
+options     head
+alias       conb
+  /// --- MOD Combination Library {{{ ///
   
   int fact[N], invFact[N];
   
