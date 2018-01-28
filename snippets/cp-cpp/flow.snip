@@ -1,0 +1,45 @@
+snippet     bipartiteMatching
+alias       flowBiparite
+options     head
+  
+  const int V = 2e3;
+  
+  /// --- Bipartite Matching Library {{{ ///
+  
+  // graph
+  VI g[V];
+  int match[V];
+  bool used[V];
+  
+  void addEdge(int a, int b) {
+    g[a].PB(b);
+    g[b].PB(a);
+  }
+  
+  // dfs
+  bool flow(int u) {
+    if(used[u]) return 0;
+    used[u] = 1;
+    for(int v : g[u]) if(match[v]<0 || flow(match[v])) {
+      match[v] = u;
+      match[u] = v;
+      return 1;
+    }
+    return 0;
+  }
+  
+  // O(|V|x|E|)
+  int bipartiteMatching(int size) {
+    int res = 0;
+    memset(match, -1, sizeof match);
+    REP(i, size) { // edit if you need
+      if(match[i] < 0) {
+        memset(used, 0, sizeof used);
+        if(flow(i)) res++;
+      }
+    }
+    return res;
+  }
+  
+  /// }}}--- ///
+
