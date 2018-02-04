@@ -50,25 +50,32 @@ set smartindent " インデントはスマートインデント
 set visualbell " ビープ音を可視化
 set showmatch " 括弧入力時の対応する括弧を表示
 set laststatus=2 " ステータスラインを常に表示
-set wildmode=list:longest " コマンドラインの補完
 set notitle
 set nowrap
-set noundofile
+
+"}}}
+
+" MatchParen{{{
+let g:loaded_matchparen = 1
 "}}}
 
 " 基本設定{{{
 set nocompatible
 set fenc=utf-8 "文字コードをUFT-8に設定
-set backup " バックアップファイルを作る
 set noswapfile " スワップファイルを作らない
 set autoread " 編集中のファイルが変更されたら自動で読み直す
 set hidden " バッファが編集中でもその他のファイルを開けるように
 set showcmd " 入力中のコマンドをステータスに表示する
+set wildmode=longest,full
+set noshowmatch
 
 set foldmethod=marker
 
-" undofileが作られるディレクトリを調整
-set undodir=~/var/vim/undo
+set backup
+set backupdir=~/vimfiles/tmp
+
+set undofile
+set undodir=~/vimfiles/tmp
 
 cd ~
 set mouse=
@@ -97,10 +104,6 @@ nnoremap <silent> <F5>d :execute "vsplit ~/vimfiles/_vim/rc/dein.toml"<CR>
 nnoremap <silent> <F5>l :execute "vsplit ~/vimfiles/_vim/rc/dein_lazy.toml"<CR>
 nnoremap <silent> <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
 
-" + タブ切り替えなど{{{
-nnoremap <expr> ts ":split "
-nnoremap <expr> tv ":vsplit "
-
 nnoremap th <C-w>h
 nnoremap tj <C-w>j
 nnoremap tk <C-w>k
@@ -126,7 +129,6 @@ nnoremap tq :q<CR>
 
 " タブで開く、を上書き
 nnoremap tt <Nop>
-" + }}}
 
 " + スペースキー関係
 nnoremap <SPACE> <Nop>
@@ -211,6 +213,7 @@ if has('gui')
   set guioptions-=l
   set guioptions-=L
 endif
+set iminsert=0
 " }}}
 
 " 見た目の設定 for CUI{{{
@@ -227,7 +230,7 @@ au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
 nnoremap <SPACE>c ggVG"*y
 nnoremap <silent> <SPACE>v ggVGs<ESC>"*p:w!<CR>
-nmap <SPACE>t ggVGstemp
+nmap <SPACE>t ggVGstemp<C-K>
 nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
 nnoremap <silent> <SPACE>b :Unite buffer<CR>
 

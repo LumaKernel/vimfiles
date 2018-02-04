@@ -1,5 +1,5 @@
 snippet     segmenttree
-abbr        struct SegTree {}
+abbr        struct SegTree {};
 alias       seg
   /// --- SegmentTree Library {{{ ///
   
@@ -8,38 +8,39 @@ alias       seg
   template <typename T> function<T(T,T)> constexpr madd(){ return [](T x, T y){return x+y;}; }
   
   template<typename T, int SIZE, T DEF, function<T(T,T)> &FUNC>
-  struct SegTree{
+  struct SegTree {
     T data[SIZE*4];
     int m;
-    T def = DEF;
-    function<T(T,T)> func = FUNC;
     SegTree(){
+      init(SIZE);
+    }
+    void init(int sz) {
       m=1;
-      while(m<SIZE) m<<=1;
-      REP(i, m*2-1) data[i] = def;
+      while(m<sz) m<<=1;
+      REP(i, m*2-1) data[i] = DEF;
     }
     void update(int i, T x) {
       i += m-1;
       data[i] = x;
       while(i>0) {
         i = (i-1)>>1;
-        data[i] = func(data[i*2+1], data[i*2+2]);
+        data[i] = FUNC(data[i*2+1], data[i*2+2]);
       }
     }
-    T query(int a, int b, int k=0,int l=0, int r=-1){
+    T query(int a, int b, int k=0,int l=0, int r=-1) {
       if(r<0) r=m;
-      if(b<=l||r<=a) return def;
+      if(b<=l||r<=a) return DEF;
       if(a<=l&&r<=b) return data[k];
-      return func(
+      return FUNC(
           query(a, b, k*2+1, l, (l+r)/2),
           query(a, b, k*2+2, (l+r)/2, r)
-        );
+          );
     }
     T get(int i) {
       return data[i + m - 1];
     }
     void dum(int l = -1, int r = -1) {
-      if(!DEBUG) return;
+  #ifdef DEBUG
       if(l<0) l = 0;
       if(r<0) r = m;
       l = max(0, l);
@@ -49,13 +50,19 @@ alias       seg
         cerr<<get(i)<<(i!=r-1?", ":"");
       }
       cerr<<"]"<<r<<endl;
+  #endif
     }
   };
   
   /// }}}--- ///
   
   auto imin = mmin<int>();
+  auto imax = mmax<int>();
+  auto iadd = madd<ll>();
   
-  using RMQ = SegTree<int, N,  INF, imin>;
-  RMQ tree;
+  using RMinQ = SegTree<int, N,  INF, imin>;
+  using RMaxQ = SegTree<int, N, -INF, imax>;
+  using RSQ = SegTree<ll, N, 0, iadd>;
+  
+  RMinQ tree;
 

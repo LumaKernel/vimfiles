@@ -1,11 +1,1 @@
 
-# C++{{{
-[[plugins]]
-repo = 'vim-jp/cpp-vim'
-on_ft = 'cpp'
-
-# }}}
-
-
-
-
