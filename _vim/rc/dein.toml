@@ -186,3 +186,9 @@ hook_add = '''
 '''
 # }}}
 
+
+# other{{{
+[[plugins]]
+repo = 'mmisono/viminesweeper'
+# }}}
+
