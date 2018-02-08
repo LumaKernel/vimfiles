@@ -6,7 +6,7 @@ options     head
   void sadd(int &a, int b) { a = modadd(a, b); }
   int modmul(int a, int b) { return (ll) a * b % MOD; }
   void smul(int &a, int b) { a = modmul(a, b); }
-  int pow(int a, ll b) {
+  int modpow(int a, ll b) {
     int res = 1;
     while(b){
       if(b & 1) smul(res, a);
@@ -16,7 +16,7 @@ options     head
     return res;
   }
   int inv(int a) {
-    return pow(a, MOD - 2);
+    return modpow(a, MOD - 2);
   }
   
   /// }}}--- ///
@@ -30,13 +30,13 @@ alias       comb
   
   void initFactorial() {
     fact[0] = 1;
-    FOR(i, 1, N) fact[i] = mul(fact[i - 1], i);
+    FOR(i, 1, N) fact[i] = modmul(fact[i - 1], i);
     invFact[N-1] = inv(fact[N - 1]);
-    RREP(i, N-1) invFact[i] = mul(invFact[i + 1], i + 1);
+    RREP(i, N-1) invFact[i] = modmul(invFact[i + 1], i + 1);
   }
   
   int C(int n, int r) {
-    return mul(fact[n], mul(invFact[r], invFact[n - r]));
+    return modmul(fact[n], modmul(invFact[r], invFact[n - r]));
   }
   
   /// }}}--- ///
