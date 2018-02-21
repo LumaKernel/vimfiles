@@ -81,6 +81,13 @@ cd ~
 set mouse=
 "}}}
 
+" IME系{{{
+augroup MyIMEGroup
+  autocmd!
+  autocmd InsertLeave * set iminsert=0
+augroup END
+"}}}
+
 " キーバインド{{{
 " + 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
