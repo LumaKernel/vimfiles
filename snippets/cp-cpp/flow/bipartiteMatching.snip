@@ -1,46 +1,46 @@
-# ToDo : remake
 snippet     bipartiteMatching
 alias       flowBipariteMatching
 options     head
-  
-  const int V = 2e3;
-  
   /// --- Bipartite Matching Library {{{ ///
   
-  // graph
-  VI g[V];
-  int match[V];
-  bool used[V];
+  // O(|V|^2)
+  struct BipartiteMatching {
+    VVI g; // bipartite directed graph
+    VI match;
+    VI used;
+    BipartiteMatching(int size) size(size), g(size) {}
   
-  void addEdge(int a, int b) {
-    g[a].PB(b);
-    g[b].PB(a);
-  }
-  
-  // dfs
-  bool flow(int u) {
-    if(used[u]) return 0;
-    used[u] = 1;
-    for(int v : g[u]) if(match[v]<0 || flow(match[v])) {
-      match[v] = u;
-      match[u] = v;
-      return 1;
+    void addEdge(int a, int b) {
+      g[a].PB(b);
+      g[b].PB(a);
     }
-    return 0;
-  }
   
-  // O(|V|x|E|)
-  int bipartiteMatching(int size) {
-    int res = 0;
-    memset(match, -1, sizeof match);
-    REP(i, size) { // edit if you need
-      if(match[i] < 0) {
-        memset(used, 0, sizeof used);
-        if(flow(i)) res++;
+    bool dfs(int u) {
+      if(used[u]) return 0;
+      used[u] = 1;
+      for(int v : g[u]) if(match[v]<0 || flow(match[v])) {
+        match[v] = u;
+        match[u] = v;
+        return 1;
       }
+      return 0;
     }
-    return res;
-  }
+  
+    int solve() {
+      int res = 0;
+      match = VI(size, -1);
+      used = VI(size);
+      REP(i, size) {
+        if(match[i] < 0) {
+          fill(ALL(used), 0);
+          if(dfs(i)) res++;
+        }
+      }
+      return res;
+    }
+  };
   
   /// }}}--- ///
+  
+  BipartiteMatching flow(N);
 

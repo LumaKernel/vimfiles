@@ -15,10 +15,10 @@ options     head
     vector<vector<Edge> > g; // direcrted
     ll inf;
     MaxFlow(int n, ll inf): n(n), g(n), inf(inf) {}
-    void addEdge(int from, int to, T cap) {
+    void addEdge(int from, int to, T cap, bool undirected = false) {
       // cap >= 0
       g[from].emplace_back(to, cap, g[to].size());
-      g[to].emplace_back(from, 0, g[from].size()-1);
+      g[to].emplace_back(from, undirected ? cap : 0, g[from].size()-1);
     }
     ll solve(int s, int t) {
       ll flow = 0;
