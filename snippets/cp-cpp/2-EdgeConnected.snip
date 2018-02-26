@@ -1,0 +1,53 @@
+snippet     towedge
+abbr        TwoEdge(Lowlink);
+options     head
+  // !! require Lowlink !!
+  /// --- 2-Edge Connected Component Decomposition Libary {{{ ///
+  
+  // undirected graph
+  struct TwoEdge {
+    Lowlink lowlink;
+    VI comp;
+  
+    TwoEdge(Lowlink lowlink): lowlink(lowlink){
+      decomposite();
+    }
+  
+    VVI tree;
+    VI used;
+  
+    private:
+    void decomposite() {
+      int size = lowlink.size;
+  
+      tree.resize(size);
+  
+      used.assign(size, 0);
+      comp.assign(size, -1);
+  
+      int gid = 0;
+      REP(i, size) if(!used[i]) dfs(i, gid++);
+  
+      tree.resize(gid);
+    }
+  
+    void dfs(int i, int gid) {
+      used[i] = 1;
+      comp[i] = gid;
+      for(auto edge : lowlink.g[i]) {
+        int j = edge.to;
+        int idx = edge.idx;
+        if(lowlink.isBridge[idx]) {
+          if(used[j]) {
+            tree[gid].PB(comp[j]);
+            tree[comp[j]].PB(gid);
+          }
+        }else if(!used[j]){
+          dfs(j, gid);
+        }
+      }
+    }
+  };
+  
+  /// }}}--- ///
+

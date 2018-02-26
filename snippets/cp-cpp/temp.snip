@@ -81,6 +81,13 @@ options     head
   template <typename T> inline void smax(T &a, T b) { a = a > b ? a : b; }
   template <typename T> inline void smin(T &a, T b) { a = a < b ? a : b; }
   
+  template<typename T> int log2max(T x) {
+    int res = 0;
+    ll tmp = 1;
+    while(tmp < x) tmp <<= 1, res++;
+    return res;
+  }
+  
   constexpr double PI = acos(-1);
   
   /// }}}--- ///
