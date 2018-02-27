@@ -1,0 +1,68 @@
+# vefiy : https://beta.atcoder.jp/contests/arc074/submissions/2141547
+snippet     dinic
+abbr        Dinic(int size)
+options     head
+  /// --- Dinic Libary {{{ ///
+  // solve max flow
+  
+  struct Dinic {
+    struct Edge {
+      int to; ll cap; int rev;
+      Edge(int to, ll cap, int rev):
+        to(to), cap(cap), rev(rev) {}
+    };
+  
+    int size;
+    vector< vector< Edge > > g;
+    ll inf;
+    Dinic(int size, ll inf = LINF): size(size), g(size), inf(inf) {}
+    
+    void addEdge(int a, int b, int cap, bool undirected = false) {
+      g[a].emplace_back(b, cap, g[b].size());
+      g[b].emplace_back(a, undirected ? cap : 0, g[a].size() - 1);
+    }
+  
+    ll solve(int s, int t) {
+      VI level(size);
+      ll flow = 0;
+      while(bfs(s, level), level[t] > 0) {
+        ll newflow = dfs(s, t, inf, level);
+        if(newflow == 0) break;
+        flow += newflow;
+        if(flow >= INF) return INF;
+      }
+      return flow;
+    }
+  
+    private:
+    void bfs(int s, VI & level) {
+      fill(ALL(level), -1);
+      queue<int> q;
+      q.push(s);
+      level[s] = 0;
+      while(q.size()) {
+        int i = q.front(); q.pop();
+        for(Edge edge : g[i])
+          if(level[edge.to] == -1 && edge.cap > 0) {
+            level[edge.to] = level[i] + 1;
+            q.push(edge.to);
+          }
+      }
+    }
+  
+    ll dfs(int i, int t, ll flow, VI const & level) {
+      if(i == t) return flow;
+      for(Edge &edge : g[i])
+        if(edge.cap > 0 && level[edge.to] > level[i]) {
+          ll newflow = dfs(edge.to, t, min(flow, edge.cap), level);
+          if(newflow == 0) continue;
+          edge.cap -= newflow;
+          g[edge.to][edge.rev].cap += newflow;
+          return newflow;
+        }
+      return 0;
+    }
+  };
+  
+  /// ---}}} ///
+
