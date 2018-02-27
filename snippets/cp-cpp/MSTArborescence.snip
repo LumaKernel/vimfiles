@@ -1,0 +1,43 @@
+# verify : http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=2708176#1
+snippet     mstarborescence
+abbr        int MSTArborescence(VVI undire, int root)
+options     head
+  // require SCC Libary!
+  // int MSTArborescence(VVI directedGraph, int root)
+  /// --- MSTArborescence Library {{{ ///
+  
+  ll MSTArborescence(VVP &graph, int start, ll sum = 0) {
+    int n = graph.size();
+   
+    VI rev(n, -1);
+    VL weight(n, INF);
+    REP(idx, n) {
+      for(auto &e : graph[idx]) {
+        if(se(e) < weight[fi(e)]) {
+          weight[fi(e)] = se(e);
+          rev[fi(e)] = idx;
+        }
+      }
+    }
+   
+    SCC scc(n);
+    REP(i, n) {
+      if(start == i) continue;
+      scc.addEdge(rev[i], i);
+      sum += weight[i];
+    }
+    VVI renew;
+    scc.decomposite(renew);
+    if(renew.size() == n) return sum;
+    VVP fixed(renew.size());
+    REP(i, n) {
+      for(P &e : graph[i]) {
+        if(scc[i] == scc[fi(e)]) continue;
+        fixed[scc[i]].emplace_back(scc[fi(e)], se(e) - weight[fi(e)]);
+      }
+    }
+    return MSTArborescence(fixed, scc[start], sum);
+  }
+  
+  /// ---}}} ///
+

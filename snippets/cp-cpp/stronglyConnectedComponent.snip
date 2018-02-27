@@ -1,0 +1,57 @@
+# verify : http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=2708176#1
+snippet     trigger
+abbr        SCC(int size)
+options     head
+  // SCC(int size)
+  // do : decomposite()
+  /// --- Strongly Connected Component {{{ ///
+  
+  // directed graph
+  struct SCC {
+    VVI g, rev;
+    VI topo;
+    VI used;
+    VI comp;
+    int n;
+    SCC(int n): n(n), g(n), rev(n), used(n, 0), comp(n, -1){}
+    void addEdge(int a, int b) {
+      g[a].PB(b);
+      rev[b].PB(a);
+    }
+    int operator[](int i) {
+      return comp[i];
+    }
+    void decomposite(VVI &renew) {
+      REP(i,n) if(!used[i]) dfs1(i);
+      reverse(begin(topo), end(topo));
+      int k=0;
+      for(int i : topo) if(comp[i] == -1) dfs2(i, k++);
+   
+      renew.resize(k);
+      set<P> connect;
+      REP(i,n){
+        for(int j : g[i]) {
+          int x = comp[i], y = comp[j];
+          if(x == y) continue;
+          if(connect.count(P(x, y))) continue;
+          connect.emplace(x, y);
+          renew[x].PB(y);
+        }
+      }
+    }
+    private:
+    void dfs1(int i) {
+      if(used[i]) return;
+      used[i] = 1;
+      for(int j : g[i]) dfs1(j);
+      topo.PB(i);
+    }
+    void dfs2(int i, int num) {
+      if(comp[i] != -1) return;
+      comp[i] = num;
+      for(int j : rev[i]) dfs2(j, num);
+    }
+  };
+  
+  /// ---}}} ///
+
