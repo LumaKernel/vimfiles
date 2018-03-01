@@ -1,0 +1,32 @@
+snippet     geometory
+alias       geo
+options     head
+  // EPS
+  constexpr double EPS = 1e-9;
+  /// --- Geometory Library {{{ ///
+  using Point = complex<double>;
+  #define X real()
+  #define Y imag()
+  #define dot(a, b) real(conj(a)*b)
+  #define cross(a, b) imag(conj(a)*b)
+  #define norm abs
+  
+  // +1 : ccw
+  // -1 : cw
+  // +2 : a--b--c
+  // -2 : b--c--a
+  //  0 : b--a--c
+  int ccw(Point a, Point b, Point c) {
+    b -= a; c -= a;
+    if(cross(b, c) > EPS) return +1;
+    if(cross(b, c) < -EPS) return -1;
+    if(dot(b, c) < 0) return 0;
+    if(norm(b) < norm(c)) return +2;
+    return -2;
+  }
+  
+  double arg(Point a, Point b) {
+    return acos(dot(a, b) / norm(a) / norm(b));
+  }
+  /// ---}}} ///
+

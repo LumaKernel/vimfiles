@@ -1,0 +1,64 @@
+# verify : https://beta.atcoder.jp/contests/agc021/submissions/2145093
+snippet     grahamscanpolar
+abbr        GrahamScan(); add(Point p);
+options     head
+  // require Geometory Library!
+  /// --- Graham Scan (Polar Sort) Library {{{ ///
+  
+  // make ConvexHull
+  
+  // if there are 3 points on line,
+  // just guaranteed that point on hull is scanned exactly;
+  // if on Line of Hull, sometimes scanned as on Hull.
+  struct GrahamScan {
+    vector<Point> points;
+    VI ids;
+    VI hull;
+  
+    void add(Point p) {
+      points.PB(p);
+    }
+  
+    int operator[](int i) {
+      return hull[i];
+    }
+  
+    void scan() {
+      int n = points.size();
+      ids.resize(n);
+  
+      iota(ALL(ids), 0);
+  
+      int startID = 0;
+      FOR(i, 1, n) {
+        if(make_pair(points[startID].X, points[startID].Y) >
+            make_pair(points[i].X, points[i].Y)) startID = i;
+      }
+      swap(ids[0], ids[startID]);
+  
+      sort(begin(ids) + 1, end(ids), [&](int a, int b) {
+          Point p1 = points[a] - points[ids[0]];
+          Point p2 = points[b] - points[ids[0]];
+          // p1.y / p1.x < p2.y / p2.x
+          double ev = p1.Y * p2.X - p2.Y * p1.X;
+          return abs(ev) < EPS ? norm(p1) < norm(p2) : ev < 0;
+          });
+  
+      hull.PB(ids[0]);
+      FORI(i, 1, n) {
+        int ii = i%n;
+        while(hull.size() >= 2 &&
+            ccw(
+              points[hull[hull.size()-2]],
+              points[hull[hull.size()-1]],
+              points[ids[ii]]
+              ) == -1) hull.pop_back();
+        hull.PB(ids[ii]);
+      }
+  
+      hull.pop_back();
+    }
+  };
+  
+  /// }}}--- ///
+
