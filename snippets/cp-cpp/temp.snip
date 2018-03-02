@@ -80,12 +80,9 @@ options     head
   template <typename T> inline void smax(T &a, T b) { a = a > b ? a : b; }
   template <typename T> inline void smin(T &a, T b) { a = a < b ? a : b; }
   
-  template<typename T> int log2max(T x) {
-    int res = 0;
-    ll tmp = 1;
-    while(tmp < x) tmp <<= 1, res++;
-    return res;
-  }
+  template<typename T> inline int intlog2(T x);
+  template<> inline int intlog2(int x) { return x == 0 ? 0 : 32 - __builtin_clz(x); }
+  template<> inline int intlog2(ll x) { return x == 0 ? 0 : 64 - __builtin_clzll(x); }
   
   constexpr double PI = acos(-1);
   
@@ -99,5 +96,3 @@ options     head
     ${0:TARGET}
   }
   
-  //
-
