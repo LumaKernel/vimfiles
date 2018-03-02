@@ -19,7 +19,7 @@ options     head
   using VP = vector<P>;
   using VS = vector<string>;
   
-  #define omajinai ios::sync_with_stdio(false);cin.tie(0)
+  #define omajinai ios::sync_with_stdio(false),cin.tie(0)
   
   #define FOR(i,a,b) for(int i=int(a);i<int(b);++i)
   #define FORI(i,a,b) for(int i=int(a);i<=int(b);++i)
@@ -30,7 +30,7 @@ options     head
   #define RREP(i,n) RFOR(i,0,n)
   #define RREPI(i,n) RFORI(i,0,n)
   
-  #define ALL(a) (a).begin(),(a).end()
+  #define ALL(a) begin(a),end(a)
   #define UNIQUE(a) (a).erase(unique(ALL(a)),(a).end())
   #define PB push_back
   #define EACH(i,c) REP(i,(c).size())
@@ -50,18 +50,13 @@ options     head
   #define Yes(x) cout<<((x)?"Yes":"No")<<"\n";
   #define yes(x) cout<<((x)?"yes":"no")<<"\n";
   
-  inline int omajinai_int_in(){omajinai;int n;cin>>n;return n;}
-  inline ll omajinai_ll_in(){omajinai;ll n;cin>>n;return n;}
-  inline string omajinai_string_in(){omajinai;string n;cin>>n;return n;}
-  inline int int_in(){int n;cin>>n;return n;}
-  inline ll ll_in(){ll n;cin>>n;return n;}
-  inline string string_in(){string n;cin>>n;return n;}
-  #define oini omajinai_int_in()
-  #define oinl omajinai_ll_in()
-  #define oins omajinai_string_in()
-  #define ini int_in()
-  #define inl ll_in()
-  #define ins string_in()
+  int __int_temp; ll __ll_temp; string __string_temp;
+  #define oini (omajinai, cin>>__int_temp, __int_temp)
+  #define oinl (omajinai, cin>>__ll_temp, __ll_temp)
+  #define oins (omajinai, cin>>__string_temp, __string_temp)
+  #define ini (cin>>__int_temp, __int_temp)
+  #define inl (cin>>__ll_temp, __ll_temp)
+  #define ins (cin>>__string_temp, __string_temp)
   
   #define isInside(y,x) (0<=(y)&&(y)<h&&0<=(x)&&(x)<w)
   
