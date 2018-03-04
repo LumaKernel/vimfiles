@@ -26,13 +26,15 @@ options     head
 alias       comb
   /// --- MOD Combination Library {{{ ///
   
-  int fact[N], invFact[N];
+  VI fact, invFact;
   
-  void initFactorial() {
+  void initFactorial(int n) {
+    n++;
+    fact.resize(n); invFact.resize(n);
     fact[0] = 1;
-    FOR(i, 1, N) fact[i] = modmul(fact[i - 1], i);
-    invFact[N-1] = inv(fact[N - 1]);
-    RREP(i, N-1) invFact[i] = modmul(invFact[i + 1], i + 1);
+    FOR(i, 1, n) fact[i] = modmul(fact[i - 1], i);
+    invFact[n-1] = inv(fact[n - 1]);
+    RREP(i, n-1) invFact[i] = modmul(invFact[i + 1], i + 1);
   }
   
   int C(int n, int r) {
