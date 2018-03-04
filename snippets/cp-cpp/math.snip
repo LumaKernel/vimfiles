@@ -1,5 +1,15 @@
-2
-0
-10
-20
-30
+snippet     isprime
+abbr        bool isPrime(int n) { }
+options     head
+  /// --- isPrime {{{ ///
+  
+  bool isPrime(int n) {
+    if(n < 2) return false;
+    for(int i=2;i*i<=n;i++) {
+      if(n%i == 0) return false;
+    }
+    return true;
+  }
+  
+  /// }}}--- ///
+
