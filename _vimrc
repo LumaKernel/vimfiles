@@ -203,7 +203,7 @@ if has('mac')
   nnoremap <silent> <SPACE>e :!open .<CR>
   nnoremap <silent> <SPACE>o :!open -a Terminal.app .<CR>
 elseif has('win32')
-  nnoremap <silent> <expr> <SPACE>e ":!satrt explorer .\<CR>"
+  nnoremap <silent> <expr> <SPACE>e ":!start explorer .\<CR>"
   nnoremap <silent> <SPACE>o :!start cmd<CR>
 endif
 
