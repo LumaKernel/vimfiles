@@ -2,44 +2,55 @@ snippet     mods
 options     head
   /// --- MOD Library {{{ ///
   
-  int modadd(int a, int b) { return (((a + b) % MOD ) + MOD ) % MOD; }
-  void sadd(int &a, int b) { a = modadd(a, b); }
-  int modmul(int a, int b) { return (ll) a * b % MOD; }
-  void smul(int &a, int b) { a = modmul(a, b); }
-  int modpow(int a, ll b) {
+  constexpr int extgcd(ll a, ll b, ll& x, ll& y) {
+    if(b==0) {
+      x = 1; y = 0;
+      return a;
+    }
+    int d = extgcd(b, a % b, y, x);
+    y += (a / b) * x;
+    return d;
+  }
+  constexpr int modadd(int a, int b, int mod = MOD) { return (((a + b) % mod ) + mod ) % mod; }
+  constexpr void sadd(int &a, int b, int mod = MOD) { a = modadd(a, b, mod); }
+  constexpr int modmul(int a, int b, int mod = MOD) { return (ll) a * b % mod; }
+  constexpr void smul(int &a, int b, int mod = MOD) { a = modmul(a, b, mod); }
+  constexpr int modpow(int a, ll b, int mod = MOD) {
     int res = 1;
     while(b){
-      if(b & 1) smul(res, a);
-      smul(a, a);
+      if(b & 1) smul(res, a, mod);
+      smul(a, a, mod);
       b>>=1;
     }
     return res;
   }
-  int inv(int a) {
-    return modpow(a, MOD - 2);
+  constexpr int modinv(int a, int mod = MOD) {
+    ll x = 0, y = 0;
+    extgcd(a, mod, x, y);
+    return x;
   }
+  
+  template<int N, int mod = MOD> struct Factorial {
+    int arr[N+1], inv[N+1];
+    int operator[](int i) const { return arr[i]; }
+    constexpr Factorial(): arr(), inv() {
+      arr[0] = 1;
+      for(int i=1;i<=N;i++) {
+        arr[i] = (ll) i * arr[i-1] % mod;
+      }
+      inv[N] = modinv(arr[N], mod);
+      for(int i=N-1;i>=0;i--) {
+        inv[i] = (ll) (i+1) * inv[i+1] % mod;
+      }
+    }
+    int C(int n, int r) {
+      if(n < 0 || r < 0 || n < r) return 0;
+      return modmul(arr[n], modmul(inv[r], inv[n - r], mod), mod);
+    }
+  };
   
   /// }}}--- ///
-
-snippet     combination
-options     head
-alias       comb
-  /// --- MOD Combination Library {{{ ///
   
-  VI fact, invFact;
-  
-  void initFactorial(int n) {
-    n++;
-    fact.resize(n); invFact.resize(n);
-    fact[0] = 1;
-    FOR(i, 1, n) fact[i] = modmul(fact[i - 1], i);
-    invFact[n-1] = inv(fact[n - 1]);
-    RREP(i, n-1) invFact[i] = modmul(invFact[i + 1], i + 1);
-  }
-  
-  int C(int n, int r) {
-    return modmul(fact[n], modmul(invFact[r], invFact[n - r]));
-  }
-  
-  /// }}}--- ///
+  constexpr int N = 1e5 + 10;
+  constexpr Factorial<N> fact;
 
