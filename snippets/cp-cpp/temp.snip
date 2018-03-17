@@ -3,6 +3,7 @@ options     head
   // see https://github.com/LumaKernel/vimfiles/tree/master/snippets/cp-cpp/temp.snip
   /// --- .lumrc Template {{{ ///
   // #define DEBUG
+  // #undef DEBUG
   // #define assert(...)
   #include <bits/stdc++.h>
   using namespace std;
@@ -79,6 +80,20 @@ options     head
   template<> inline int intlog2(int x) { return x == 0 ? 0 : 32 - __builtin_clz(x); }
   template<> inline int intlog2(ll x) { return x == 0 ? 0 : 64 - __builtin_clzll(x); }
   
+  vector<string> split(const string& s, char delim) {
+    std::vector<string> elms;
+    size_t offset = 0;
+    while (true) {
+        size_t next = s.find_first_of(delim, offset);
+        if (next == string::npos) {
+            elms.push_back(s.substr(offset));
+            return elms;
+        }
+        elms.push_back(s.substr(offset, next - offset));
+        offset = next + 1;
+    }
+  }
+  
   constexpr double PI = acos(-1);
   
   /// }}}--- ///
@@ -91,3 +106,16 @@ options     head
     ${0:TARGET}
   }
   
+
+snippet     temp2
+options     head
+  #include<bits/stdc++.h>
+  using namespace std;
+  using ll = long long;
+  
+  int main() {
+    ios::sync_with_stdio(false), cin.tie(0);
+  
+  }
+  
+
