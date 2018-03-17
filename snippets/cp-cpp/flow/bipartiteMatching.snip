@@ -1,46 +1,43 @@
+# verify : https://beta.atcoder.jp/contests/arc092/submissions/2225494
 snippet     bipartiteMatching
 alias       flowBipariteMatching
 options     head
-  /// --- Bipartite Matching Library {{{ ///
-  
-  // O(|V|^2)
   struct BipartiteMatching {
-    VVI g; // bipartite directed graph
-    VI match;
-    VI used;
-    BipartiteMatching(int size) size(size), g(size) {}
+    int n;
+    vector< vector<int> > graph;
   
+    BipartiteMatching(int n): n(n), graph(n) {}
     void addEdge(int a, int b) {
-      g[a].PB(b);
-      g[b].PB(a);
+      graph[a].emplace_back(b);
+      graph[b].emplace_back(a);
     }
   
-    bool dfs(int u) {
-      if(used[u]) return 0;
-      used[u] = 1;
-      for(int v : g[u]) if(match[v]<0 || flow(match[v])) {
-        match[v] = u;
-        match[u] = v;
-        return 1;
-      }
-      return 0;
-    }
+    vector<int> used;
+    vector<int> match;
   
+    // max flow
     int solve() {
-      int res = 0;
-      match = VI(size, -1);
-      used = VI(size);
-      REP(i, size) {
-        if(match[i] < 0) {
-          fill(ALL(used), 0);
-          if(dfs(i)) res++;
+      match = vector<int>(n, -1);
+      int flow = 0;
+      for(int i = 0; i < n; i++) {
+        if(match[i] < 0) { ///
+          used = vector<int>(n, 0); ///
+          if(dfs(i)) flow++;
         }
       }
-      return res;
+      return flow;
+    }
+  
+    private:
+    bool dfs(int v) {
+      if(used[v]) return false; ///
+      used[v] = 1;
+      for(int u : graph[v]) if(match[u] < 0 || dfs(match[u])) {
+        match[v] = u;
+        match[u] = v;
+        return true;
+      }
+      return false;
     }
   };
-  
-  /// }}}--- ///
-  
-  BipartiteMatching flow(N);
 
