@@ -1,0 +1,37 @@
+snippet     modint
+abbr        ModInt<ll mod> (int val)
+options     head
+  // require mod library
+  template<ll mod>
+  struct ModInt{
+    ll val;
+  
+    ModInt() : val(0) {}
+    ModInt(ll val) : val((val % mod + mod) % mod) {}
+    ll get() const { return val; }
+  
+    ModInt operator+(ModInt<mod> rhs) {
+      return ModInt<mod>(val + rhs.val);
+    }
+    ModInt operator*(ModInt<mod> rhs) {
+      return ModInt<mod>(val * rhs.val);
+    }
+    ModInt operator/(ModInt<mod> rhs) {
+      return ModInt<mod>(val * rhs.inv().val);
+    }
+    ModInt &operator+=(ModInt<mod> rhs) {
+      val = ((val + rhs.val) % mod + mod) % mod;
+      return *this;
+    }
+    ModInt &operator*=(ModInt<mod> rhs) {
+      val = (val * rhs.val % mod + mod) % mod;
+      return *this;
+    }
+    ModInt &operator/=(ModInt<mod> rhs) {
+      val = (val * rhs.inv().val % mod + mod) % mod;
+      return *this;
+    }
+    ModInt inv() {
+      return ModInt<mod>(modinv(val, mod));
+    }
+  };

@@ -2,18 +2,18 @@ snippet     mods
 options     head
   /// --- MOD Library {{{ ///
   
-  constexpr int extgcd(ll a, ll b, ll& x, ll& y) {
+  constexpr ll extgcd(ll a, ll b, ll& x, ll& y) {
     if(b==0) {
       x = 1; y = 0;
       return a;
     }
-    int d = extgcd(b, a % b, y, x);
+    ll d = extgcd(b, a % b, y, x);
     y += (a / b) * x;
     return d;
   }
   constexpr int modadd(int a, int b, int mod = MOD) { return (((a + b) % mod ) + mod ) % mod; }
   constexpr void sadd(int &a, int b, int mod = MOD) { a = modadd(a, b, mod); }
-  constexpr int modmul(int a, int b, int mod = MOD) { return (ll) a * b % mod; }
+  constexpr int modmul(int a, int b, int mod = MOD) { return (ll) (a % mod) * (b % mod) % mod; }
   constexpr void smul(int &a, int b, int mod = MOD) { a = modmul(a, b, mod); }
   constexpr int modpow(int a, ll b, int mod = MOD) {
     int res = 1;
@@ -27,7 +27,7 @@ options     head
   constexpr int modinv(int a, int mod = MOD) {
     ll x = 0, y = 0;
     extgcd(a, mod, x, y);
-    return x;
+    return (x % mod + mod) % mod;
   }
   
   template<int N, int mod = MOD> struct Factorial {
