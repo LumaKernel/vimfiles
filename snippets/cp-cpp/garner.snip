@@ -13,7 +13,8 @@ options     head
       ll v = (n[i] - constants[i]) * modinv(coeffs[i], mods[i]) % mods[i];
       if (v < 0) v += mods[i];
       for (int j = i + 1; j < (int) n.size(); j++) {
-        (constants[j] += coeffs[i] * v) %= mods[j];
+        // coeffs[j] is (mod j)
+        (constants[j] += coeffs[j] * v) %= mods[j];
         (coeffs[j] *= mods[i]) %= mods[j];
       }
     }
