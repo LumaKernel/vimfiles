@@ -8,14 +8,14 @@ options     head
   // undirected graph
   struct BiConnected {
     Lowlink lowlink;
-    VI comp;
+    vector<int> comp;
   
     TwoEdge(Lowlink lowlink): lowlink(lowlink){
       decomposite();
     }
   
-    VVI tree;
-    VI used;
+    vector< vector<int> > tree;
+    vector<int> used;
   
     private:
     void decomposite() {

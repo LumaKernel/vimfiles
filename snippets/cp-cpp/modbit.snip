@@ -1,39 +1,37 @@
 snippet     modbit
 abbr        struct MODBIT{}
 options     head
+  // require mod library
   /// --- MODBIT Library {{{ ///
-  // depends on MOD
 
   template<int SIZE>
   struct MODBIT{
-    int data[SIZE+1];
-    int n = SIZE;
+    int size;
+    vector<int> data;
+    int mod;
 
-    BIT(){
-      REP(i, n+1) data[i] = 0;
-    }
+    MODBIT(int size, int mod = 1e9 + 7): size(size), data(n), mod(mod) {}
 
     void add(int i, T x) {
       i++;
       while(i<=n){
-        sadd(data[i], x);
+        data[i - 1] = ((data[i - 1] + x) % mod + mod) % mod;
         i += i&-i;
       }
     }
     int sum(int i) {
       if(i<0) return 0;
       i++;
-      ll s = 0;
+      int s = 0;
       while(i>0){
-        sadd(s, data[i]);
+        s = ((s + data[i - 1]) % mod + mod) % mod;
         i -= i&-i;
       }
       return s;
     }
     int range(int a, int b) {
-      return modadd(sum(b), -sum(a-1));
+      return (sum(b) - sum(a-1)) % mod;
     }
   };
-
   /// }}}--- ///
 

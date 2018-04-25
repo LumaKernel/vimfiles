@@ -6,7 +6,7 @@ options     head
   
   struct UF {
     int n;
-    VI par, rank;
+    vector<int> par, rank;
     UF(int n): n(n), par(n, -1), rank(n, 0) {}
     int find(int x) {
       return par[x] < 0 ? x : par[x] = find(par[x]);
