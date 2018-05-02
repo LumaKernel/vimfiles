@@ -3,6 +3,7 @@ alias       gauss
 options     head
   using Vec = vector<double>;
   using Mat = vector<Vec>;
+  /// {{{ gauss jordan --- ///
   Vec gaussJordan(Mat mat, Vec v, double eps = 1e-9) {
     int n = mat.size();
     assert(n == (int) mat[0].size() && n == (int) v.size());
@@ -12,7 +13,7 @@ options     head
     for(int i = 0; i < n; i++) {
       int pivot = i;
       for(int j = i + 1; j < n; j++) {
-        if(abs(mat[pivot][i] < abs(mat[j][i]))
+        if(abs(mat[pivot][i] < abs(mat[j][i])))
           pivot = j;
       }
       if(mat[pivot][i] < eps) return Vec();
@@ -29,4 +30,5 @@ options     head
     for(int i = 0; i < n; i++) v[i] = mat[i][n];
     return v;
   }
+  /// }}} --- ///
 
