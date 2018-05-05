@@ -1,0 +1,74 @@
+# refer : https://tomcatowl.github.io/post/ds-and-alg-1/
+snippet     segmenttree
+alias       seg
+  // use 2^i size by yourself
+  /// --- SegmentTree Library {{{ ///
+  
+  /*
+  struct Monoid {
+    using T = _underlying_set_;
+    static T op(const T& a, const T& b) { return _a_op_b_; }
+    static constexpr T identity() { return _identity_element_; }
+  };
+  */
+  
+  template<class Monoid>
+  struct SegTree {
+    private:
+      using T = typename Monoid::T;
+      const int n;
+      vector<T> t;
+      void propTo(int i) { t[i] = Monoid::op(t[2 * i], t[2 * i + 1]); }
+  
+    public:
+      SegTree(int n, const T& v = Monoid::identity())
+        : n(n), t(2 * n, v) {}
+   
+      template <class InputIt>
+      SegTree(InputIt first, InputIt last)
+        : n(distance(first, last)), t(2 * n, Monoid::identity()) {
+        copy(first, last, begin(t) + n);
+        for(int i = n; i > 0; i--) propTo(i);
+      }
+   
+      void set(int i, const T& v) {
+        t[i += n] = v;
+        while(i >>= 1) propTo(i);
+      }
+   
+      T get(int i) { return t[i + n]; }
+   
+      T query(int l, int r) {
+        l = max(0, l); r = min(r, n);
+        T tmpL = Monoid::identity(), tmpR = Monoid::identity();
+        for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
+          if(l & 1) tmpL = Monoid::op(tmpL, t[l++]);
+          if(r & 1) tmpR = Monoid::op(t[--r], tmpR);
+        }
+        return Monoid::op(tmpL, tmpR);
+      }
+  };
+  
+  struct RMQMonoid {
+    using T = long long;
+    static T op(const T& a, const T& b) { return std::min(a, b); }
+    static constexpr T identity() { return numeric_limits<T>::max(); }
+  };
+  struct RSQMonoid {
+    using T = long long;
+    static T op(const T& a, const T& b) { return a + b; }
+    static constexpr T identity() { return 0; }
+  };
+  struct RMaxQMonoid {
+    using T = long long;
+    static T op(const T& a, const T& b) { return std::max(a, b); }
+    static constexpr T identity() { return numeric_limits<T>::min(); }
+  };
+  
+  using RMQ = SegTree<RMQMonoid>;
+  using RSQ = SegTree<RSQMonoid>;
+  using RMaxQ = SegTree<RMaxQMonoid>;
+  
+  /// }}}--- ///
+  
+
