@@ -17,33 +17,33 @@ alias       seg
     private:
       using T = typename Monoid::T;
       const int n;
-      vector<T> t;
-      void propTo(int i) { t[i] = Monoid::op(t[2 * i], t[2 * i + 1]); }
+      vector<T> data;
+      void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
   
     public:
       SegTree(int n, const T& v = Monoid::identity())
-        : n(n), t(2 * n, v) {}
+        : n(n),data(2 * n, v) {}
    
       template <class InputIt>
       SegTree(InputIt first, InputIt last)
-        : n(distance(first, last)), t(2 * n, Monoid::identity()) {
+        : n(distance(first, last)), data(2 * n, Monoid::identity()) {
         copy(first, last, begin(t) + n);
         for(int i = n; i > 0; i--) propTo(i);
       }
    
       void set(int i, const T& v) {
-        t[i += n] = v;
+        data[i += n] = v;
         while(i >>= 1) propTo(i);
       }
    
-      T get(int i) { return t[i + n]; }
+      T get(int i) { return data[i + n]; }
    
       T query(int l, int r) {
         l = max(0, l); r = min(r, n);
         T tmpL = Monoid::identity(), tmpR = Monoid::identity();
         for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
-          if(l & 1) tmpL = Monoid::op(tmpL, t[l++]);
-          if(r & 1) tmpR = Monoid::op(t[--r], tmpR);
+          if(l & 1) tmpL = Monoid::op(tmpL, data[l++]);
+          if(r & 1) tmpR = Monoid::op(data[--r], tmpR);
         }
         return Monoid::op(tmpL, tmpR);
       }
