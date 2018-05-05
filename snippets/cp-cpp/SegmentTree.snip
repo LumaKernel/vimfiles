@@ -2,6 +2,7 @@
 snippet     segmenttree
 alias       seg
   // use 2^i size by yourself
+  // otherwise, maybe, it needs exchange law
   /// --- SegmentTree Library {{{ ///
   
   /*
@@ -27,7 +28,8 @@ alias       seg
       template <class InputIt>
       SegTree(InputIt first, InputIt last)
         : n(distance(first, last)), data(2 * n, Monoid::identity()) {
-        copy(first, last, begin(t) + n);
+        copy(first, last, begin(data) + n);
+        // たぶん深いところから更新するため
         for(int i = n; i > 0; i--) propTo(i);
       }
    
