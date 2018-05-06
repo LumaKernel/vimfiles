@@ -30,7 +30,7 @@ alias       seg
         : n(distance(first, last)), data(2 * n, Monoid::identity()) {
         copy(first, last, begin(data) + n);
         // たぶん深いところから更新するため
-        for(int i = n; i > 0; i--) propTo(i);
+        for(int i = n - 1; i > 0; i--) propTo(i);
       }
    
       void set(int i, const T& v) {

@@ -75,7 +75,7 @@ options     head
         data(2 * n, DM::identity()), lazy(2 * n, OM::identity()) {
           copy(first, last, begin(data) + n);
           // たぶん深いところから更新するため
-          for(int i = n; i > 0; i--) propToDataOne(i);
+          for(int i = n - 1; i > 0; i--) propToDataOne(i);
         }
   
       void act(int l, int r, const OT& m) {
@@ -96,7 +96,7 @@ options     head
   
       void set(int i, const DT& v) {
         propToO(i);
-        data[i] = v;
+        data[i + n] = v;
         propToD(i);
       }
   
