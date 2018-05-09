@@ -18,7 +18,8 @@ options     head
      struct MM {
      using OperatorMonoid = _operator_monoid_;
      using DataMonoid = _data_monoid_;
-     static T act(const OperatorMonoid::T& m, const T& a) { return _m_act_a; }
+     static T act(const OperatorMonoid::T& m, const T& a)
+     { return _m_act_a; }
      };
      */
   
@@ -74,17 +75,13 @@ options     head
         : n(distance(first, last)), h(log(n)),
         data(2 * n, DM::identity()), lazy(2 * n, OM::identity()) {
           copy(first, last, begin(data) + n);
-          // たぶん深いところから更新するため
           for(int i = n - 1; i > 0; i--) propToDataOne(i);
         }
   
       void act(int l, int r, const OT& m) {
-        // なんか交換律を必要としないためにやっているのに,
-        // 後半は完全に交換律を必用とする実装になっている感じがする
         l = max(0, l); r = min(r, n);
         propToO(l);
         propToO(r - 1);
-        int tl = l, tr = r;
         int sz = 1;
         for(l += n, r += n; l < r; l >>= 1, r >>= 1, sz <<= 1) {
           if(l & 1) propFrom(l, sz), lazy[l] = m, propFrom(l, sz), l++;
@@ -111,6 +108,7 @@ options     head
         propToO(r - 1);
         DT tmpL = DM::identity(), tmpR = DM::identity();
         int sz = 1;
+        int tl = l, tr = r;
         for(l += n, r += n; l < r; l >>= 1, r >>= 1, sz <<= 1) {
           if(l & 1) propFrom(l, sz), tmpL = DM::op(tmpL, data[l++]);
           if(r & 1) propFrom(--r, sz), tmpR = DM::op(data[r], tmpR);
@@ -118,12 +116,11 @@ options     head
         return DM::op(tmpL, tmpR);
       }
   
-      void dum() {
-  #ifdef dump
-        dump("data");
-        dump(data);
-        dump("op");
-        dump(lazy);
+      void dum(int r = -1) {
+  #ifdef DEBUG
+        if(r < 0) r = n;
+        for(int i = 0; i < min(r, n); i++) cerr << get(i) << ", ";
+        cerr << endl;
   #endif
       }
   };
@@ -152,9 +149,17 @@ options     head
     static constexpr T identity() { return -1; }
   };
   
-  /// }}}--- ///
+  // MinAdd m + a
+  // MinSet m
+  // SumAdd m * z + a
+  // SumSet m * z
   
-  // ex)
+  struct RangeMinAdd {
+    using OperatorMonoid = RangeSum;
+    using DataMonoid = RangeMin;
+    static DataMonoid::T act(const OperatorMonoid::T& m, int, const DataMonoid::T& a)
+    { return m + a; }
+  };
   
   struct RangeMinSet {
     using OperatorMonoid = RangeSet;
@@ -169,6 +174,15 @@ options     head
     static DataMonoid::T act(const OperatorMonoid::T& m, int sz, const DataMonoid::T& a)
     { return m * sz + a; }
   };
+  
+  struct RangeSumSet {
+    using OperatorMonoid = RangeSet;
+    using DataMonoid = RangeSum;
+    static DataMonoid::T act(const OperatorMonoid::T& m, int sz, const DataMonoid::T&)
+    { return m * sz; }
+  };
+  
+  /// }}}--- ///
   
   // LazySegTree<RangeSumAdd> seg(m, 0, 0);
   
