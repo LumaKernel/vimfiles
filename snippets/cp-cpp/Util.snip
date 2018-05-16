@@ -8,7 +8,7 @@ options     head
   #define dump(...) cerr<<"["<<__LINE__<< "] "<<#__VA_ARGS__<<" = "<<make_tuple(__VA_ARGS__)<<"\n";
   template<int n, class...T> typename enable_if<(n>=sizeof...(T))>::type _ot(ostream &, tuple<T...> const &){}
   template<int n, class...T> typename enable_if<(n< sizeof...(T))>::type _ot(ostream & os, tuple<T...> const & t){ os << (n==0?"":", ") << get<n>(t); _ot<n+1>(os, t); }
-  template<class...T> ostream & operator<<(ostream & os, tuple<T...> const & t){ _ot<0>(os, t); return os; }
+  template<class...T> ostream & operator<<(ostream &o, tuple<T...> const &t){ o << "("; _ot<0>(o, t); o << ")"; return o; }
   #else
   #define dump(...)
   #endif
@@ -18,4 +18,27 @@ options     head
 snippet     ostreamvector
 options     head
   template <typename T> ostream &operator<<(ostream &o, const vector<T> &v) { if(&o == &cerr) { o << '{'; for(size_t i = 0; i < v.size(); i++) o << v[i] << (i + 1 != v.size() ? ", " : ""); o << "}"; } else { for(size_t i = 0; i < v.size(); i++) o << v[i] << (i + 1 != v.size() ? " " : ""); } return o; }
+
+snippet     yes
+alias       possible
+options     head
+  #define Pos(x) cout<<((x)?"Possible":"Impossible")<<endl;
+  #define POS(x) cout<<((x)?"POSSIBLE":"IMPOSSIBLE")<<endl;
+  #define YES(x) cout<<((x)?"YES":"NO")<<endl;
+  #define Yes(x) cout<<((x)?"Yes":"No")<<endl;
+  #define yes(x) cout<<((x)?"yes":"no")<<endl;
+
+snippet     smax
+alias       smin
+options     head
+  template <class T, class U> inline void smax(T &a, U b) { a = a > b ? a : b; }
+  template <class T, class U> inline void smin(T &a, U b) { a = a < b ? a : b; }
+
+# 緊急用
+snippet     rep
+options     head
+  #define rep(i, a, b) for(ll i = (ll) a; i < (ll) b; i++)
+  #define repi(i, a, b) for(ll i = (ll) a; i <= (ll) b; i++)
+  #define rrep(i, a, b) for(ll i = (ll) b - 1; i >= (ll) a; i--)
+  #define rrepi(i, a, b) for(ll i = (ll) b; i >= (ll) a; i--)
 
