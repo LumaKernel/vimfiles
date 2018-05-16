@@ -2,7 +2,7 @@
 # bridge : https://beta.atcoder.jp/contests/arc039/submissions/2136670
 # articulation : http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=2723146#1
 snippet     lowlink
-abbr        Lowlink(int size);calc();
+abbr        Lowlink(int size), calc();
 options     head
   /// --- Lowlink Library {{{ ///
   
@@ -11,22 +11,19 @@ options     head
   // construct : (int size)
   // do : calc()
   struct Lowlink {
-    struct Edge {
-      int to, idx;
-      Edge(int to, int idx): to(to), idx(idx) {}
-    };
+    struct Edge { int to, idx; };
     int size;
     int edgeSize = 0;
     vector< vector< Edge > > g;
-    VI ord, low;
+    vector<int> ord, low;
   
-    VI used;
-    VI isBridge, isArticulation;
+    vector<int> used;
+    vector<int> isBridge, isArticulation;
     Lowlink(int n): size(n), g(n), ord(n), low(n) {}
   
     void addEdge(int a, int b) {
-      g[a].emplace_back(b, edgeSize);
-      g[b].emplace_back(a, edgeSize);
+      g[a].emplace_back((Edge) {b, edgeSize});
+      g[b].emplace_back((Edge) {a, edgeSize});
       edgeSize++;
     }
   
@@ -39,7 +36,6 @@ options     head
       dfs(0, -1, k);
     }
   
-    // p just means "just before"
     private :
     void dfs(int i, int p, int &k) {
       used[i] = 1;
@@ -49,20 +45,19 @@ options     head
       for(Edge edge : g[i]) {
         int j = edge.to;
         int idx = edge.idx;
-        if(used[j]) {
+        if(!used[j]) {
           if(j != p) {
-            // back edge
-            smin(low[i], ord[j]);
+            // on dfs-tree
+            DFSTreeDegree++;
+            dfs(j, i, k);
+            low[i] = min(low[i], low[j]);
+            isBridge[idx] = ord[i] < low[j];
+            if(p != -1 && ord[i] <= low[j]) {
+              isArticulation[i] = 1;
+            }
           }
-        } else {
-          // on dfs-tree
-          DFSTreeDegree++;
-          dfs(j, i, k);
-          smin(low[i], low[j]);
-          isBridge[idx] = ord[i] < low[j];
-          if(p != -1 && ord[i] <= low[j]) {
-            isArticulation[i] = 1;
-          }
+        } else if(j != p) {
+          low[i] = min(low[i], ord[j]);
         }
       }
       if(p == -1 && DFSTreeDegree > 1) {
