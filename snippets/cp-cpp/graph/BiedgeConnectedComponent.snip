@@ -1,16 +1,17 @@
 # verify : https://beta.atcoder.jp/contests/arc039/submissions/2136670
-snippet     towedge
-abbr        TwoEdge(Lowlink);
+snippet     biedge
+alias       bridge twoedge
+abbr        Biedge(Lowlink);
 options     head
   // !! require Lowlink !!
-  /// --- BiConnected Component Decomposition Libary {{{ ///
+  /// --- Biedge Component Decomposition Libary {{{ ///
   
   // undirected graph
-  struct BiConnected {
+  struct Biedge {
     Lowlink lowlink;
     vector<int> comp;
   
-    TwoEdge(Lowlink lowlink): lowlink(lowlink){
+    Biedge(Lowlink lowlink): lowlink(lowlink){
       decomposite();
     }
   
