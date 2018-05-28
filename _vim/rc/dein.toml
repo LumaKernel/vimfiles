@@ -59,7 +59,7 @@ repo = 'Shougo/vimshell.vim'
 depends = ['vimproc.vim']
 # }}}
 
-#neosippet{{{
+# neosnippet{{{
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets']
@@ -68,7 +68,7 @@ hook_add = '''
 '''
 # }}}
 
-# neosnippet{{{
+# neosnippet-snippets{{{
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
 hook_add = '''
@@ -193,6 +193,9 @@ hook_add = '''
   let g:indent_guides_enable_on_vim_startup = 1
 '''
 # }}}
+
+[[plugins]]
+repo = 'pangloss/vim-javascript'
 
 [[plugins]]
 repo = 'digitaltoad/vim-pug'

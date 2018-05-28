@@ -237,7 +237,7 @@ au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
 au FileType text nnoremap <silent> <SPACE>w :w!<CR>
 nnoremap <SPACE>c ggVG"*y
-nnoremap <silent> <SPACE>v ggVGs<ESC>"*p:w!<CR>
+nnoremap <silent> <SPACE>v ggVGs<ESC>"*P:w!<CR>
 nmap <SPACE>t ggVGstemp<C-K>
 nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
 nnoremap <silent> <SPACE>b :Unite buffer<CR>
