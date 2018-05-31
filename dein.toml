@@ -1,9 +1,13 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
-# molokai{{{
+# hybrid {{{
 [[plugins]]
-repo = 'tomasr/molokai'
+repo = 'w0ng/vim-hybrid'
+hook_add = """
+  set background=dark
+  au MyAutoCmd VimEnter * nested colorscheme hybrid
+"""
 # }}}
 
 # toml syntax{{{
@@ -188,20 +192,82 @@ hook_add = '''
 
 # indent visualization {{{
 [[plugins]]
-repo = 'nathanaelkane/vim-indent-guides'
+repo = 'Yggdroot/indentLine'
+# }}}
+
+# c++ {{{
+[[plugins]]
+repo = 'Mizuchi/STL-Syntax'
+
+[[plugins]]
+repo = 'osyo-manga/vim-snowdrop'
+depends = ['vimproc.vim']
 hook_add = '''
-  let g:indent_guides_enable_on_vim_startup = 1
+  if has("unix")
+    let g:snowdrop#libclang_directory="/usr/lib/clang+llvm-3.4.2/lib"
+  endif
+  let g:snowdrop#command_options = {
+    \"cpp" : "-std=c++14",
+    \}
+
+  " Enable code completion in neocomplete.vim.
+  let g:neocomplete#sources#snowdrop#enable = 1
+
+  " Not skip
+  let g:neocomplete#skip_auto_completion_time = ""
+'''
+
+[[plugins]]
+repo = 'Shougo/unite-outline'
+
+[[plugins]]
+repo = 'osyo-manga/vim-marching'
+hook_add = '''
+  " clang コマンドの設定
+  let g:marching_clang_command = "clang"
+
+  " オプションを追加する
+  " filetype=cpp に対して設定する場合
+  let g:marching#clang_command#options = {
+  \	"cpp" : "-std=gnu++1y"
+  \}
+
+  " neocomplete.vim と併用して使用
+  let g:marching_enable_neocomplete = 1
+
+  if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+  endif
+
+  let g:neocomplete#force_omni_input_patterns.cpp =
+    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+  " 処理のタイミングを制御する
+  " 短いほうがより早く補完ウィンドウが表示される
+  " ただし、marching.vim 以外の処理にも影響するので注意する
+  set updatetime=200
+
+  " オムニ補完時に補完ワードを挿入したくない場合
+  imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+
+  " キャッシュを削除してからオムに補完を行う
+  imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
+
+
+  " _数値 から始まる候補を無視する
+  let g:marching#default_config = {
+  \	"ignore_pat" : '^_\D'
+  \}
 '''
 # }}}
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
 
 [[plugins]]
 repo = 'pangloss/vim-javascript'
 
 [[plugins]]
 repo = 'digitaltoad/vim-pug'
-
-# other{{{
-[[plugins]]
-repo = 'mmisono/viminesweeper'
-# }}}
 

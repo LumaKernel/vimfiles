@@ -1,40 +1,33 @@
 " エンコーディング次第でうまくいかないプラグイン対策
 set encoding=utf-8
 
-" バンドルのセットアップ {{{
-" + プラグインが実際にインストールされるディレクトリ
-let s:dein_dir = expand('~/.cache/dein')
-" dein.vim 本体
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-
-" + dein.vim がなければ github から落としてくる
-if &runtimepath !~# '/dein.vim'
-  if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-  endif
-  execute 'set runtimepath^=' . s:dein_repo_dir
+if !&compatible
+  set nocompatible
 endif
 
-" + プラグイン初期化
+" reset augroup
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+" dein settings {{{
+" dein自体の自動インストール
+let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
+let s:dein_dir = s:cache_home . '/dein'
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if !isdirectory(s:dein_repo_dir)
+  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
+endif
+let &runtimepath = s:dein_repo_dir .",". &runtimepath
+" プラグイン読み込み＆キャッシュ作成
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
-
-  " プラグインリストを収めた TOML ファイル
-  let g:rc_dir    = expand('~/.vim/rc')
-  let g:dein      = g:rc_dir . '/dein.toml'
-  let g:dein_lazy = g:rc_dir . '/dein_lazy.toml'
-
-  " TOML を読み込み、キャッシュしておく
-  call dein#load_toml(g:dein,      {'lazy': 0})
-  call dein#load_toml(g:dein_lazy, {'lazy': 1})
-
-  " 設定終了
+  call dein#load_toml("~/vimfiles/dein.toml")
   call dein#end()
   call dein#save_state()
 endif
-
-" もし、未インストールものものがあったらインストール
-if dein#check_install()
+" 不足プラグインの自動インストール
+if has('vim_starting') && dein#check_install()
   call dein#install()
 endif
 " }}}
@@ -79,6 +72,8 @@ set undodir=~/vimfiles/tmp
 
 cd ~
 set mouse=
+
+set matchpairs+=<:>
 "}}}
 
 " IME系{{{
@@ -105,11 +100,10 @@ noremap! <UP> <NOP>
 noremap! <DOWN> <NOP>
 
 " + vimrc関係をすぐに編集
-nnoremap <silent> <F5><F5> :vsplit ~/vimfiles/_vimrc<CR>
-nnoremap <silent> <F5>g :vsplit ~/vimfiles/_gvimrc<CR>
-nnoremap <silent> <F5>d :execute "vsplit ~/vimfiles/_vim/rc/dein.toml"<CR>
-nnoremap <silent> <F5>l :execute "vsplit ~/vimfiles/_vim/rc/dein_lazy.toml"<CR>
-nnoremap <silent> <expr> <F6> ":source $MYVIMRC \| :source $MYGVIMRC\<CR>"
+nnoremap <silent> <F5><F5> :e ~/vimfiles/_vimrc<CR>
+nnoremap <silent> <F5>g :e ~/vimfiles/_gvimrc<CR>
+nnoremap <silent> <F5>d :e ~/vimfiles/dein.toml<CR>
+nnoremap <silent> <F5>l :e ~/vimfiles/dein_lazy.toml<CR>
 
 nnoremap th <C-w>h
 nnoremap tj <C-w>j
@@ -138,7 +132,6 @@ nnoremap tq :q<CR>
 nnoremap tt <Nop>
 
 " + スペースキー関係
-nnoremap <SPACE> <Nop>
 nnoremap <silent> <SPACE>r :reg<CR>
 
 " + コマンド モード中はCTRLで移動できるように
@@ -206,7 +199,6 @@ elseif has('win32')
   nnoremap <silent> <expr> <SPACE>e ":!start explorer .\<CR>"
   nnoremap <silent> <SPACE>o :!start cmd<CR>
 endif
-
 "}}}
 
 " GVIMの設定{{{
@@ -224,20 +216,39 @@ set iminsert=0
 " }}}
 
 " 見た目の設定 for CUI{{{
-colorscheme molokai
 set guifont=Myrica\ M:h12,Osaka-Mono:h14
-set t_Co=256
-set lines=55
-set columns=160
 "}}}
+
+augroup cpp-namespace
+    autocmd!
+    autocmd FileType cpp inoremap <buffer><expr>; <SID>expand_namespace()
+augroup END
+function! s:expand_namespace()
+    let s = getline('.')[0:col('.')-1]
+    if s =~# '\<b;$'
+        return "\<BS>oost::"
+    elseif s =~# '\<s;$'
+        return "\<BS>td::"
+    elseif s =~# '\<d;$'
+        return "\<BS>etail::"
+    else
+        return ';'
+    endif
+endfunction
+
 
 " 競プロ向け設定{{{
 
 au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
 au FileType text nnoremap <silent> <SPACE>w :w!<CR>
-nnoremap <SPACE>c ggVG"*y2<C-O>
-nnoremap <silent> <SPACE>v ggVGs<ESC>"*P:w!<CR>
+if has('unix')
+  nnoremap <SPACE>c ggVG"+y2<C-O>
+  nnoremap <silent> <SPACE>v ggVGs<ESC>"+P:w!<CR>
+else
+  nnoremap <SPACE>c ggVG"*y2<C-O>
+  nnoremap <silent> <SPACE>v ggVGs<ESC>"*P:w!<CR>
+endif
 nmap <SPACE>t ggVGstemp<C-K>
 nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
 nnoremap <silent> <SPACE>b :Unite buffer<CR>
