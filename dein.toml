@@ -285,8 +285,10 @@ hook_add = '''
     \ 'c'  : 'C',
     \ 'v'  : 'V',
     \ 'V'  : 'V',
+    \ ''  : 'V',
     \ 's'  : 'S',
     \ 'S'  : 'S',
+    \ ''  : 'S',
     \ }
 
   let g:airline_powerline_fonts = 1
