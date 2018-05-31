@@ -149,11 +149,6 @@ cnoremap <C-D> <DEL>
 
 " }}}
 
-" NERDTree {{{
-au FileType nerdtree nmap <buffer> za o
-au FileType nerdtree nnoremap <buffer> <silent> <Leader>n :q<CR>
-" }}}
-
 " Tab系{{{
 set list " 不可視文字表示
 set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化
@@ -223,23 +218,28 @@ set iminsert=0
 set guifont=Myrica\ M:h12,Osaka-Mono:h14
 "}}}
 
+" c++ {{{
+
+set cinoptions=g0
+
 augroup cpp-namespace
-    autocmd!
-    autocmd FileType cpp inoremap <buffer><expr>; <SID>expand_namespace()
+  autocmd!
+  autocmd FileType cpp inoremap <buffer><expr>; <SID>expand_namespace()
 augroup END
 function! s:expand_namespace()
-    let s = getline('.')[0:col('.')-1]
-    if s =~# '\<b;$'
-        return "\<BS>oost::"
-    elseif s =~# '\<s;$'
-        return "\<BS>td::"
-    elseif s =~# '\<d;$'
-        return "\<BS>etail::"
-    else
-        return ';'
-    endif
+  let s = getline('.')[0:col('.')-1]
+  if s =~# '\<b;$'
+    return "\<BS>oost::"
+  elseif s =~# '\<s;$'
+    return "\<BS>td::"
+  elseif s =~# '\<d;$'
+    return "\<BS>etail::"
+  else
+    return ';'
+  endif
 endfunction
 
+" }}}
 
 " 競プロ向け設定{{{
 
@@ -254,8 +254,6 @@ else
   nnoremap <silent> <Leader>v ggVGs<ESC>"*P:w!<CR>
 endif
 nmap <Leader>t ggVGstemp<C-K>
-nnoremap <silent> <Leader>sh :VimShell<CR>
-nnoremap <silent> <Leader>b :Unite buffer<CR>
 
 " F1押し間違えるので
 nnoremap <F1> <Nop>

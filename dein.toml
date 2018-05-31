@@ -38,6 +38,9 @@ hook_add = '''
 # unite{{{
 [[plugins]]
 repo = 'Shougo/unite.vim'
+hook_add = '''
+  nnoremap <silent> <SPACE>b :Unite buffer<CR>
+'''
 # }}}
 
 # gitgutter{{{
@@ -48,8 +51,13 @@ repo = 'airblade/vim-gitgutter'
 # NERDTree{{{
 [[plugins]]
 repo = 'scrooloose/nerdtree'
+depends = ['vimproc.vim']
 hook_add = '''
-  nnoremap <silent> <SPACE>t :NERDTree<CR>
+  nnoremap <silent> <SPACE>n :NERDTree<CR>
+  augroup MyAutoCmd
+    au FileType nerdtree nmap <buffer> za o
+    au FileType nerdtree nnoremap <buffer><silent> <SPACE>n :q<CR>
+  augroup END
 '''
 
 [[plugins]]
@@ -61,6 +69,9 @@ depends = ['nerdtree']
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
 depends = ['vimproc.vim']
+hook_add = '''
+  nnoremap <silent> <SPACE>sh :VimShell<CR>
+'''
 # }}}
 
 # neosnippet{{{
@@ -69,17 +80,16 @@ repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets']
 hook_add = '''
   let g:neosnippet#snippets_directory='~/vimfiles/snippets/'
+
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  xmap <C-k> <Plug>(neosnippet_expand_or_target)
 '''
 # }}}
 
 # neosnippet-snippets{{{
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
-hook_add = '''
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k> <Plug>(neosnippet_expand_or_target)
-'''
 # }}}
 
 # neocomplete {{{
@@ -199,6 +209,7 @@ repo = 'Yggdroot/indentLine'
 [[plugins]]
 repo = 'Mizuchi/STL-Syntax'
 
+# Snowdrop {{{
 [[plugins]]
 repo = 'osyo-manga/vim-snowdrop'
 depends = ['vimproc.vim']
@@ -215,11 +226,30 @@ hook_add = '''
 
   " Not skip
   let g:neocomplete#skip_auto_completion_time = ""
+
+  augroup MyAutoCmd
+    autocmd FileType cpp setlocal balloonexpr=snowdrop#ballonexpr_typeof()
+    autocmd FileType cpp setlocal ballooneval
+  augroup END
+
+  " 編集中にGotoDefinitionすると必ずエラーになるので
+  let g:snowdrop#goto_definition_open_cmd = "silent! edit"
+
+  " コマンドが登録されない謎バグ
+  " issue出したほうがいいかね
+  augroup MyAutoCmd
+    autocmd FileType cpp call snowdrop#ftplugin#command("cpp")
+    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>i :SnowdropEchoTypeof<CR>
+    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>r :SnowdropEchoResultTypeof<CR>
+    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>g :SnowdropGotoDefenition<CR>
+  augroup END
 '''
+# }}}
 
 [[plugins]]
 repo = 'Shougo/unite-outline'
 
+# ALE {{{
 [[plugins]]
 repo = 'w0rp/ale'
 if = 'has("job") && has("channel") && has("timers")'
@@ -241,8 +271,7 @@ hook_add = '''
 
   let g:ale_lint_on_enter = 1
   let g:ale_lint_on_save = 1
-  " 編集中のlintはしない
-  let g:ale_lint_on_text_changed = 'never'
+  " let g:ale_lint_on_text_changed = 'never'
   let g:ale_lint_on_insert_leave = 1
 
   let g:ale_set_loclist = 1
@@ -254,8 +283,8 @@ hook_add = '''
     \  'cpp': ['gcc'],
     \}
 
-  nmap <silent> <SPACE>p <Plug>(ale_previous_wrap)
-  nmap <silent> <SPACE>n <Plug>(ale_next_wrap)
+  nmap <silent> <C-K><C-P> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-K><C-N> <Plug>(ale_next_wrap)
 
   function! s:ale_list()
     let g:ale_open_list = 1
@@ -266,6 +295,7 @@ hook_add = '''
   autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:q!<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
 '''
+# }}}
 
 # }}}
 
@@ -315,13 +345,55 @@ if = 'g:light'
 
 # }}}
 
+# CtrlP {{{
+# 参考 :
+# https://qiita.com/ahiruman5/items/4f3c845500c172a02935
+[[plugins]]
+repo = 'ctrlpvim/ctrlp.vim'
+hook_add = '''
+  " マッチウインドウの設定. 「下部に表示, 大きさ20行で固定, 検索結果100件」
+  let g:ctrlp_match_window = 'order:ttb,min:20,max:20,results:100'
+  " .(ドット)から始まるファイルも検索対象にする
+  let g:ctrlp_show_hidden = 1
+  let g:ctrlp_types = ['fil'] "ファイル検索のみ使用
+'''
+
+[[plugins]]
+repo = 'rking/ag.vim'
+hook_add = '''
+  if executable('ag') " agが使える環境の場合
+    let g:ctrlp_use_caching=0 " CtrlPのキャッシュを使わない
+    let g:ctrlp_user_command='ag %s -i --hidden -g ""' " 「ag」の検索設定
+  endif
+'''
+
+# }}}
+
+# vim-quickrun {{{
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+# }}}
+
+[[plugins]]
+repo = 'jsfaint/gen_tags.vim'
+hook_add = '''
+  let g:gen_tags#ctags_auto_gen = 1
+  let g:gen_tags#gtags_auto_gen = 1
+'''
+
+[[plugins]]
+repo = 'rhysd/wandbox-vim'
+depends = ['vim-quickrun']
+
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
 build = 'make'
 
 [[plugins]]
 repo = 'pangloss/vim-javascript'
+on_ft = ['javascript']
 
 [[plugins]]
 repo = 'digitaltoad/vim-pug'
+on_ft = ['pug', 'jade', 'vue']
 
