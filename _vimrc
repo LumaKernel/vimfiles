@@ -1,6 +1,9 @@
 " エンコーディング次第でうまくいかないプラグイン対策
 set encoding=utf-8
 
+" 軽いと思う環境
+let g:light = has("unix")
+
 if !&compatible
   set nocompatible
 endif
@@ -59,7 +62,7 @@ set noswapfile " スワップファイルを作らない
 set autoread " 編集中のファイルが変更されたら自動で読み直す
 set hidden " バッファが編集中でもその他のファイルを開けるように
 set showcmd " 入力中のコマンドをステータスに表示する
-set wildmode=longest,full
+set wildmode=full:list
 set noshowmatch
 
 set foldmethod=marker
@@ -84,6 +87,8 @@ augroup END
 "}}}
 
 " キーバインド{{{
+let g:mapleader=" "
+
 " + 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
@@ -131,8 +136,7 @@ nnoremap tq :q<CR>
 " タブで開く、を上書き
 nnoremap tt <Nop>
 
-" + スペースキー関係
-nnoremap <silent> <SPACE>r :reg<CR>
+nnoremap <silent> <Leader>r :reg<CR>
 
 " + コマンド モード中はCTRLで移動できるように
 cnoremap <C-H> <LEFT>
@@ -147,7 +151,7 @@ cnoremap <C-D> <DEL>
 
 " NERDTree {{{
 au FileType nerdtree nmap <buffer> za o
-au FileType nerdtree nnoremap <buffer> <silent> <SPACE>n :q<CR>
+au FileType nerdtree nnoremap <buffer> <silent> <Leader>n :q<CR>
 " }}}
 
 " Tab系{{{
@@ -193,11 +197,11 @@ nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
 
 " vimとFinder, terminalへの橋渡し{{{
 if has('mac')
-  nnoremap <silent> <SPACE>e :!open .<CR>
-  nnoremap <silent> <SPACE>o :!open -a Terminal.app .<CR>
+  nnoremap <silent> <Leader>e :!open .<CR>
+  nnoremap <silent> <Leader>o :!open -a Terminal.app .<CR>
 elseif has('win32')
-  nnoremap <silent> <expr> <SPACE>e ":!start explorer .\<CR>"
-  nnoremap <silent> <SPACE>o :!start cmd<CR>
+  nnoremap <silent> <expr> <Leader>e ":!start explorer .\<CR>"
+  nnoremap <silent> <Leader>o :!start cmd<CR>
 endif
 "}}}
 
@@ -241,17 +245,17 @@ endfunction
 
 au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
-au FileType text nnoremap <silent> <SPACE>w :w!<CR>
+au FileType text nnoremap <silent> <Leader>w :w!<CR>
 if has('unix')
-  nnoremap <SPACE>c ggVG"+y2<C-O>
-  nnoremap <silent> <SPACE>v ggVGs<ESC>"+P:w!<CR>
+  nnoremap <Leader>c ggVG"+y2<C-O>
+  nnoremap <silent> <Leader>v ggVGs<ESC>"+P:w!<CR>
 else
-  nnoremap <SPACE>c ggVG"*y2<C-O>
-  nnoremap <silent> <SPACE>v ggVGs<ESC>"*P:w!<CR>
+  nnoremap <Leader>c ggVG"*y2<C-O>
+  nnoremap <silent> <Leader>v ggVGs<ESC>"*P:w!<CR>
 endif
-nmap <SPACE>t ggVGstemp<C-K>
-nnoremap <silent> <SPACE><SPACE> :VimShell<CR>
-nnoremap <silent> <SPACE>b :Unite buffer<CR>
+nmap <Leader>t ggVGstemp<C-K>
+nnoremap <silent> <Leader>sh :VimShell<CR>
+nnoremap <silent> <Leader>b :Unite buffer<CR>
 
 " F1押し間違えるので
 nnoremap <F1> <Nop>

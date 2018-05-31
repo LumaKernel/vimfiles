@@ -49,7 +49,7 @@ repo = 'airblade/vim-gitgutter'
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-  nnoremap <silent> <SPACE>n :NERDTree<CR>
+  nnoremap <silent> <SPACE>t :NERDTree<CR>
 '''
 
 [[plugins]]
@@ -221,50 +221,95 @@ hook_add = '''
 repo = 'Shougo/unite-outline'
 
 [[plugins]]
-repo = 'justmao945/vim-clang'
+repo = 'w0rp/ale'
+if = 'has("job") && has("channel") && has("timers")'
+on_ft = 'cpp'
+# 参考 :
+# https://rcmdnk.com/blog/2017/09/25/computer-vim/
+# https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7#ale
 hook_add = '''
-  let g:clang_auto = 0
-  " default 'longest' can not work with neocomplete
-  let g:clang_c_completeopt   = 'menuone'
-  let g:clang_cpp_completeopt = 'menuone'
-  
-  function! s:get_latest_clang(search_path)
-      let l:filelist = split(globpath(a:search_path, 'clang-*'), '\n')
-      let l:clang_exec_list = []
-      for l:file in l:filelist
-          if l:file =~ '^.*clang-\d\.\d$'
-              call add(l:clang_exec_list, l:file)
-          endif
-      endfor
-      if len(l:clang_exec_list)
-          return reverse(l:clang_exec_list)[0]
-      else
-          return 'clang'
-      endif
+  " エラー行に表示するマーク
+  let g:ale_sign_error = '>'
+  let g:ale_sign_warning = '⚠'
+
+  let g:ale_list_window_size = 1
+
+  " エラー行にカーソルをあわせた際に表示されるメッセージフォーマット
+  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+  " エラー表示の列を常時表示
+  let g:ale_sign_column_always = 1
+
+  let g:ale_lint_on_enter = 1
+  let g:ale_lint_on_save = 1
+  " 編集中のlintはしない
+  let g:ale_lint_on_text_changed = 'never'
+  let g:ale_lint_on_insert_leave = 1
+
+  let g:ale_set_loclist = 1
+  let g:ale_set_quickfix = 0
+  let g:ale_open_list = 0
+  let g:ale_keep_list_window_open = 0
+
+  let g:ale_linters = {
+    \  'cpp': ['gcc'],
+    \}
+
+  nmap <silent> <SPACE>p <Plug>(ale_previous_wrap)
+  nmap <silent> <SPACE>n <Plug>(ale_next_wrap)
+
+  function! s:ale_list()
+    let g:ale_open_list = 1
+    call ale#Queue(0, 'lint_file')
   endfunction
-  
-  function! s:get_latest_clang_format(search_path)
-      let l:filelist = split(globpath(a:search_path, 'clang-format-*'), '\n')
-      let l:clang_exec_list = []
-      for l:file in l:filelist
-          if l:file =~ '^.*clang-format-\d\.\d$'
-              call add(l:clang_exec_list, l:file)
-          endif
-      endfor
-      if len(l:clang_exec_list)
-          return reverse(l:clang_exec_list)[0]
-      else
-          return 'clang-format'
-      endif
-  endfunction
-  
-  let g:clang_exec = s:get_latest_clang('/usr/bin')
-  let g:clang_format_exec = s:get_latest_clang_format('/usr/bin')
-  
-  let g:clang_c_options = '-std=c11'
-  let g:clang_cpp_options = '-std=gnu++14'
+  command! ALEList call s:ale_list()
+  nnoremap <SPACE>m :ALEList<CR>
+  autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:q!<CR>
+  autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
 '''
 
+# }}}
+
+# vim-airline {{{
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+if = 'g:light'
+# 参考 :
+# https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7#vim-airline
+hook_add = '''
+  " モードの表示名を定義
+  let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'n'  : 'N',
+    \ 'i'  : 'I',
+    \ 'R'  : 'R',
+    \ 'c'  : 'C',
+    \ 'v'  : 'V',
+    \ 'V'  : 'V',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ }
+
+  let g:airline_powerline_fonts = 1
+  let g:airline_theme = 'bubblegum'
+  let g:airline#extensions#tabline#enabled = 1
+  let g:ale_list_window_size = 4
+
+  " gitのHEADから変更した行の+-を非表示(vim-gitgutterの拡張)
+  let g:airline#extensions#hunks#enabled = 0
+
+  " Lintツールによるエラー、警告を表示(ALEの拡張)
+  let g:airline#extensions#ale#enabled = 1
+  let g:airline#extensions#ale#error_symbol = 'E:'
+  let g:airline#extensions#ale#warning_symbol = 'W:'
+'''
+
+hook_source = '''
+  " let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+'''
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+if = 'g:light'
 
 # }}}
 
