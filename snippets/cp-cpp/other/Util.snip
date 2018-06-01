@@ -28,6 +28,11 @@ options     head
   #define Yes(x) cout<<((x)?"Yes":"No")<<endl;
   #define yes(x) cout<<((x)?"yes":"no")<<endl;
 
+snippet     uniq
+options     head
+  #define uniq(v) sort(begin(v), end(v)), (v).erase(unique(begin(v), end(v)), end(v))
+  
+
 snippet     smax
 alias       smin
 options     head

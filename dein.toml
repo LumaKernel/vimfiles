@@ -412,9 +412,9 @@ let g:quickrun_config._ = {
   \ }
   augroup MyAutoCmd
     autocmd FileType cpp nnoremap <buffer><SPACE>0 :QuickRun<CR>
-    autocmd FileType cpp nnoremap <buffer><SPACE>1 :QuickRun -input in1
-    autocmd FileType cpp nnoremap <buffer><SPACE>2 :QuickRun -input in2
-    autocmd FileType cpp nnoremap <buffer><SPACE>3 :QuickRun -input in3
+    autocmd FileType cpp nnoremap <buffer><SPACE>1 :QuickRun -input in1<CR>
+    autocmd FileType cpp nnoremap <buffer><SPACE>2 :QuickRun -input in2<CR>
+    autocmd FileType cpp nnoremap <buffer><SPACE>3 :QuickRun -input in3<CR>
     autocmd FileType cpp nnoremap <buffer><SPACE>4 :QuickRun -input in4
   augroup END
 '''
