@@ -14,11 +14,18 @@ hook_add = """
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
 dapends = ['context_filetype.vim']
-on_ft = 'toml'
+on_ft = ['toml', 'help']
+hook_add = '''
+let g:precious_enable_switch_CursorMoved = {
+  \  "*" : 0,
+  \  "toml" : 1,
+  \  "help" : 1
+  \}
+'''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
-on_ft = 'toml'
+on_ft = ['toml', 'help']
 # }}}
 
 # toml syntax{{{
@@ -334,6 +341,12 @@ hook_add = '''
   let g:airline#extensions#tabline#enabled = 1
   let g:ale_list_window_size = 4
 
+  let g:airline_detect_iminsert = 1
+
+  augroup MyAutoCmd
+    autocmd FileType qf let w:airline_disabled = 1
+  augroup END
+
   " gitのHEADから変更した行の+-を非表示(vim-gitgutterの拡張)
   let g:airline#extensions#hunks#enabled = 0
 
@@ -393,21 +406,32 @@ repo = 'vim-jp/vimdoc-ja'
 # }}}
 
 # gtags {{{
-[[plugins]]
-repo = 'jsfaint/gen_tags.vim'
-hook_add = '''
-  let g:gen_tags#gtags_auto_gen = 1
-'''
+#[[plugins]]
+#repo = 'jsfaint/gen_tags.vim'
+#hook_add = '''
+#  let g:gen_tags#gtags_auto_gen = 1
+#'''
 
 [[plugins]]
 repo = 'lighttiger2505/gtags.vim'
+
+[[plugins]]
+repo = 'zebult/auto-gtags.vim'
+# https://qiita.com/zebult/items/270edd5d237f389f0563
 hook_add = '''
-  let g:Gtags_Auto_Map = 0
-  let g:Gtags_OpenQuickfixWindow = 1
-  nmap <silent> K :<C-u>exe("Gtags ".expand('<cword>'))<CR>
-  nmap <silent> R :<C-u>exe("Gtags -r ".expand('<cword>'))<CR>
+  let g:auto_gtags = 1
 '''
 # }}}
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+hook_add = '''
+  let g:tagbar_width = 30
+  let g:tagbar_autoshowtag = 1
+'''
+
+[[plugins]]
+repo = 'thinca/vim-qfreplace'
 
 [[plugins]]
 repo = 'rhysd/wandbox-vim'

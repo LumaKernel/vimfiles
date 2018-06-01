@@ -73,9 +73,6 @@ set backupdir=~/vimfiles/tmp
 set undofile
 set undodir=~/vimfiles/tmp
 
-cd ~
-set mouse=
-
 set matchpairs+=<:>
 "}}}
 
@@ -188,6 +185,8 @@ set wrapscan
 set hlsearch
 " ハイライト解除
 nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
+
+cmap <silent> <Esc> <Esc><Esc>
 "}}}
 
 " vimとFinder, terminalへの橋渡し{{{
