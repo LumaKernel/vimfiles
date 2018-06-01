@@ -14,6 +14,7 @@ hook_add = """
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
 dapends = ['context_filetype.vim']
+if = 'g:light'
 on_ft = ['toml', 'help']
 hook_add = '''
 let g:precious_enable_switch_CursorMoved = {
@@ -25,6 +26,7 @@ let g:precious_enable_switch_CursorMoved = {
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
+if = 'g:light'
 on_ft = ['toml', 'help']
 # }}}
 
@@ -398,6 +400,24 @@ hook_add = '''
 # vim-quickrun {{{
 [[plugins]]
 repo = 'thinca/vim-quickrun'
+hook_add = '''
+let g:quickrun_config = get(g:, 'quickrun_config', {})
+let g:quickrun_config._ = {
+  \ 'outputter' : 'quickfix',
+  \ 'runner' : 'job'
+  \ }
+  let g:quickrun_config.cpp = {
+  \ 'command' : 'g++',
+  \ 'cmdopt' : '-DDEBUG -w -std=c++14',
+  \ }
+  augroup MyAutoCmd
+    autocmd FileType cpp nnoremap <buffer><SPACE>0 :QuickRun<CR>
+    autocmd FileType cpp nnoremap <buffer><SPACE>1 :QuickRun -input in1
+    autocmd FileType cpp nnoremap <buffer><SPACE>2 :QuickRun -input in2
+    autocmd FileType cpp nnoremap <buffer><SPACE>3 :QuickRun -input in3
+    autocmd FileType cpp nnoremap <buffer><SPACE>4 :QuickRun -input in4
+  augroup END
+'''
 # }}}
 
 # japanese {{{
@@ -405,37 +425,17 @@ repo = 'thinca/vim-quickrun'
 repo = 'vim-jp/vimdoc-ja'
 # }}}
 
-# gtags {{{
-#[[plugins]]
-#repo = 'jsfaint/gen_tags.vim'
-#hook_add = '''
-#  let g:gen_tags#gtags_auto_gen = 1
-#'''
-
-[[plugins]]
-repo = 'lighttiger2505/gtags.vim'
-
-[[plugins]]
-repo = 'zebult/auto-gtags.vim'
-# https://qiita.com/zebult/items/270edd5d237f389f0563
-hook_add = '''
-  let g:auto_gtags = 1
-'''
-# }}}
-
+# tagbar {{{
 [[plugins]]
 repo = 'majutsushi/tagbar'
 hook_add = '''
   let g:tagbar_width = 30
   let g:tagbar_autoshowtag = 1
 '''
-
-[[plugins]]
-repo = 'thinca/vim-qfreplace'
+# }}}
 
 [[plugins]]
 repo = 'rhysd/wandbox-vim'
-depends = ['vim-quickrun']
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'

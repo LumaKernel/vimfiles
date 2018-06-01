@@ -144,6 +144,9 @@ cnoremap <C-L> <RIGHT>
 inoremap <C-L> <DEL>
 cnoremap <C-D> <DEL>
 
+" like VSCode
+nnoremap <A-Z> set wrap!
+
 " }}}
 
 " Tab系{{{
@@ -184,9 +187,7 @@ set wrapscan
 " 検索語をハイライト表示
 set hlsearch
 " ハイライト解除
-nmap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
-
-cmap <silent> <Esc> <Esc><Esc>
+nmap <silent> <ESC><ESC> :nohlsearch<CR><ESC>
 "}}}
 
 " vimとFinder, terminalへの橋渡し{{{
@@ -209,13 +210,15 @@ if has('gui')
   set guioptions-=R
   set guioptions-=l
   set guioptions-=L
+
+  if has('unix')
+    set guifont=Source\ Code\ Pro\ for\ Powerline\ 11,Source\ Code\ Pro\ 11
+  else
+    set guifont=Myrica\ M:h12,Osaka-Mono:h14
+  endif
 endif
 set iminsert=0
 " }}}
-
-" 見た目の設定 for CUI{{{
-set guifont=Myrica\ M:h12,Osaka-Mono:h14
-"}}}
 
 " c++ {{{
 
