@@ -210,43 +210,6 @@ repo = 'Yggdroot/indentLine'
 repo = 'Mizuchi/STL-Syntax'
 on_ft = 'cpp'
 
-# Snowdrop {{{
-[[plugins]]
-repo = 'osyo-manga/vim-snowdrop'
-depends = ['vimproc.vim']
-hook_add = '''
-  if has("unix")
-    let g:snowdrop#libclang_directory="/usr/lib/clang+llvm-3.4.2/lib"
-  endif
-  let g:snowdrop#command_options = {
-    \"cpp" : "-std=c++14",
-    \}
-
-  " Enable code completion in neocomplete.vim.
-  let g:neocomplete#sources#snowdrop#enable = 1
-
-  " Not skip
-  let g:neocomplete#skip_auto_completion_time = ""
-
-  augroup MyAutoCmd
-    autocmd FileType cpp setlocal balloonexpr=snowdrop#ballonexpr_typeof()
-    autocmd FileType cpp setlocal ballooneval
-  augroup END
-
-  " 編集中にGotoDefinitionすると必ずエラーになるので
-  let g:snowdrop#goto_definition_open_cmd = "silent! edit"
-
-  " コマンドが登録されない謎バグ
-  " issue出したほうがいいかね
-  augroup MyAutoCmd
-    autocmd FileType cpp call snowdrop#ftplugin#command("cpp")
-    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>i :SnowdropEchoTypeof<CR>
-    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>r :SnowdropEchoResultTypeof<CR>
-    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>g :SnowdropGotoDefinition<CR>
-  augroup END
-'''
-# }}}
-
 [[plugins]]
 repo = 'Shougo/unite-outline'
 
