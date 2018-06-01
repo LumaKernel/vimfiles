@@ -82,6 +82,7 @@ options     head
         l = max(0, l); r = min(r, n);
         propToO(l);
         propToO(r - 1);
+        int tl = l, tr = r;
         int sz = 1;
         for(l += n, r += n; l < r; l >>= 1, r >>= 1, sz <<= 1) {
           if(l & 1) propFrom(l, sz), lazy[l] = m, propFrom(l, sz), l++;

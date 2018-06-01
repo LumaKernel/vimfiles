@@ -208,6 +208,7 @@ repo = 'Yggdroot/indentLine'
 # c++ {{{
 [[plugins]]
 repo = 'Mizuchi/STL-Syntax'
+on_ft = 'cpp'
 
 # Snowdrop {{{
 [[plugins]]
@@ -241,7 +242,7 @@ hook_add = '''
     autocmd FileType cpp call snowdrop#ftplugin#command("cpp")
     autocmd FileType cpp nnoremap <buffer><silent> <SPACE>i :SnowdropEchoTypeof<CR>
     autocmd FileType cpp nnoremap <buffer><silent> <SPACE>r :SnowdropEchoResultTypeof<CR>
-    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>g :SnowdropGotoDefenition<CR>
+    autocmd FileType cpp nnoremap <buffer><silent> <SPACE>g :SnowdropGotoDefinition<CR>
   augroup END
 '''
 # }}}
@@ -351,19 +352,24 @@ if = 'g:light'
 [[plugins]]
 repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
-  " マッチウインドウの設定. 「下部に表示, 大きさ20行で固定, 検索結果100件」
-  let g:ctrlp_match_window = 'order:ttb,min:20,max:20,results:100'
-  " .(ドット)から始まるファイルも検索対象にする
+  let g:ctrlp_match_window = 'bottom,order:ttb,min:1,max:20,results:50'
   let g:ctrlp_show_hidden = 1
-  let g:ctrlp_types = ['fil'] "ファイル検索のみ使用
-'''
-
-[[plugins]]
-repo = 'rking/ag.vim'
-hook_add = '''
-  if executable('ag') " agが使える環境の場合
-    let g:ctrlp_use_caching=0 " CtrlPのキャッシュを使わない
-    let g:ctrlp_user_command='ag %s -i --hidden -g ""' " 「ag」の検索設定
+  " ファイルのみ
+  let g:ctrlp_types = ['fil']
+  " カレントディレクトリから探す
+  let g:ctrlp_working_path_mode = 'w'
+  let g:ctrlp_lazy_update = 200
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll|o)$',
+    \ 'link': '',
+    \ }
+  " C-Rでキャッシュ削除
+  let g:ctrlp_prompt_mappings = { 'PrtClearCache()': ['<C-R>'] }
+  if executable('ag')
+    " CtrlPのキャッシュを使わない
+    let g:ctrlp_use_caching=0
+    let g:ctrlp_user_command='ag %s -i --hidden -g ""'
   endif
 '''
 
@@ -374,10 +380,14 @@ hook_add = '''
 repo = 'thinca/vim-quickrun'
 # }}}
 
+# japanese {{{
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+# }}}
+
 [[plugins]]
 repo = 'jsfaint/gen_tags.vim'
 hook_add = '''
-  let g:gen_tags#ctags_auto_gen = 1
   let g:gen_tags#gtags_auto_gen = 1
 '''
 
