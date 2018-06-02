@@ -69,19 +69,13 @@ hook_add = '''
 
   nnoremap <silent> <Leader>b :Unite buffer<CR>
   nnoremap <silent> <Leader>a :Unite outline<CR>
-  nnoremap <silent> <Leader>g :Unite grep<CR>
 
   " Unite-grep {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
 
-  " grep検索
   nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-
-  " カーソル位置の単語をgrep検索
   nnoremap <silent> ,cg :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
-
-  " grep検索結果の再呼出
   nnoremap <silent> ,r  :<C-u>UniteResume search-buffer<CR>
 
   " use ripgrep
@@ -297,10 +291,6 @@ hook_add = '''
   let g:ale_open_list = 0
   let g:ale_keep_list_window_open = 0
 
-  " 効かない...Cだけ?
-  " let g:ale_c_gcc_options = '-std=c++14 -Wall -DDEBUG -DUSECOUT'
-  " let g:ale_c_clang_options = '-std=c++14 -Wall -DDEBUG -DUSECOUT'
-
   let g:ale_linters = {
     \  'cpp': ['gcc'],
     \}
@@ -317,6 +307,11 @@ hook_add = '''
   autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:q!<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
 '''
+
+hook_source = '''
+  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -DDEBUG -DUSECOUT')
+'''
+
 # }}}
 
 # }}}
