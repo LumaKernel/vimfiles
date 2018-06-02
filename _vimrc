@@ -1,7 +1,9 @@
 " エンコーディング次第でうまくいかないプラグイン対策
 set encoding=utf-8
 
-" 軽いと思う環境
+let g:mapleader = " "
+
+"<CR> 軽いと思う環境
 let g:light = has("unix")
 
 if !&compatible
@@ -84,8 +86,6 @@ augroup END
 "}}}
 
 " キーバインド{{{
-let g:mapleader=" "
-
 " + 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
@@ -248,17 +248,33 @@ endfunction
 au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
 au FileType text nnoremap <silent> <Leader>w :w!<CR>
+let s:creg = "*"
 if has('unix')
+  let s:creg = "+"
   nnoremap <Leader>c ggVG"+y2<C-O>
   nnoremap <silent> <Leader>v ggVGs<ESC>"+P:w!<CR>
 else
   nnoremap <Leader>c ggVG"*y2<C-O>
   nnoremap <silent> <Leader>v ggVGs<ESC>"*P:w!<CR>
 endif
-nmap <Leader>t ggVGstemp<C-K>
+nmap <Leader>t ggVGstemp
 
 " F1押し間違えるので
 nnoremap <F1> <Nop>
+
+function! s:cp_cpp()
+  " clipboard を (編集中.cppのあるディレクトリ)/in#{i} に F#{i} キーで保存
+  for i in range(1, 10)
+    execute
+    \ "nnoremap <expr><buffer> <Leader><F" . i .
+    \'> ":e " . expand("%:h") . "/in' . i . '<CR>' .
+    \ 'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>"'
+  endfor
+endfunction
+
+augroup MyAutoCmd
+  autocmd Filetype cpp call <SID>cp_cpp()
+augroup END
 
 " }}}
 

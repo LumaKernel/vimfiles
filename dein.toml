@@ -67,9 +67,9 @@ hook_add = '''
     autocmd Filetype unite imap <buffer><silent> <C-K> <C-P>
   augroup END
 
-  nnoremap <silent> <SPACE>b :Unite buffer<CR>
-  nnoremap <silent> <SPACE>a :Unite outline<CR>
-  nnoremap <silent> <SPACE>g :Unite outline<CR>
+  nnoremap <silent> <Leader>b :Unite buffer<CR>
+  nnoremap <silent> <Leader>a :Unite outline<CR>
+  nnoremap <silent> <Leader>g :Unite grep<CR>
 
   " Unite-grep {{{
   let g:unite_enable_ignore_case = 1
@@ -105,10 +105,10 @@ repo = 'airblade/vim-gitgutter'
 repo = 'scrooloose/nerdtree'
 depends = ['vimproc.vim']
 hook_add = '''
-  nnoremap <silent> <SPACE>n :NERDTree<CR>
+  nnoremap <silent> <Leader>n :NERDTree<CR>
   augroup MyAutoCmd
     au FileType nerdtree nmap <buffer> za o
-    au FileType nerdtree nnoremap <buffer><silent> <SPACE>n :q<CR>
+    au FileType nerdtree nnoremap <buffer><silent> <Leader>n :q<CR>
   augroup END
 '''
 
@@ -122,7 +122,7 @@ depends = ['nerdtree']
 repo = 'Shougo/vimshell.vim'
 depends = ['vimproc.vim']
 hook_add = '''
-  nnoremap <silent> <SPACE>sh :VimShell<CR>
+  nnoremap <silent> <Leader>sh :VimShell<CR>
 '''
 # }}}
 
@@ -275,8 +275,8 @@ on_ft = 'cpp'
 # https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7#ale
 hook_add = '''
   " エラー行に表示するマーク
-  if has('unix') && !has('gui-toolbar')
-    let g:ale_sign_error = '>'
+  if has('unix') && !has('gui_running')
+    let g:ale_sign_error = '>>'
     let g:ale_sign_warning = '⚠'
   endif
 
@@ -297,6 +297,10 @@ hook_add = '''
   let g:ale_open_list = 0
   let g:ale_keep_list_window_open = 0
 
+  " 効かない...Cだけ?
+  " let g:ale_c_gcc_options = '-std=c++14 -Wall -DDEBUG -DUSECOUT'
+  " let g:ale_c_clang_options = '-std=c++14 -Wall -DDEBUG -DUSECOUT'
+
   let g:ale_linters = {
     \  'cpp': ['gcc'],
     \}
@@ -309,7 +313,7 @@ hook_add = '''
     call ale#Queue(0, 'lint_file')
   endfunction
   command! ALEList call s:ale_list()
-  nnoremap <SPACE>m :ALEList<CR>
+  nnoremap <Leader>m :ALEList<CR>
   autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:q!<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
 '''
@@ -409,15 +413,15 @@ let g:quickrun_config._ = {
   \ }
   let g:quickrun_config.cpp = {
   \ 'command' : 'g++',
-  \ 'cmdopt' : '-DDEBUG -w -std=c++14',
+  \ 'cmdopt' : '-DDEBUG -DUSECOUT -w -std=c++14',
   \ }
   augroup MyAutoCmd
-    autocmd FileType cpp nnoremap <expr><buffer><SPACE>0 ":ccl\|QuickRun\<CR>"
-    autocmd FileType cpp nnoremap <expr><buffer><SPACE>1 ":ccl\|QuickRun -input " . expand("%:h") . "/in1\<CR>"
+    autocmd FileType cpp nnoremap <expr><buffer><Leader>0 ":ccl\|QuickRun\<CR>"
+    autocmd FileType cpp nnoremap <expr><buffer><Leader>1 ":ccl\|QuickRun -input " . expand("%:h") . "/in1\<CR>"
     for i in range(1, 9)
       exe
       \'autocmd FileType cpp nnoremap <expr><buffer> ' .
-      \'<SPACE>' . i .
+      \'<Leader>' . i .
       \' ":ccl\|QuickRun -input " . expand("%:h") . "/in' . i .
       \'\<CR>"'
     endfor
