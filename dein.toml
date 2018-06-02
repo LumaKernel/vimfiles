@@ -309,7 +309,7 @@ hook_add = '''
 '''
 
 hook_source = '''
-  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -DDEBUG -DUSECOUT')
+  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -DDEBUG -DUSE_COUT')
 '''
 
 # }}}
