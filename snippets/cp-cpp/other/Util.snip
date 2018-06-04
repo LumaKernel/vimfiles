@@ -13,11 +13,11 @@ options     head
   template<int n, class...T> typename enable_if<(n>=sizeof...(T))>::type _ot(ostream &, tuple<T...> const &){}
   template<int n, class...T> typename enable_if<(n< sizeof...(T))>::type _ot(ostream & os, tuple<T...> const & t){ os << (n==0?"":", ") << get<n>(t); _ot<n+1>(os, t); }
   template<class...T> ostream & operator<<(ostream &o, tuple<T...> const &t){ o << "("; _ot<0>(o, t); o << ")"; return o; }
+  template<class T, class U> ostream & operator<<(ostream &o, pair<T, U> const &p) { o << "(" << p.first << ", " << p.second << ")"; return o; }
   #else
   #define dump(...) (0)
   #endif
   /// }}}--- ///
-  
 
 snippet     ostreamvector
 options     head
@@ -35,13 +35,24 @@ options     head
 snippet     uniq
 options     head
   #define uniq(v) sort(begin(v), end(v)), (v).erase(unique(begin(v), end(v)), end(v))
-  
 
 snippet     smax
 alias       smin
 options     head
   template <class T, class U> inline void smax(T &a, U b) { a = a > b ? a : b; }
   template <class T, class U> inline void smin(T &a, U b) { a = a < b ? a : b; }
+
+snippet     neighbor4
+alias       4
+options     head
+  int dx[] = {1, 0, -1, 0};
+  int dy[] = {0, -1, 0, 1};
+
+snippet     neighbor8
+alias       8
+options     head
+  int dx[] = {1, 0, -1, 0, 1, 1, -1, -1};
+  int dy[] = {0, -1, 0, 1, -1, 1, -1, 1};
 
 # 緊急用
 snippet     rep
