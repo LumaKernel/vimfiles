@@ -3,7 +3,7 @@ set encoding=utf-8
 
 let g:mapleader = " "
 
-"<CR> 軽いと思う環境
+" 軽いと思う環境
 let g:light = has("unix")
 
 if !&compatible
@@ -58,7 +58,6 @@ let g:loaded_matchparen = 1
 "}}}
 
 " 基本設定{{{
-set nocompatible
 set fenc=utf-8 "文字コードをUFT-8に設定
 set noswapfile " スワップファイルを作らない
 set autoread " 編集中のファイルが変更されたら自動で読み直す
@@ -76,6 +75,11 @@ set undofile
 set undodir=~/vimfiles/tmp
 
 set matchpairs+=<:>
+
+set scrolloff=4
+
+set backspace=indent,eol,start
+
 "}}}
 
 " IME系{{{
@@ -222,6 +226,7 @@ set iminsert=0
 
 " c++ {{{
 
+" private:とかのインデントを作らない(たぶん
 set cinoptions=g0
 
 augroup cpp-namespace
@@ -248,19 +253,22 @@ endfunction
 au FileType vimshell imap <buffer> <C-K> <Plug>(neosnippet_expand_or_jump)
 
 au FileType text nnoremap <silent> <Leader>w :w!<CR>
-let s:creg = "*"
+let s:creg = has('unix') ? "+" : "*"
+
+function! s:copyall()
+  let l:cursor = getcurpos()
+  execute 'normal! ggVG"' . s:creg . 'y'
+  call setpos('.', l:cursor)
+endfunction
+
+nnoremap <silent> <Leader>c :call <SID>copyall()<CR>
 if has('unix')
-  let s:creg = "+"
-  nnoremap <Leader>c ggVG"+y2<C-O>
   nnoremap <silent> <Leader>v ggVGs<ESC>"+P:w!<CR>
 else
-  nnoremap <Leader>c ggVG"*y2<C-O>
   nnoremap <silent> <Leader>v ggVGs<ESC>"*P:w!<CR>
 endif
 nmap <Leader>t ggVGstemp
 
-" F1押し間違えるので
-nnoremap <F1> <Nop>
 
 function! s:cp_cpp()
   " clipboard を (編集中.cppのあるディレクトリ)/in#{i} に F#{i} キーで保存
@@ -270,6 +278,10 @@ function! s:cp_cpp()
     \'> ":e " . expand("%:h") . "/in' . i . '<CR>' .
     \ 'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>"'
   endfor
+
+  " F1押し間違えるので
+  nnoremap <F1> <Nop>
+
 endfunction
 
 augroup MyAutoCmd
