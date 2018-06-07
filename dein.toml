@@ -263,7 +263,7 @@ repo = 'Shougo/unite-outline'
 [[plugins]]
 repo = 'w0rp/ale'
 if = 'has("job") && has("channel") && has("timers")'
-on_ft = 'cpp'
+on_ft = ['cpp', 'javascript']
 # 参考 :
 # https://rcmdnk.com/blog/2017/09/25/computer-vim/
 # https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7#ale
@@ -293,7 +293,16 @@ hook_add = '''
 
   let g:ale_linters = {
     \  'cpp': ['gcc'],
+    \  'javascript': ['eslint'],
     \}
+
+  let g:ale_javascript_prettier_use_local_config = 1
+
+  let g:ale_fixers = {
+  \   'javascript': [
+  \       'prettier-eslint',
+  \   ],
+  \}
 
   nmap <silent> <C-K><C-P> <Plug>(ale_previous_wrap)
   nmap <silent> <C-K><C-N> <Plug>(ale_next_wrap)
@@ -338,7 +347,7 @@ hook_add = '''
     \ ''  : 'S',
     \ }
 
-  let g:airline_powerline_fonts = 1
+  let g:airline_powerline_fonts = 0
   let g:airline_theme = 'bubblegum'
   let g:airline#extensions#tabline#enabled = 1
   let g:ale_list_window_size = 4
@@ -382,7 +391,7 @@ hook_add = '''
   let g:ctrlp_working_path_mode = 'w'
   let g:ctrlp_lazy_update = 200
   let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'dir':  '\v([\/]\.(git|hg|svn)$|node_modules)',
     \ 'file': '\v\.(exe|so|dll|o)$',
     \ 'link': '',
     \ }

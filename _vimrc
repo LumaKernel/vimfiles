@@ -76,7 +76,7 @@ set undodir=~/vimfiles/tmp
 
 set matchpairs+=<:>
 
-set scrolloff=4
+set scrolloff=7
 
 set backspace=indent,eol,start
 
@@ -216,7 +216,7 @@ if has('gui')
   set guioptions-=L
 
   if has('unix')
-    set guifont=Source\ Code\ Pro\ for\ Powerline\ 11,Source\ Code\ Pro\ 11
+    set guifont=MyricaM\ M\ 14,Source\ Code\ Pro\ for\ Powerline\ 11,Source\ Code\ Pro\ 11
   else
     set guifont=Myrica\ M:h12,Osaka-Mono:h14
   endif
