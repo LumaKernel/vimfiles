@@ -28,7 +28,7 @@ options     head
       comp.assign(size, -1);
   
       int gid = 0;
-      REP(i, size) if(!used[i]) dfs(i, gid++);
+      for(int i = 0; i < size; i++) if(!used[i]) dfs(i, gid++);
   
       tree.resize(gid);
     }

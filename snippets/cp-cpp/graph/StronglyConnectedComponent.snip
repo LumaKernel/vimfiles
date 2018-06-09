@@ -29,7 +29,7 @@ options     head
    
       renew.resize(k);
       set<pair<int, int>> connect;
-      REP(i,n){
+      for(int i = 0; i < n; i++) {
         for(int j : g[i]) {
           int x = comp[i], y = comp[j];
           if(x == y) continue;

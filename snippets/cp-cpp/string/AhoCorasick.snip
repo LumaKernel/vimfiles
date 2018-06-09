@@ -1,6 +1,7 @@
 snippet     ahocorasick
 alias       aho
 options     head
+  // never fail to call build() !!
   /// {{{ AhoCorasick Library --- ///
   
   struct AhoCorasick {
@@ -47,7 +48,7 @@ options     head
         Trie* now = q.front();
         q.pop();
         for(pair<char, Trie*> ch : now -> child) {
-          q.push(ch.second);
+          q.emplace(ch.second);
           ch.second -> failure = now == top ? top : now -> failure -> go(ch.first);
           /// only from failure!!
           vector<int> &words = ch.second -> words;
@@ -69,5 +70,5 @@ options     head
   };
   
   /// }}} --- ///
-  
+  ${0}
 

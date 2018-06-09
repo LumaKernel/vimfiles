@@ -6,10 +6,10 @@ options     head
     while (true) {
       size_t next = s.find_first_of(delim, offset);
       if (next == string::npos) {
-        elms.push_back(s.substr(offset));
+        elms.emplace_back(s.substr(offset));
         return elms;
       }
-      elms.push_back(s.substr(offset, next - offset));
+      elms.emplace_back(s.substr(offset, next - offset));
       offset = next + 1;
     }
   }

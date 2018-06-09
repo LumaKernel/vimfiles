@@ -1,31 +1,32 @@
 # verify : https://beta.atcoder.jp/contests/arc039/submissions/2136670
 snippet     doublingparent
-abbr        DoublingParent(VVI tree);
+abbr        DoublingParent(tree);
 options     head
+  // size is non-zero
   /// --- Doubilng Parent Library {{{ ///
   
   // tree
   struct DoublingParent {
     int size, logSize;
-    VVI tree;
-    VI depth; // 0-indexed
-    VVI par; // for doubling
-    DoublingParent(VVI tree): size(tree.size()), tree(tree) {
+    vector< vector<int> > tree;
+    vector<int> depth; // 0-indexed
+    vector< vector<int> > par; // for doubling
+    DoublingParent(vector< vector<int> > tree): size(tree.size()), tree(tree) {
       calc();
     }
   
     private:
     void calc() {
       // calc log_2 size
-      logSize = log2max(size);
+      logSize = 32 - __builtin_clz(size);
       if(logSize == 0) logSize++;
   
       depth.assign(size, 0);
-      par.assign(size, VI(logSize, -1));
+      par.assign(size, vector<int>(logSize, -1));
       dfs(0);
   
-      FOR(k, 1, logSize) {
-        REP(i, size) {
+      for(int k = 1; k < logSize) {
+        for(int i = 0; i < size; i++) {
           int p = par[i][k-1];
           if(p == -1) {
             par[i][k] = -1;
@@ -47,14 +48,14 @@ options     head
     public:
     int LCA(int a, int b) {
       if(depth[a] < depth[b]) swap(a,b);
-      RREP(k, logSize) {
+      for(int k = logSize - 1; k >= 0; k--) {
         int na = par[a][k];
         if(na == -1) continue;
         if(depth[na] < depth[b]) continue;
         a = na;
       }
       if(a==b) return a;
-      RREP(k, logSize) {
+      for(int k = logSize - 1; k >= 0; k--) {
         int na = par[a][k];
         int nb = par[b][k];
         if(na==nb) continue;
