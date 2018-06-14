@@ -26,8 +26,8 @@ options     head
 snippet     yes
 alias       possible
 options     head
-  #define Pos(x) cout<<((x)?"Possible":"Impossible")<<endl;
   #define POS(x) cout<<((x)?"POSSIBLE":"IMPOSSIBLE")<<endl;
+  #define Pos(x) cout<<((x)?"Possible":"Impossible")<<endl;
   #define YES(x) cout<<((x)?"YES":"NO")<<endl;
   #define Yes(x) cout<<((x)?"Yes":"No")<<endl;
   #define yes(x) cout<<((x)?"yes":"no")<<endl;
@@ -53,6 +53,18 @@ alias       8
 options     head
   int dx[] = {1, 0, -1, 0, 1, 1, -1, -1};
   int dy[] = {0, -1, 0, 1, -1, 1, -1, 1};
+
+snippet     time
+options     head
+  // time measuring
+  // you must write return 0; !!
+  #ifdef DEBUG
+  #ifdef USE_COUT
+  #define main __main(); int main() { clock_t beg = clock(); __main(); clock_t end = clock(); cout << double(end - beg) / CLOCKS_PER_SEC << endl; } int __main
+  #else
+  #define main __main(); int main() { clock_t beg = clock(); __main(); clock_t end = clock(); cerr << double(end - beg) / CLOCKS_PER_SEC << endl; } int __main
+  #endif
+  #endif
 
 # 緊急用
 snippet     rep
