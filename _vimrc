@@ -152,6 +152,9 @@ nnoremap <silent> <C-H> :bprevious<CR>
 nnoremap <silent> <C-L> :bnext<CR>
 nnoremap <silent> <C-J> :b#<CR>
 
+" C-Lの移動
+nnoremap <C-K> <C-L>
+
 " }}}
 
 " Tab系{{{
