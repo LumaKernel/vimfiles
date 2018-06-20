@@ -1,55 +1,52 @@
 " エンコーディング次第でうまくいかないプラグイン対策
 set encoding=utf-8
+if &compatible
+  set nocompatible
+endif
 
 let g:mapleader = " "
 
 " 軽いと思う環境
 let g:light = has("unix")
 
-if !&compatible
-  set nocompatible
-endif
-
-" reset augroup
 augroup MyAutoCmd
   autocmd!
 augroup END
 
 " dein settings {{{
-" dein自体の自動インストール
-let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
+filetype plugin indent off
+let s:cache_home = expand('~/.cache')
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-if !isdirectory(s:dein_repo_dir)
-  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
-endif
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
-" プラグイン読み込み＆キャッシュ作成
+
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
+  call dein#add("~/.cache/dein")
   call dein#load_toml("~/vimfiles/dein.toml")
   call dein#end()
   call dein#save_state()
+  if has('vim_starting') && dein#check_install()
+    call dein#install()
+  endif
 endif
-" 不足プラグインの自動インストール
-if has('vim_starting') && dein#check_install()
-  call dein#install()
-endif
+filetype plugin indent on
 " }}}
 
 " 基本的な見た目の設定{{{
-syntax on
+syntax enable
 
-set number " 行番号を表示
-set cursorline " 現在の行を強調表示
-set cursorcolumn " 現在の行を強調表示（縦）
+set number
+set cursorline
+set cursorcolumn
 set virtualedit=onemore " 行末の1文字先までカーソルを移動できるように
 set smartindent " インデントはスマートインデント
-set visualbell " ビープ音を可視化
-set showmatch " 括弧入力時の対応する括弧を表示
 set laststatus=2 " ステータスラインを常に表示
 set notitle
-set nowrap
+set wrap
+
+set noshowmatch
+set novisualbell " 画面がガビガビする原因
 
 "}}}
 
@@ -64,7 +61,6 @@ set autoread " 編集中のファイルが変更されたら自動で読み直�
 set hidden " バッファが編集中でもその他のファイルを開けるように
 set showcmd " 入力中のコマンドをステータスに表示する
 set wildmode=full:list
-set noshowmatch
 
 set foldmethod=marker
 
@@ -148,22 +144,24 @@ cnoremap <C-L> <RIGHT>
 inoremap <C-L> <DEL>
 cnoremap <C-D> <DEL>
 
-" like VSCode
-nnoremap <A-Z> set wrap!
+" バッファ切り替え
+nnoremap <silent> <C-H> :bprevious<CR>
+nnoremap <silent> <C-L> :bnext<CR>
+nnoremap <silent> <C-J> :b#<CR>
 
 " }}}
 
 " Tab系{{{
 set list " 不可視文字表示
-set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%" 不可視文字を可視化
+" 不可視文字を可視化
+set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%
 set expandtab " Tab文字を半角スペースにする
-set tabstop=2 " 行頭以外のTab文字の表示幅（スペースいくつ分）
+set tabstop=2 " 行頭以外のTab文字の表示幅(スペースいくつ分)
 set shiftwidth=2 " 行頭でのTab文字の表示幅
 
 " 全角スペース・行末のスペース・タブの可視化
 " 全角スペース可視化のみ抜粋
 if has("syntax")
-    syntax on
     " PODバグ対策
     syn sync fromstart
     function! ActivateInvisibleIndicator()
@@ -205,7 +203,7 @@ endif
 "}}}
 
 " GVIMの設定{{{
-if has('gui')
+if has('gui_running')
   set guioptions+=e
   set guioptions-=m " メニューバーを消す
   set guioptions-=T " ツールバーを消す
@@ -235,11 +233,11 @@ augroup cpp-namespace
 augroup END
 function! s:expand_namespace()
   let s = getline('.')[0:col('.')-1]
-  if s =~# '\<b;'
+  if s =~# '\<b;;'
     return "\<BS>oost::"
-  elseif s =~# '\<s;'
-    return "\<BS>td::"
-  elseif s =~# '\<d;'
+  elseif s =~# '\<s;;'
+    return "\<BS>\<BS>td::"
+  elseif s =~# '\<d;;'
     return "\<BS>etail::"
   else
     return ';'
