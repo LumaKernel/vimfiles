@@ -1,13 +1,13 @@
 snippet     modint
 abbr        ModInt<ll mod> (ll val = 0)
 options     head
-  // require mod library
+  // require math library
   /// ModInt Library {{{ ///
-  template<ll mod = 1e9 + 7>
+  template<long long mod = 1e9 + 7>
   struct ModInt{
-    ll val;
+    long long val;
     ModInt() : val(0) {}
-    ModInt(ll val) : val((val % mod + mod) % mod) {}
+    ModInt(long long val) : val((val % mod + mod) % mod) {}
     ModInt operator+(ModInt<mod> const &rhs) {
       return ModInt<mod>(val + rhs.val);
     }
@@ -74,4 +74,5 @@ options     head
   template<typename T, ll mod> ModInt<mod> operator*(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod * mv.val); }
   template<typename T, ll mod> ModInt<mod> operator/(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod * mv.inv().val); }
   /// }}}-- ///
+  ${0}
 
