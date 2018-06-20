@@ -76,6 +76,9 @@ set scrolloff=7
 
 set backspace=indent,eol,start
 
+" beep音を消す
+set belloff=all
+
 "}}}
 
 " IME系{{{
