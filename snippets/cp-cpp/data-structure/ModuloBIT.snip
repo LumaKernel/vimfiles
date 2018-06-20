@@ -1,9 +1,6 @@
 snippet     modbit
 abbr        struct MODBIT{}
 options     head
-  // NOTE : there's get and sum method
-  // NOTE : access i < n only
-  // NOTE : return POSITIVE modulo
   /// --- MODBIT Library {{{ ///
   
   struct MODBIT{
@@ -14,30 +11,23 @@ options     head
     void add(int i, long long x) {
       x %= mod;
       i++;
-      while(i <= n){
+      while(i<=n){
         data[i - 1] = ((data[i - 1] + x) % mod + mod) % mod;
         i += i & -i;
       }
     }
-    void set(int i, long long x) {
-      x %= mod;
-      add(i, x - get(i));
-    }
     int sum(int i) {
-      if(i < 0) return 0;
+      if(i<0) return 0;
       i++;
       long long s = 0;
-      while(i > 0){
+      while(i>0){
         s += data[i - 1];
         i -= i & -i;
       }
       return (s % mod + mod) % mod;
     }
-    int get(int i) {
-      return ((sum(i) - sum(i - 1)) % mod + mod) % mod;
-    }
     int range(int a, int b) {
-      return ((sum(b) - sum(a - 1)) % mod + mod) % mod;
+      return (sum(b) - sum(a-1)) % mod;
     }
   };
   

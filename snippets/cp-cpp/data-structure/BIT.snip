@@ -1,39 +1,48 @@
-snippet bit
-abbr BIT(int size);
-options head
+snippet     bit
+abbr        BIT(int size);
+options     head
+  // NOTE : there's get and sum method.
+  // NOTE : access i < n only
   /// --- BIT Library {{{ ///
   
+  template<class T = long long>
   struct BIT{
-    vector<ll> data;
+    vector<T> data;
     int n;
     BIT(int n): n(n){
       data.resize(n, 0);
     }
     void clear(int sz=0) {
       if(sz > 0) n = sz;
-      data.assign(n, 0);
+      data.resize(n, 0);
     }
-    void add(int i, ll x) {
+    void add(int i, T x) {
       i++;
-      while(i<=n){
-        data[i-1] += x;
-        i += i&-i;
+      while(i <= n){
+        data[i - 1] += x;
+        i += i & -i;
       }
     }
-    ll sum(int i) {
-      if(i<0) return 0;
+    T sum(int i) {
+      if(i < 0) return 0;
       i++;
-      ll s = 0;
-      while(i>0){
-        s += data[i-1];
-        i -= i&-i;
+      T s = 0;
+      while(i > 0){
+        s += data[i - 1];
+        i -= i & -i;
       }
       return s;
     }
-    ll range(int a, int b) {
-      return sum(b) - sum(a-1);
+    T get(int i) {
+      return sum(i) - sum(i - 1);
+    }
+    T range(int a, int b) {
+      return sum(b) - sum(a - 1);
     }
   };
   
   /// }}}--- ///
+  
+  // BIT<> bit(N);
+  ${0}
 
