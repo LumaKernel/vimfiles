@@ -109,7 +109,6 @@ options     head
       propToO(r - 1);
       DT tmpL = DM::identity(), tmpR = DM::identity();
       int sz = 1;
-      int tl = l, tr = r;
       for(l += n, r += n; l < r; l >>= 1, r >>= 1, sz <<= 1) {
         if(l & 1) propFrom(l, sz), tmpL = DM::op(tmpL, data[l++]);
         if(r & 1) propFrom(--r, sz), tmpR = DM::op(data[r], tmpR);

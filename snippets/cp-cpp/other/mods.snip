@@ -2,18 +2,18 @@ snippet     mods
 alias       fact comb
 options     head
   /// --- modulo Library {{{ ///
-  constexpr ll extgcd(ll a, ll b, ll& x, ll& y) {
+  constexpr long long extgcd(long long a, long long b, long long& x, long long& y) {
     if(b==0) {
       x = 1; y = 0;
       return a;
     }
-    ll d = extgcd(b, a % b, y, x);
+    long long d = extgcd(b, a % b, y, x);
     y -= (a / b) * x;
     return d;
   }
-  constexpr ll modpow(ll a, ll b, ll mod = static_cast<int>(1e9 + 7)) {
+  constexpr long long modpow(long long a, long long b, long long mod = static_cast<int>(1e9 + 7)) {
     a = (a % mod + mod) % mod;
-    ll r = 1;
+    long long r = 1;
     while(b){
       if(b & 1) r = r * a % mod;
       a = a * a % mod;
@@ -21,9 +21,9 @@ options     head
     }
     return r;
   }
-  constexpr ll modinv(ll a, ll mod = static_cast<int>(1e9 + 7)) {
+  constexpr long long modinv(long long a, long long mod = static_cast<int>(1e9 + 7)) {
     a = (a % mod + mod) % mod;
-    ll x = 0, y = 0;
+    long long x = 0, y = 0;
     extgcd(a, mod, x, y);
     return (x % mod + mod) % mod;
   }
@@ -43,7 +43,7 @@ options     head
     }
     long long C(int n, int r) const {
       if(n < 0 || r < 0 || n < r) return 0;
-      return (((ll) arr[n] * inv[r]) % mod * inv[n - r]) % mod;
+      return (((long long) arr[n] * inv[r]) % mod * inv[n - r]) % mod;
     }
   };
   /// }}}--- ///
