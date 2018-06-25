@@ -6,9 +6,9 @@ options     head
   
   int main() {
     ios::sync_with_stdio(false), cin.tie(0);
-    ${0:TARGET}
+    ${0:TARGET};
+    return 0;
   }
-  
 
 snippet     temptree
 options     head
@@ -16,7 +16,7 @@ options     head
   using namespace std;
   using ll = long long;
   
-  const int N = 1e5${0:TARGET}
+  const int N = 1e5${0}
   vector<int> g[N];
   int n;
   int main() {
@@ -28,8 +28,8 @@ options     head
       g[a].emplace_back(b);
       g[b].emplace_back(a);
     }
+    return 0;
   }
-  
 
 snippet     tempgraph
 options     head
@@ -37,7 +37,7 @@ options     head
   using namespace std;
   using ll = long long;
   
-  const int N = 1e5${0:TARGET}
+  const int N = 1e5${0}
   vector<int> g[N];
   int n, m;
   int main() {
@@ -49,6 +49,6 @@ options     head
       g[a].emplace_back(b);
       g[b].emplace_back(a);
     }
+    return 0;
   }
-  
 
