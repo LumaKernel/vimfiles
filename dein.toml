@@ -35,7 +35,7 @@ repo = 'cespare/vim-toml'
 on_ft = 'toml'
 # }}}
 
-# parentmatch{{{
+# parenmatch{{{
 [[plugins]]
 repo = 'itchyny/vim-parenmatch'
 # }}}
@@ -303,8 +303,8 @@ hook_add = '''
   \   ],
   \}
 
-  nmap <silent> <C-K><C-P> <Plug>(ale_previous_wrap)
-  nmap <silent> <C-K><C-N> <Plug>(ale_next_wrap)
+  nmap <silent> <Leader><C-P> <Plug>(ale_previous_wrap)
+  nmap <silent> <Leader><C-N> <Plug>(ale_next_wrap)
 
   function! s:ale_list()
     let g:ale_open_list = 1
