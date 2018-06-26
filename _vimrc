@@ -79,6 +79,9 @@ set backspace=indent,eol,start
 " beep音を消す
 set belloff=all
 
+set ttimeout " キーコードに問題はないが
+set notimeout " マッピングのキー列をタイムアウトにしない
+
 "}}}
 
 " IME系{{{
@@ -148,12 +151,43 @@ inoremap <C-L> <DEL>
 cnoremap <C-D> <DEL>
 
 " バッファ切り替え
-nnoremap <silent> <C-H> :bprevious<CR>
-nnoremap <silent> <C-L> :bnext<CR>
+nnoremap <silent> <C-H> :call <SID>myBufPrevious()<CR>
+nnoremap <silent> <C-L> :call <SID>myBufNext()<CR>
 nnoremap <silent> <C-J> :b#<CR>
+" C-L をmap
+nnoremap <silent> <C-K> <C-L>
 
-" C-Lの移動
-nnoremap <C-K> <C-L>
+let g:skipQF = 1
+
+" myBufPrevious/Next {{{
+function! s:myBufPrevious()
+  if !exists("g:skipQF")
+    let g:skipQF = 0
+  endif
+  bprevious
+  if g:skipQF
+    let l:count = 0
+    while &ft == "qf" && l:count < 1
+      bprevious
+      let l:count = l:count + 1
+    endwhile
+  endif
+endfunction
+
+function! s:myBufNext()
+  if !exists("g:skipQF")
+    let g:skipQF = 0
+  endif
+  bnext
+  if g:skipQF
+    let l:count = 0
+    while &ft == "qf" && l:count < 1
+      bnext
+      let l:count = l:count + 1
+    endwhile
+  endif
+endfunction
+" }}}
 
 " }}}
 
@@ -273,19 +307,35 @@ else
 endif
 nmap <Leader>t ggVGstemp
 
+" <Leader>f#{a} で :e #{a}.cpp
+for i in range(char2nr("a"), char2nr("z"))
+  execute
+        \ "nnoremap <Leader>f" . nr2char(i) . " " .
+        \ ":e " . nr2char(i) . ".cpp\<CR>"
+endfor
 
 function! s:cp_cpp()
+  " <Leader><F#{i}>
   " clipboard を (編集中.cppのあるディレクトリ)/in#{i} に F#{i} キーで保存
   for i in range(1, 10)
     execute
-    \ "nnoremap <expr><buffer> <Leader><F" . i .
-    \'> ":e " . expand("%:h") . "/in' . i . '<CR>' .
-    \ 'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>"'
+          \ "nnoremap <expr><buffer> <Leader><F" . i .
+          \'> ":e " . expand("%:h") . "/in' . i . '<CR>' .
+          \ 'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>"'
+  endfor
+
+  " <Leader>#{i} で %:h/in#{i} を input として % を実行
+  nnoremap <expr><buffer><Leader>0 ":ccl\|QuickRun\<CR>"
+  for i in range(1, 9)
+    execute
+          \'autocmd FileType cpp nnoremap <expr><buffer> ' .
+          \'<Leader>' . i .
+          \' ":ccl\|QuickRun -input " . expand("%:h") . "/in' . i .
+          \'\<CR>"'
   endfor
 
   " F1押し間違えるので
   nnoremap <F1> <Nop>
-
 endfunction
 
 augroup MyAutoCmd
