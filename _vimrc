@@ -317,7 +317,7 @@ endfor
 function! s:cp_cpp()
   " <Leader><F#{i}>
   " clipboard を (編集中.cppのあるディレクトリ)/in#{i} に F#{i} キーで保存
-  for i in range(1, 10)
+  for i in range(1, 9)
     execute
           \ "nnoremap <expr><buffer> <Leader><F" . i .
           \'> ":e " . expand("%:h") . "/in' . i . '<CR>' .
@@ -328,8 +328,7 @@ function! s:cp_cpp()
   nnoremap <expr><buffer><Leader>0 ":ccl\|QuickRun\<CR>"
   for i in range(1, 9)
     execute
-          \'autocmd FileType cpp nnoremap <expr><buffer> ' .
-          \'<Leader>' . i .
+          \'nnoremap <expr><buffer> <Leader>' . i .
           \' ":ccl\|QuickRun -input " . expand("%:h") . "/in' . i .
           \'\<CR>"'
   endfor
