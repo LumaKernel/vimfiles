@@ -2,18 +2,21 @@
 snippet     scc
 abbr        SCC(int size)
 options     head
-  // SCC(int size)
-  // do : decomposite()
+  // SCC(UnWeightedGraph)
+  // must build(renew)
   /// --- Strongly Connected Component {{{ ///
   
-  // directed graph
   struct SCC {
-    vector<pair<int, int>> g, rev;
+    int n;
+    vector< vector<int> > g, rev;
     vector<int> topo;
     vector<int> used;
     vector<int> comp;
-    int n;
-    SCC(int n): n(n), g(n), rev(n), used(n, 0), comp(n, -1){}
+    SCC(int n): n(n), g(n), rev(n) {}
+    SCC(UnWeightedGraph ig): n(g.size()), g(n), rev(n) {
+      for(int from = 0; from < n; from++)
+        for(int to : ig[from]) addEdge(from, to);
+    }
     void addEdge(int a, int b) {
       g[a].emplace_back(b);
       rev[b].emplace_back(a);
@@ -21,12 +24,14 @@ options     head
     int operator[](int i) {
       return comp[i];
     }
-    void decomposite(vector< vector<int> > &renew) {
+    void build(vector< vector<int> > &renew) {
+      used.resize(n, 0);
+      comp.resize(n, -1);
       for(int i = 0; i < n; i++) if(!used[i]) dfs1(i);
       reverse(begin(topo), end(topo));
-      int k=0;
+      int k = 0;
       for(int i : topo) if(comp[i] == -1) dfs2(i, k++);
-   
+  
       renew.resize(k);
       set<pair<int, int>> connect;
       for(int i = 0; i < n; i++) {
@@ -39,7 +44,7 @@ options     head
         }
       }
     }
-    private:
+  private:
     void dfs1(int i) {
       if(used[i]) return;
       used[i] = 1;
@@ -54,4 +59,5 @@ options     head
   };
   
   /// ---}}} ///
+  ${0}
 
