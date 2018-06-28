@@ -3,8 +3,8 @@ options     head
   // #undef DEBUG
   // #define DEBUG
   /// {{{ DEBUG --- ///
-  template <typename T> ostream &operator<<(ostream &o, const vector<T> &v) { if(&o == &cerr) { o << '{'; for(size_t i = 0; i < v.size(); i++) o << v[i] << (i + 1 != v.size() ? ", " : ""); o << "}"; } else { for(size_t i = 0; i < v.size(); i++) o << v[i] << (i + 1 != v.size() ? " " : ""); } return o; }
   #ifdef DEBUG
+  template <typename T> ostream &operator<<(ostream &o, const vector<T> &v) { o << "{"; for(size_t i = 0; i < v.size(); i++) o << v[i] << (i + 1 != v.size() ? ", " : ""); o << "}"; return o; }
   #ifdef USE_COUT
   #define dump(...) (cout<<"["<<__LINE__<< "] "<<#__VA_ARGS__<<" = "<<make_tuple(__VA_ARGS__)<<"\n")
   #else
@@ -15,6 +15,7 @@ options     head
   template<class...T> ostream & operator<<(ostream &o, tuple<T...> const &t){ o << "("; _ot<0>(o, t); o << ")"; return o; }
   template<class T, class U> ostream & operator<<(ostream &o, pair<T, U> const &p) { o << "(" << p.first << ", " << p.second << ")"; return o; }
   #else
+  template <typename T> ostream &operator<<(ostream &o, const vector<T> &v) { for(size_t i = 0; i < v.size(); i++) o << v[i] << (i + 1 != v.size() ? " " : ""); return o; }
   #define dump(...) (0)
   #endif
   /// }}}--- ///
@@ -50,8 +51,8 @@ options     head
 snippet     neighbor4
 alias       4
 options     head
-  int dx[] = {1, 0, -1, 0};
-  int dy[] = {0, -1, 0, 1};
+  int dx[] = {1, 0, 0, -1};
+  int dy[] = {0, 1, -1, 0};
   ${0}
 
 snippet     neighbor8
@@ -94,8 +95,8 @@ options     head
   /// }}} ///
   ${0}
 
-snippet     outside
-alias       inside outside
+snippet     inside
+alias       outside isinside
 options     head
   if(${1:ny} < 0 || ${2:nx} < 0 || $1 >= h || $2 >= w) continue;
   ${0}

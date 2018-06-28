@@ -44,7 +44,7 @@ options     head
       if(used[i]) return;
       used[i] = 1;
       for(int j : g[i]) dfs1(j);
-      topo.PB(i);
+      topo.emplace_back(i);
     }
     void dfs2(int i, int num) {
       if(comp[i] != -1) return;

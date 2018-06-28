@@ -2,24 +2,26 @@
 # bridge : https://beta.atcoder.jp/contests/arc039/submissions/2136670
 # articulation : http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=2723146#1
 snippet     lowlink
-abbr        Lowlink(int size), calc();
 options     head
+  // Lowlink(UndirectedGraph)
+  // or use addEdge
+  // must build()
   /// --- Lowlink Library {{{ ///
   
-  // undirected graph
-  // count edges
-  // construct : (int size)
-  // do : calc()
   struct Lowlink {
     struct Edge { int to, idx; };
-    int size;
+    int n;
     int edgeSize = 0;
     vector< vector< Edge > > g;
     vector<int> ord, low;
   
     vector<int> used;
     vector<int> isBridge, isArticulation;
-    Lowlink(int n): size(n), g(n), ord(n), low(n) {}
+    Lowlink(int n): n(n), g(n), ord(n), low(n) {}
+    Lowlink(UnWeightedGraph ig): n(ig.size()), g(n), ord(n), low(n) {
+      for(int from = 0; from < n; from++)
+        for(int to : ig[from]) if(from < to) addEdge(from, to);
+    }
   
     void addEdge(int a, int b) {
       g[a].emplace_back((Edge) {b, edgeSize});
@@ -27,36 +29,35 @@ options     head
       edgeSize++;
     }
   
-    void calc() {
-      used.assign(size, 0);
-      isBridge.assign(edgeSize, 0);
-      isArticulation.assign(size, 0);
+    void build() {
+      used.resize(n, 0);
+      isBridge.resize(edgeSize, 0);
+      isArticulation.resize(n, 0);
   
       int k = 0;
       dfs(0, -1, k);
     }
   
-    private :
+  private :
     void dfs(int i, int p, int &k) {
       used[i] = 1;
-      ord[i]=low[i]=k++;
+      ord[i] = low[i] = k++;
       isArticulation[i] = 0;
       int DFSTreeDegree = 0;
       for(Edge edge : g[i]) {
         int j = edge.to;
         int idx = edge.idx;
+        if(j == p) continue;
         if(!used[j]) {
-          if(j != p) {
-            // on dfs-tree
-            DFSTreeDegree++;
-            dfs(j, i, k);
-            low[i] = min(low[i], low[j]);
-            isBridge[idx] = ord[i] < low[j];
-            if(p != -1 && ord[i] <= low[j]) {
-              isArticulation[i] = 1;
-            }
+          // on dfs-tree
+          DFSTreeDegree++;
+          dfs(j, i, k);
+          low[i] = min(low[i], low[j]);
+          isBridge[idx] = ord[i] < low[j];
+          if(p != -1 && ord[i] <= low[j]) {
+            isArticulation[i] = 1;
           }
-        } else if(j != p) {
+        } else {
           low[i] = min(low[i], ord[j]);
         }
       }
@@ -67,5 +68,5 @@ options     head
   };
   
   /// }}}--- ///
-  
+  ${0}
 
