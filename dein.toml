@@ -312,7 +312,7 @@ hook_add = '''
   endfunction
   command! ALEList call s:ale_list()
   nnoremap <Leader>m :ALEList<CR>
-  autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:q!<CR>
+  autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:bd<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
 '''
 
