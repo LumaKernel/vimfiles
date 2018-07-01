@@ -316,20 +316,20 @@ endfor
 
 function! s:cp_cpp()
   " <Leader><F#{i}>
-  " clipboard を (編集中.cppのあるディレクトリ)/in#{i} に F#{i} キーで保存
+  " clipboard を "%:r" . _in#{i} に F#{i} キーで保存
   for i in range(1, 9)
     execute
           \ "nnoremap <expr><buffer> <Leader><F" . i .
-          \'> ":e " . expand("%:h") . "/in' . i . '<CR>' .
+          \'> ":e " . expand("%:r") . "_in' . i . '<CR>' .
           \ 'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>"'
   endfor
 
-  " <Leader>#{i} で %:h/in#{i} を input として % を実行
+  " <Leader>#{i} で "%:r" . _in#{i} を input として % を実行
   nnoremap <expr><buffer><Leader>0 ":ccl\|QuickRun\<CR>"
   for i in range(1, 9)
     execute
           \'nnoremap <expr><buffer> <Leader>' . i .
-          \' ":ccl\|QuickRun -input " . expand("%:h") . "/in' . i .
+          \' ":ccl\|QuickRun -input " . expand("%:r") . "_in' . i .
           \'\<CR>"'
   endfor
 
