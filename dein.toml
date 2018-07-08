@@ -115,7 +115,7 @@ depends = ['nerdtree']
 repo = 'Shougo/vimshell.vim'
 depends = ['vimproc.vim']
 hook_add = '''
-  nnoremap <silent> <Leader>sh :VimShell<CR>
+  nnoremap <silent> <Leader>h :VimShell<CR>
 '''
 # }}}
 
