@@ -104,9 +104,9 @@ options     head
 # 緊急用
 snippet     rep
 options     head
-  #define rep(i, a, b) for(ll i = (ll) a; i < (ll) b; i++)
-  #define repi(i, a, b) for(ll i = (ll) a; i <= (ll) b; i++)
-  #define rrep(i, a, b) for(ll i = (ll) b - 1; i >= (ll) a; i--)
-  #define rrepi(i, a, b) for(ll i = (ll) b; i >= (ll) a; i--)
+  #define rep(i, a, b) for(ll i = (ll) (a); i < (ll) (b); i++)
+  #define repi(i, a, b) for(ll i = (ll) (a); i <= (ll) (b); i++)
+  #define rrep(i, a, b) for(ll i = (ll) (b) - 1; i >= (ll) (a); i--)
+  #define rrepi(i, a, b) for(ll i = (ll) (b); i >= (ll) (a); i--)
   ${0}
 
