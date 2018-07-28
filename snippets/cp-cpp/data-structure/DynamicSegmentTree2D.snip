@@ -1,0 +1,80 @@
+snippet     dynamicseg2d
+abbr        seg2ddynamin 2dsegdynamic
+options     head
+  // constructor(int sizex, int sizey, T identity, func merge)
+  /// --- Dynamic 2D SegmentTree Library {{{ ///
+  
+  template<class T>
+  struct DynamicSegTree2D {
+    struct Node {
+      T value;
+      Node *l = nullptr, *r = nullptr;
+      void make(T identity) {
+        if(l != nullptr) return;
+        l = new Node, r = new Node;
+        l->value = r->value = identity;
+      }
+    };
+    int sizex, sizey;
+    Node* top = new Node;
+    T identity;
+    function<T(T, T)> merge;
+    DynamicSegTree2D(int sizex, int sizey, T identity, function<T(T, T)> merge)
+      :sizex(sizex), sizey(sizey), identity(identity), merge(merge) {
+      }
+    void set(int x, int y, T const &dat) {
+      goone(x, y, dat, 0, sizex, 0, sizey, top, 1);
+    }
+    void act(int x, int y, T const &dat) {
+      goone(x, y, dat, 0, sizex, 0, sizey, top, 0);
+    }
+  private:
+    T get(Node* node) {
+      return node == nullptr ? identity : node->value;
+    }
+    void goone(int x, int y, T const &dat,
+        int sxl, int sxr, int syl, int syr, Node*& node, int set) {
+      if(x+1 <= sxl || sxr <= x || y+1 <= syl || syr <= y) return;
+      if(node == nullptr) node = new Node, node->value = identity;
+      if(x <= sxl && sxr <= x+1 && y <= syl && syr <= y+1) {
+        if(set) node->value = dat;
+        else node->value = merge(dat, node->value);
+        return;
+      }
+      if(sxr - sxl < syr - syl) {
+        // devide y
+        goone(x, y, dat, sxl, sxr, syl, (syl + syr) / 2, node->l, set);
+        goone(x, y, dat, sxl, sxr, (syl + syr) / 2, syr, node->r, set);
+      } else {
+        // devide x
+        goone(x, y, dat, sxl, (sxl + sxr) / 2, syl, syr, node->l, set);
+        goone(x, y, dat, (sxl + sxr) / 2, sxr, syl, syr, node->r, set);
+      }
+      node->value = merge(get(node->l), get(node->r));
+    }
+  public:
+    T query(int xl, int xr, int yl, int yr,
+        int sxl = 0, int sxr = -1, int syl = 0, int syr = -1, Node* node = nullptr) {
+      if(sxr < 0) sxr = sizex, syr = sizey, node = top;
+      if(node == nullptr) return identity;
+      if(xr <= sxl || sxr <= xl || yr <= syl || syr <= yl) return identity;
+      if(xl <= sxl && sxr <= xr && yl <= syl && syr <= yr) return node->value;
+      if(sxr - sxl < syr - syl) {
+        // devide y
+        return merge(
+            query(xl, xr, yl, yr, sxl, sxr, syl, (syl + syr) / 2, node->l),
+            query(xl, xr, yl, yr, sxl, sxr, (syl + syr) / 2, syr, node->r)
+            );
+      } else {
+        // devide x
+        return merge(
+            query(xl, xr, yl, yr, sxl, (sxl + sxr) / 2, syl, syr, node->l),
+            query(xl, xr, yl, yr, (sxl + sxr) / 2, sxr, syl, syr, node->r)
+            );
+      }
+    }
+  };
+  
+  /// }}}--- ///
+  ${0}
+
