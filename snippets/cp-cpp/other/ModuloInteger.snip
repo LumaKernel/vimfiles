@@ -3,11 +3,13 @@ abbr        ModInt<ll mod> (ll val = 0)
 options     head
   // require math library
   /// ModInt Library {{{ ///
-  template<long long mod = 1e9 + 7>
+  template<long long mod = (long long)1e9 + 7>
   struct ModInt{
     long long val;
     ModInt() : val(0) {}
     ModInt(long long val) : val((val % mod + mod) % mod) {}
+    operator int() const { return val; }
+    operator long long() const { return val; }
     ModInt operator+(ModInt<mod> const &rhs) {
       return ModInt<mod>(val + rhs.val);
     }
@@ -34,6 +36,24 @@ options     head
     }
     ModInt &operator/=(ModInt<mod> const &rhs) {
       val = (val * rhs.inv().val % mod + mod) % mod;
+      return *this;
+    }
+    ModInt operator++(int) {
+      ModInt tmp = *this;
+      val = (val + 1) % mod;
+      return tmp;
+    }
+    ModInt operator--(int) {
+      ModInt tmp = *this;
+      val = (val + mod - 1) % mod;
+      return tmp;
+    }
+    ModInt &operator++() {
+      val = (val + 1) % mod;
+      return *this;
+    }
+    ModInt &operator--() {
+      val = (val + mod - 1) % mod;
       return *this;
     }
     template<typename T> ModInt operator+(T const &rhs) {
@@ -68,11 +88,15 @@ options     head
       return ModInt<mod>(modinv(val, mod));
     }
   };
-  template<ll mod> ostream &operator<<(ostream &os, ModInt<mod> const &mv) { os << mv.val; return os; }
-  template<typename T, ll mod> ModInt<mod> operator+(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod + mv.val); }
-  template<typename T, ll mod> ModInt<mod> operator-(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod + mv.val); }
-  template<typename T, ll mod> ModInt<mod> operator*(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod * mv.val); }
-  template<typename T, ll mod> ModInt<mod> operator/(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod * mv.inv().val); }
+  template<long long mod> ostream &operator<<(ostream &os, ModInt<mod> const &mv) { os << mv.val; return os; }
+  template<typename T, long long mod> constexpr ModInt<mod> operator+(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod + mv.val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator-(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod - mv.val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator*(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod * mv.val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator/(T a, ModInt<mod> const &mv) { return ModInt<mod>(a % mod * mv.inv().val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator+(ModInt<mod> const &mv, T a) { return ModInt<mod>(a % mod + mv.val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator-(ModInt<mod> const &mv, T a) { return ModInt<mod>(a % mod + mv.val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator*(ModInt<mod> const &mv, T a) { return ModInt<mod>(a % mod * mv.val); }
+  template<typename T, long long mod> constexpr ModInt<mod> operator/(ModInt<mod> const &mv, T a) { return ModInt<mod>(mv.val * modinv(a, mod)); }
   /// }}}-- ///
   ${0}
 
