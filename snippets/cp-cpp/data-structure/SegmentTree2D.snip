@@ -1,0 +1,70 @@
+snippet     seg2d
+abbr        staticseg2d 2dseg
+options     head
+  // constructor(int sizex, int sizey, T identity)
+  /// --- 2D SegmentTree Library {{{ ///
+  
+  template<class T>
+  struct SegTree2D {
+    vector<T> dat;
+    int sizex, sizey;
+    T identity;
+    function<T(T, T)> merge;
+    SegTree2D(int tx, int ty, T identity, function<T(T, T)> merge)
+      :identity(identity), merge(merge) {
+        sizex = sizey = 1;
+        while(tx > sizex) sizex <<= 1;
+        while(ty > sizey) sizey <<= 1;
+        dat = vector<T>(sizex * sizey * 4, identity);
+      }
+    void set(int x, int y, T const &dat) {
+      goone(x, y, dat, 0, sizex, 0, sizey, 0, 1);
+    }
+    void act(int x, int y, T const &dat) {
+      goone(x, y, dat, 0, sizex, 0, sizey, 0, 0);
+    }
+  private:
+    void goone(int x, int y, T const &val,
+        int sxl, int sxr, int syl, int syr, int k, int set) {
+      if(x+1 <= sxl || sxr <= x || y+1 <= syl || syr <= y) return;
+      if(x <= sxl && sxr <= x+1 && y <= syl && syr <= y+1) {
+        if(set) dat[k] = val;
+        else dat[k] = merge(dat[k], val);
+        return;
+      }
+      if(sxr - sxl < syr - syl) {
+        // devide y
+        goone(x, y, val, sxl, sxr, syl, (syl + syr) / 2, k * 2 + 1, set);
+        goone(x, y, val, sxl, sxr, (syl + syr) / 2, syr, k * 2 + 2, set);
+      } else {
+        // devide x
+        goone(x, y, val, sxl, (sxl + sxr) / 2, syl, syr, k * 2 + 1, set);
+        goone(x, y, val, (sxl + sxr) / 2, sxr, syl, syr, k * 2 + 2, set);
+      }
+      dat[k] = merge(dat[k * 2 + 1], dat[k * 2 + 2]);
+    }
+  public:
+    T query(int xl, int xr, int yl, int yr,
+        int sxl = 0, int sxr = -1, int syl = 0, int syr = -1, int k = 0) {
+      if(sxr < 0) sxr = sizex, syr = sizey;
+      if(xr <= sxl || sxr <= xl || yr <= syl || syr <= yl) return identity;
+      if(xl <= sxl && sxr <= xr && yl <= syl && syr <= yr) return dat[k];
+      if(sxr - sxl < syr - syl) {
+        // devide y
+        return merge(
+            query(xl, xr, yl, yr, sxl, sxr, syl, (syl + syr) / 2, k * 2 + 1),
+            query(xl, xr, yl, yr, sxl, sxr, (syl + syr) / 2, syr, k * 2 + 2)
+            );
+      } else {
+        // devide x
+        return merge(
+            query(xl, xr, yl, yr, sxl, (sxl + sxr) / 2, syl, syr, k * 2 + 1),
+            query(xl, xr, yl, yr, (sxl + sxr) / 2, sxr, syl, syr, k * 2 + 2)
+            );
+      }
+    }
+  };
+  
+  /// }}}--- ///
+  ${0}
+
