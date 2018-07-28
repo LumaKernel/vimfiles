@@ -324,6 +324,14 @@ function! s:cp_cpp()
           \ 'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>"'
   endfor
 
+  " <Leader>e<F#{i}>
+  " "%:r" . _in#{i} を開く
+  for i in range(1, 9)
+    execute
+          \ "nnoremap <expr><buffer> <Leader>e<F" . i .
+          \'> ":e " . expand("%:r") . "_in' . i . '<CR>"'
+  endfor
+
   " <Leader>#{i} で "%:r" . _in#{i} を input として % を実行
   nnoremap <expr><buffer><Leader>0 ":ccl\|QuickRun\<CR>"
   for i in range(1, 9)
