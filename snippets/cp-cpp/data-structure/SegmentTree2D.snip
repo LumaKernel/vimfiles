@@ -1,7 +1,9 @@
+# verify : http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=3064000#1
 snippet     seg2d
 abbr        staticseg2d 2dseg
 options     head
-  // constructor(int sizex, int sizey, T identity)
+  // constructor(int sizex, int sizey, T identity, func merge)
+  // WARN : query in range by yourself!
   /// --- 2D SegmentTree Library {{{ ///
   
   template<class T>
@@ -17,51 +19,57 @@ options     head
         while(ty > sizey) sizey <<= 1;
         dat = vector<T>(sizex * sizey * 4, identity);
       }
-    void set(int x, int y, T const &dat) {
-      goone(x, y, dat, 0, sizex, 0, sizey, 0, 1);
+    void set(int x, int y, T const &val) {
+      int kx = x + sizex - 1, ky = y + sizey - 1;
+      dat[kx * sizey * 2 + ky] = val;
+      sety(kx, y);
+      while(kx > 0) {
+        kx = (kx - 1) / 2;
+        ky = y + sizey - 1;
+        dat[kx * sizey * 2 + ky] = merge(
+            dat[(kx * 2 + 1) * sizey * 2 + ky],
+            dat[(kx * 2 + 2) * sizey * 2 + ky]
+            );
+        sety(kx, y);
+      }
     }
-    void act(int x, int y, T const &dat) {
-      goone(x, y, dat, 0, sizex, 0, sizey, 0, 0);
+    void act(int x, int y, T const &val) {
+      int kx = x + sizex - 1, ky = y + sizey - 1;
+      set(x, y, merge(dat[kx * sizey * 2 + ky], val));
     }
   private:
-    void goone(int x, int y, T const &val,
-        int sxl, int sxr, int syl, int syr, int k, int set) {
-      if(x+1 <= sxl || sxr <= x || y+1 <= syl || syr <= y) return;
-      if(x <= sxl && sxr <= x+1 && y <= syl && syr <= y+1) {
-        if(set) dat[k] = val;
-        else dat[k] = merge(dat[k], val);
-        return;
+    void sety(int kx, int y) {
+      int ky = y + sizey - 1;
+      while(ky > 0) {
+        ky = (ky - 1) / 2;
+        dat[kx * sizey * 2 + ky] = merge(
+            dat[kx * sizey * 2 + ky * 2 + 1],
+            dat[kx * sizey * 2 + ky * 2 + 2]
+            );
       }
-      if(sxr - sxl < syr - syl) {
-        // devide y
-        goone(x, y, val, sxl, sxr, syl, (syl + syr) / 2, k * 2 + 1, set);
-        goone(x, y, val, sxl, sxr, (syl + syr) / 2, syr, k * 2 + 2, set);
-      } else {
-        // devide x
-        goone(x, y, val, sxl, (sxl + sxr) / 2, syl, syr, k * 2 + 1, set);
-        goone(x, y, val, (sxl + sxr) / 2, sxr, syl, syr, k * 2 + 2, set);
-      }
-      dat[k] = merge(dat[k * 2 + 1], dat[k * 2 + 2]);
     }
   public:
-    T query(int xl, int xr, int yl, int yr,
-        int sxl = 0, int sxr = -1, int syl = 0, int syr = -1, int k = 0) {
-      if(sxr < 0) sxr = sizex, syr = sizey;
-      if(xr <= sxl || sxr <= xl || yr <= syl || syr <= yl) return identity;
-      if(xl <= sxl && sxr <= xr && yl <= syl && syr <= yr) return dat[k];
-      if(sxr - sxl < syr - syl) {
-        // devide y
-        return merge(
-            query(xl, xr, yl, yr, sxl, sxr, syl, (syl + syr) / 2, k * 2 + 1),
-            query(xl, xr, yl, yr, sxl, sxr, (syl + syr) / 2, syr, k * 2 + 2)
-            );
-      } else {
-        // devide x
-        return merge(
-            query(xl, xr, yl, yr, sxl, (sxl + sxr) / 2, syl, syr, k * 2 + 1),
-            query(xl, xr, yl, yr, (sxl + sxr) / 2, sxr, syl, syr, k * 2 + 2)
-            );
-      }
+    T query(int xl, int xr, int yl, int yr) {
+      return queryx(xl, xr, yl, yr, 0, sizex, 0);
+    }
+  private:
+    T queryx(int xl, int xr, int yl, int yr,
+        int sxl, int sxr, int k) {
+      if(xr <= sxl || sxr <= xl) return identity;
+      if(xl <= sxl && sxr <= xr) return queryy(k, yl, yr, 0, sizey, 0);
+      return merge(
+          queryx(xl, xr, yl, yr, sxl, (sxl + sxr) / 2, k * 2 + 1),
+          queryx(xl, xr, yl, yr, (sxl + sxr) / 2, sxr, k * 2 + 2)
+          );
+    }
+    T queryy(int kx, int yl, int yr,
+        int syl, int syr, int k) {
+      if(yr <= syl || syr <= yl) return identity;
+      if(yl <= syl && syr <= yr) return dat[kx * sizey * 2 + k];
+      return merge(
+          queryy(kx, yl, yr, syl, (syl + syr) / 2, k * 2 + 1),
+          queryy(kx, yl, yr, (syl + syr) / 2, syr, k * 2 + 2)
+          );
     }
   };
   
