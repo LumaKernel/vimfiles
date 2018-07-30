@@ -92,6 +92,23 @@ options     head
   // }}}
   ${0}
 
+snippet     timestack
+options     head
+  // push/pop Time
+  // timestack {{{
+  
+  stack<clock_t> __timestack;
+  void pushTime() {
+    __timestack.push(clock());
+  }
+  double popTime() {
+    clock_t beg = __timestack.top(); __timestack.pop();
+    return double(clock() - beg) / CLOCKS_PER_SEC;
+  }
+  
+  // }}}
+  ${0}
+
 snippet     safeout
 options     head
   // safe output arg1 / arg2
