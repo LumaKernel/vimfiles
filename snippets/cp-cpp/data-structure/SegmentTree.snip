@@ -6,50 +6,54 @@ options     head
   /// --- SegmentTree Library {{{ ///
   
   /*
-  struct Monoid {
-    using T = _underlying_set_;
-    static T op(const T& a, const T& b) { return _a_op_b_; }
-    static constexpr T identity() { return _identity_element_; }
-  };
-  */
+     struct Monoid {
+     using T = _underlying_set_;
+     static T op(const T& a, const T& b) { return _a_op_b_; }
+     static constexpr T identity() { return _identity_element_; }
+     };
+     */
   
   template<class Monoid>
   struct SegTree {
-    private:
-      using T = typename Monoid::T;
-      const int n;
-      vector<T> data;
-      void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
+  private:
+    using T = typename Monoid::T;
+    const int n;
+    vector<T> data;
+    void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
   
-    public:
-      SegTree(int n, const T& v = Monoid::identity())
-        : n(n),data(2 * n, v) {}
-   
-      template <class InputIt>
+  public:
+    SegTree(int n, const T& v = Monoid::identity())
+      : n(n),data(2 * n, v) {}
+  
+    template <class InputIt>
       SegTree(InputIt first, InputIt last)
-        : n(distance(first, last)), data(2 * n, Monoid::identity()) {
+      : n(distance(first, last)), data(2 * n, Monoid::identity()) {
         copy(first, last, begin(data) + n);
         // update form deep
         for(int i = n - 1; i > 0; i--) propTo(i);
       }
-   
-      void set(int i, const T& v) {
-        data[i += n] = v;
-        while(i >>= 1) propTo(i);
+  
+    void set(int i, const T& v) {
+      data[i += n] = v;
+      while(i >>= 1) propTo(i);
+    }
+  
+    T get(int i) { return data[i + n]; }
+  
+    T query(int l, int r) {
+      l = max(0, l); r = min(r, n);
+      T tmpL = Monoid::identity(), tmpR = Monoid::identity();
+      for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
+        if(l & 1) tmpL = Monoid::op(tmpL, data[l++]);
+        if(r & 1) tmpR = Monoid::op(data[--r], tmpR);
       }
-   
-      T get(int i) { return data[i + n]; }
-   
-      T query(int l, int r) {
-        l = max(0, l); r = min(r, n);
-        T tmpL = Monoid::identity(), tmpR = Monoid::identity();
-        for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
-          if(l & 1) tmpL = Monoid::op(tmpL, data[l++]);
-          if(r & 1) tmpR = Monoid::op(data[--r], tmpR);
-        }
-        return Monoid::op(tmpL, tmpR);
-      }
+      return Monoid::op(tmpL, tmpR);
+    }
   };
+  
+  /// }}}--- ///
+  
+  // examples {{{
   
   struct RMQMonoid {
     using T = long long;
@@ -71,5 +75,6 @@ options     head
   using RSQ = SegTree<RSQMonoid>;
   using RMaxQ = SegTree<RMaxQMonoid>;
   
-  /// }}}--- ///
+  // }}}
+  ${0}
 
