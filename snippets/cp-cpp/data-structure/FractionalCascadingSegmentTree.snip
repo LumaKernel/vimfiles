@@ -14,16 +14,18 @@ options     head
     vector< vector<Index> > indices;
     vector< vector<int> > L, R;
     U identity;
-    function<void(T&, int, const U& a)> upd;
+    function<void(T&, int, int, const U&)> upd;
+    function<void(T&, vector<Index>&)> ini;
     function<U(T&, int, int)> f;
     function<U(const U&, const U&)> m;
     FractionalCascadingSegTree() {}
     FractionalCascadingSegTree(int t,
-        function<void(T&, int, const U& a)> const &upd,
+        function<void(T&, int, int, const U&)> const &upd,
+        function<void(T&, vector<Index>&)> const &ini,
         function<U(T&, int, int)> const &f,
         function<U(const U&, const U&)> const &m,
         U identity = U(), T initial = T())
-      : identity(identity), upd(upd), f(f), m(m) {
+      : identity(identity), upd(upd), ini(ini), f(f), m(m) {
         n = 1; while(n < t) n <<= 1;
         dat = vector<T>(2 * n, initial);
         indices = vector< vector<Index> >(2 * n);
@@ -32,18 +34,17 @@ options     head
     void index(int i, Index j) {
       indices[i + n - 1].emplace_back(j);
     }
-    void init(bool doUnique, function<void(T&, vector<int>&)> h = [](T&, vector<int>&){}) {
+    void init(bool doUnique) {
       for(int i = n * 2 - 2; i >= 0; i--) {
         if(i >= n - 1) {
           sort(begin(indices[i]), end(indices[i]));
           if(doUnique) indices[i].erase(unique(begin(indices[i]), end(indices[i])), end(indices[i]));
-          h(dat[i], indices[i]);
+          ini(dat[i], indices[i]);
           continue;
         }
         size_t lsz = indices[i * 2 + 1].size();
         size_t rsz = indices[i * 2 + 2].size();
         size_t nsz = lsz + rsz;
-        h(dat[i], indices[i]);
         indices[i].resize(nsz); L[i].resize(nsz + 1, lsz); R[i].resize(nsz + 1, rsz);
         size_t p1 = 0, p2 = 0;
         while(p1 < lsz || p2 < rsz) {
@@ -55,6 +56,7 @@ options     head
             indices[i][p1 + p2] = indices[i * 2 + 2][p2]; p2++;
           }
         }
+        ini(dat[i], indices[i]);
       }
     }
     void update(int i, int j, U const &val) {
@@ -63,7 +65,7 @@ options     head
     }
     void update(int i, int lower, U const &val, int l, int r, int k) {
       if(i+1 <= l || r <= i) return;
-      upd(dat[k], lower, val);
+      upd(dat[k], i, lower, val);
       if(i <= l && r <= i+1) return;
       update(i, L[k][lower], val, l, (l + r) >> 1, k * 2 + 1);
       update(i, R[k][lower], val, (l + r) >> 1, r, k * 2 + 2);
@@ -85,24 +87,32 @@ options     head
   
   /// }}}--- ///
   
-  // expamle {{{
+  // fc-seg expamle {{{
   
-  // FractionalCascadingSegTree<BIT<>, ll> ecas(N + 1,
-  //     [](BIT<> &bit, int i, ll const &x) {
-  //     bit.set(i, x);
+  // using Under = BIT<>;
+  // using Data = ll;
+  
+  // using Under = SparseTable<RMQSL>;
+  // using Data = ll;
+  
+  // FractionalCascadingSegTree<Under, Data> ecas(N + 1,
+  //     // update
+  //     [](Under &dat, int x, int y, Data const &v) -> void {
+  //     dat.set(y, RMQSL::op(dat.get(y), v));
   //     },
-  //     [](BIT<> &bit, int l, int r) {
-  //     return bit.range(l, r-1);
+  //     // init
+  //     [](Under &dat, vector<ll> indices) -> void {
+  //     dat = Under(indices.size()); // serve initial?
   //     },
-  //     [](ll a, ll b) {
-  //     return a + b;
+  //     // [l, r) // WARN : l <= r
+  //     [](Under &dat, int l, int r) -> Data {
+  //       return dat.query(l, r);
+  //     },
+  //     // merge
+  //     [](Data a, Data b) -> Data {
+  //       return a + b;
   //     });
   
   // }}}
-  
-  // FractionalCascadingSegTree<BIT<>, ll> ecas(size, upd: (&bit, i, &dat) -> void, f: (&bit, [l, r)) -> ll, merge)
-  // index(int x, int y)
-  // init(f: (bit, size, indices) -> void)
-  // update(int x, int y, value)
   ${0}
 
