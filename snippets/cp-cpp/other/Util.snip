@@ -8,7 +8,7 @@ options     head
   #ifdef USE_COUT
   #define dump(...) [&](){auto __debug_tap=make_tuple(__VA_ARGS__);cout<<"["<<__LINE__<< "] "<<#__VA_ARGS__<<" = "<<__debug_tap<<"\n";}()
   #else
-  #define dump(...) [&](){auto __debug_tap=make_tuple(__VA_ARGS__);cout<<"["<<__LINE__<< "] "<<#__VA_ARGS__<<" = "<<__debug_tap<<"\n";}()
+  #define dump(...) [&](){auto __debug_tap=make_tuple(__VA_ARGS__);cerr<<"["<<__LINE__<< "] "<<#__VA_ARGS__<<" = "<<__debug_tap<<"\n";}()
   #endif
   template<class T> inline void dump2D(T &d, size_t sizey, size_t sizex) { ostream&o=
   #ifdef USE_COUT
