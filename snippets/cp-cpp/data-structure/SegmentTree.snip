@@ -5,23 +5,22 @@ options     head
   // not 2^i size needs exchange-law (maybe)
   /// --- SegmentTree Library {{{ ///
   
-  /*
-     struct Monoid {
-     using T = _underlying_set_;
-     static T op(const T& a, const T& b) { return _a_op_b_; }
-     static constexpr T identity() { return _identity_element_; }
-     };
-     */
+  // struct Monoid {
+  //   using T = _underlying_set_;
+  //   static T op(const T& a, const T& b) { return _a_op_b_; }
+  //   static constexpr T identity() { return _identity_element_; }
+  // };
   
   template<class Monoid>
   struct SegTree {
   private:
     using T = typename Monoid::T;
-    const int n;
+    int n;
     vector<T> data;
     void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
   
   public:
+    SegTree() {}
     SegTree(int n, const T& v = Monoid::identity())
       : n(n),data(2 * n, v) {}
   
