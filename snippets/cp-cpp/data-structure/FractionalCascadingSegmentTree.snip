@@ -32,18 +32,18 @@ options     head
     void index(int i, Index j) {
       indices[i + n - 1].emplace_back(j);
     }
-    void init(function<void(T&, vector<int> indices)> h) {
+    void init(bool doUnique, function<void(T&, vector<int>&)> h = [](T&, vector<int>&){}) {
       for(int i = n * 2 - 2; i >= 0; i--) {
         if(i >= n - 1) {
           sort(begin(indices[i]), end(indices[i]));
-          indices[i].erase(unique(begin(indices[i]), end(indices[i])), end(indices[i]));
+          if(doUnique) indices[i].erase(unique(begin(indices[i]), end(indices[i])), end(indices[i]));
           h(dat[i], indices[i]);
           continue;
         }
         size_t lsz = indices[i * 2 + 1].size();
         size_t rsz = indices[i * 2 + 2].size();
         size_t nsz = lsz + rsz;
-        h(dat[i], nsz);
+        h(dat[i], indices[i]);
         indices[i].resize(nsz); L[i].resize(nsz + 1, lsz); R[i].resize(nsz + 1, rsz);
         size_t p1 = 0, p2 = 0;
         while(p1 < lsz || p2 < rsz) {
