@@ -272,12 +272,12 @@ augroup cpp-namespace
   autocmd FileType cpp inoremap <buffer><expr>; <SID>expand_namespace()
 augroup END
 function! s:expand_namespace()
-  let s = getline('.')[0:col('.')-1]
-  if s =~# '\<b;;'
+  let s = getline('.')[0:col('.')-2]
+  if s =~# '\<b;'
     return "\<BS>oost::"
-  elseif s =~# '\<s;;'
-    return "\<BS>\<BS>td::"
-  elseif s =~# '\<d;;'
+  elseif s =~# '\<s;'
+    return "\<BS>td::"
+  elseif s =~# '\<d;'
     return "\<BS>etail::"
   else
     return ';'
