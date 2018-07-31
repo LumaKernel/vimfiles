@@ -1,5 +1,4 @@
-# this is fantastic library !!!!
-# refer : https://tomcatowl.github.io/post/ds-and-alg-2/
+# reference : https://tomcatowl.github.io/post/ds-and-alg-2/
 snippet     lazysegmenttree
 alias       lazy lazyseg
 options     head
@@ -130,6 +129,10 @@ options     head
     }
   };
   
+  /// }}}--- ///
+  
+  // lazy-seg expamles {{{
+  
   struct RangeMin {
     using T = long long;
     static T op(const T& a, const T& b) { return min(a, b); }
@@ -187,7 +190,7 @@ options     head
     { return m * sz; }
   };
   
-  /// }}}--- ///
+  // }}}
   
   // LazySegTree<RangeSumAdd> seg(m, 0, 0);
 
