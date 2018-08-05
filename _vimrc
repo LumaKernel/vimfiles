@@ -243,6 +243,7 @@ endif
 "}}}
 
 " GVIMの設定{{{
+" gvimrc? IDK.
 if has('gui_running')
   set guioptions+=e
   set guioptions-=m " メニューバーを消す
@@ -252,6 +253,9 @@ if has('gui_running')
   set guioptions-=R
   set guioptions-=l
   set guioptions-=L
+
+  set columns=108
+  set lines=40
 
   if has('unix')
     set guifont=MyricaM\ M\ 14,Source\ Code\ Pro\ for\ Powerline\ 11,Source\ Code\ Pro\ 11
