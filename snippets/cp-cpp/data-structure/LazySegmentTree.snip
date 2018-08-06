@@ -6,25 +6,25 @@ options     head
   /// --- LazySegmentTree Library {{{ ///
   
   /*
-  struct Monoid {
-    using T = _underlying_set_;
-    static T op(const T& a, const T& b) { return _a_op_b_; }
-    static constexpr T identity() { return _identity_element_; }
-  };
-  */
+     struct Monoid {
+     using T = _underlying_set_;
+     static T op(const T& a, const T& b) { return _a_op_b_; }
+     static constexpr T identity() { return _identity_element_; }
+     };
+     */
   
   /*
-  struct MM {
-    using OperatorMonoid = _operator_monoid_;
-    using DataMonoid = _data_monoid_;
-    static T act(const OperatorMonoid::T& m, const T& a)
-    { return _m_act_a; }
-  };
-  */
+     struct MM {
+     using OperatorMonoid = _operator_monoid_;
+     using DataMonoid = _data_monoid_;
+     static T act(const OperatorMonoid::T& m, const T& a)
+     { return _m_act_a; }
+     };
+     */
   
   template<class MM>
   struct LazySegTree {
-    private:
+  private:
     using DM = typename MM::DataMonoid;
     using OM = typename MM::OperatorMonoid;
     using DT = typename DM::T;
@@ -32,7 +32,7 @@ options     head
     const int n, h;
     vector<DT> data;
     vector<OT> lazy; // act
-
+  
     void propFrom(int i, int sz) {
       if(lazy[i] == OM::identity()) return;
       data[i] = MM::act(lazy[i], sz, data[i]);
@@ -42,41 +42,42 @@ options     head
       }
       lazy[i] = OM::identity();
     }
-
+  
     void propToO(int i) {
       i += n;
       for(int j = h - 1; j >= 0; j--) propFrom(i >> j, 1 << j);
     }
-
+  
     void propToD(int i) {
       i += n;
       int sz = 1;
       while(i >>= 1) propFrom(i * 2, sz), propFrom(i * 2 + 1, sz), //// important!!!
         data[i] = DM::op(data[i * 2], data[i * 2 + 1]), sz <<= 1;
     }
-
+  
     void propToDataOne(int i) {
       data[i] = DM::op(data[i * 2], data[i * 2 + 1]);
     }
-
+  
     int log(int x) {
       int h = 0;
       while(x >> h) h++;
       return h;
     }
   
-    public:
+  public:
+    LazySegTree(): n(0) {}
     LazySegTree(int n, const DT& v = DM::identity(), const OT& w = OM::identity())
       : n(n), h(log(n)), data(2 * n, v), lazy(2 * n, w) {}
-
-    template <class InputIt>
-      LazySegTree(InputIt first, InputIt last)
+  
+    template <class InputIter, class = typename iterator_traits<InputIter>::value_type>
+      LazySegTree(InputIter first, InputIter last)
       : n(distance(first, last)), h(log(n)),
       data(2 * n, DM::identity()), lazy(2 * n, OM::identity()) {
         copy(first, last, begin(data) + n);
         for(int i = n - 1; i > 0; i--) propToDataOne(i);
       }
-
+  
     void act(int l, int r, const OT& m) {
       l = max(0, l); r = min(r, n);
       propToO(l);
@@ -90,18 +91,18 @@ options     head
       propToD(tl);
       propToD(tr - 1);
     }
-
+  
     void set(int i, const DT& v) {
       propToO(i);
       data[i + n] = v;
       propToD(i);
     }
-
+  
     DT get(int i) {
       propToO(i);
       return data[i + n];
     }
-
+  
     DT query(int l, int r) {
       l = max(0, l); r = min(r, n);
       propToO(l);
@@ -114,7 +115,7 @@ options     head
       }
       return DM::op(tmpL, tmpR);
     }
-
+  
     inline void dum(int r = -1) {
   #ifdef DEBUG
       if(r < 0) r = n;

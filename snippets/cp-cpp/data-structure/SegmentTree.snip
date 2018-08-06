@@ -20,12 +20,12 @@ options     head
     void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
   
   public:
-    SegTree() {}
+    SegTree(): n(0) {}
     SegTree(int n, const T& v = Monoid::identity())
       : n(n),data(2 * n, v) {}
   
-    template <class InputIt>
-      SegTree(InputIt first, InputIt last)
+    template <class InputIter, class = typename iterator_traits<InputIter>::value_type>
+      SegTree(InputIter first, InputIter last)
       : n(distance(first, last)), data(2 * n, Monoid::identity()) {
         copy(first, last, begin(data) + n);
         // update form deep
