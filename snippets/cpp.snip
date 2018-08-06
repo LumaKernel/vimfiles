@@ -27,3 +27,7 @@ snippet     s
 options     word
   std::
 
+snippet     input
+options     word
+  template<class InputIter, class = typename std::iterator_traits<InputIter>::value_type>
+
