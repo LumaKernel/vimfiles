@@ -2,7 +2,7 @@
 snippet     segmenttree
 alias       seg
 options     head
-  // not 2^i size needs exchange-law (maybe)
+  // NOTE : query in range!
   /// --- SegmentTree Library {{{ ///
   
   // struct Monoid {
@@ -18,27 +18,24 @@ options     head
     int n;
     vector<T> data;
     void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
-  
   public:
     SegTree(): n(0) {}
-    SegTree(int n, const T& v = Monoid::identity())
-      : n(n),data(2 * n, v) {}
-  
-    template <class InputIter, class = typename iterator_traits<InputIter>::value_type>
+    SegTree(int t) {
+      n = 1; while(n < t) n <<= 1; // for no exchange-law
+      data.resize(n * 2, Monoid::identity());
+    }
+    template<class InputIter, class = typename std::iterator_traits<InputIter>::value_type>
       SegTree(InputIter first, InputIter last)
-      : n(distance(first, last)), data(2 * n, Monoid::identity()) {
+      : SegTree(distance(first, last)) {
         copy(first, last, begin(data) + n);
         // update form deep
         for(int i = n - 1; i > 0; i--) propTo(i);
       }
-  
     void set(int i, const T& v) {
       data[i += n] = v;
       while(i >>= 1) propTo(i);
     }
-  
     T get(int i) { return data[i + n]; }
-  
     T query(int l, int r) {
       l = max(0, l); r = min(r, n);
       T tmpL = Monoid::identity(), tmpR = Monoid::identity();
@@ -52,7 +49,7 @@ options     head
   
   /// }}}--- ///
   
-  // examples {{{
+  // seg-examples {{{
   
   struct RMQMonoid {
     using T = long long;
