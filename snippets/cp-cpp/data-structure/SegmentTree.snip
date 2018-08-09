@@ -16,28 +16,27 @@ options     head
   private:
     using T = typename Monoid::T;
     int n;
-    vector<T> data;
-    void propTo(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
+    std::vector<T> data;
+    // call after touch data[i]
+    void prop(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
   public:
     SegTree(): n(0) {}
-    SegTree(int t) {
-      n = 1; while(n < t) n <<= 1; // for no exchange-law
+    SegTree(int n): n(n) {
       data.resize(n * 2, Monoid::identity());
     }
     template<class InputIter, class = typename std::iterator_traits<InputIter>::value_type>
       SegTree(InputIter first, InputIter last)
-      : SegTree(distance(first, last)) {
-        copy(first, last, begin(data) + n);
-        // update form deep
-        for(int i = n - 1; i > 0; i--) propTo(i);
+      : SegTree(std::distance(first, last)) {
+        copy(first, last, std::begin(data) + n);
+        // fill from deep
+        for(int i = n - 1; i > 0; i--) prop(i);
       }
     void set(int i, const T& v) {
       data[i += n] = v;
-      while(i >>= 1) propTo(i);
+      while(i >>= 1) prop(i); // propUp
     }
     T get(int i) { return data[i + n]; }
     T query(int l, int r) {
-      l = max(0, l); r = min(r, n);
       T tmpL = Monoid::identity(), tmpR = Monoid::identity();
       for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
         if(l & 1) tmpL = Monoid::op(tmpL, data[l++]);
@@ -45,32 +44,49 @@ options     head
       }
       return Monoid::op(tmpL, tmpR);
     }
+    inline void dum(int r = -1) {
+  #ifdef DEBUG
+      std::ostream & o =
+  #ifdef USE_COUT
+        std::cout
+  #else
+        std::cerr
+  #endif
+        ;
+      if(r < 0) r = n;
+      o << "{";
+      for(int i = 0; i < std::min(r, n); i++) o << (i ? ", " : "") << get(i);
+      o << "}" << std::endl;
+  #endif
+    }
   };
   
   /// }}}--- ///
   
-  // seg-examples {{{
+  // Monoid examples {{{
   
-  struct RMQMonoid {
+  constexpr long long inf = std::numeric_limits<long long>::max();
+  // using P = pair<ll, ll>
+  
+  struct MonoidMin {
     using T = long long;
     static T op(const T& a, const T& b) { return std::min(a, b); }
-    static constexpr T identity() { return numeric_limits<T>::max(); }
+    static constexpr T identity() { return inf; }
   };
-  struct RSQMonoid {
+  struct MonoidSum {
     using T = long long;
     static T op(const T& a, const T& b) { return a + b; }
     static constexpr T identity() { return 0; }
   };
-  struct RMaxQMonoid {
+  struct MonoidMax {
     using T = long long;
     static T op(const T& a, const T& b) { return std::max(a, b); }
-    static constexpr T identity() { return numeric_limits<T>::min(); }
+    static constexpr T identity() { return -inf; }
   };
   
-  using RMQ = SegTree<RMQMonoid>;
-  using RSQ = SegTree<RSQMonoid>;
-  using RMaxQ = SegTree<RMaxQMonoid>;
-  
   // }}}
+  
+  // using RMQ = SegTree<MonoidMin>;
+  // RMQ rmq(N);
   ${0}
 
