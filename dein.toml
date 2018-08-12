@@ -393,6 +393,7 @@ hook_add = '''
 [[plugins]]
 repo = 'ap/vim-buftabline'
 hook_add = '''
+  let g:buftabline_show = 1
   let g:buftabline_indicators = 1
 '''
 
