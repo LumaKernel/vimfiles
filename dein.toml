@@ -101,7 +101,7 @@ hook_add = '''
   nnoremap <silent> <Leader>s :NERDTree<CR>
   augroup MyAutoCmd
     au FileType nerdtree nmap <buffer> za o
-    au FileType nerdtree nnoremap <buffer><silent> <Leader>n :q<CR>
+    au FileType nerdtree nnoremap <buffer><silent> <Leader>s :q<CR>
   augroup END
 '''
 
@@ -317,6 +317,7 @@ hook_add = '''
   nnoremap <Leader>m :ALEList<CR>
   autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:bd<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
+  nnoremap <silent> <F8> :ALEFix<CR>
 '''
 
 hook_source = '''

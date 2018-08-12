@@ -234,10 +234,10 @@ nmap <silent> <ESC><ESC> :nohlsearch<CR><ESC>
 
 " vimとFinder, terminalへの橋渡し{{{
 if has('mac')
-  nnoremap <silent> <Leader>e :!open .<CR>
+  " nnoremap <silent> <Leader>e :!open .<CR>
   nnoremap <silent> <Leader>o :!open -a Terminal.app .<CR>
 elseif has('win32')
-  nnoremap <silent> <expr> <Leader>e ":!start explorer .\<CR>"
+  " nnoremap <silent> <expr> <Leader>e ":!start explorer .\<CR>"
   nnoremap <silent> <Leader>o :!start cmd<CR>
 endif
 "}}}
