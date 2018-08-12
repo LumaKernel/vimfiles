@@ -153,44 +153,44 @@ options     head
   struct RangeMinAdd {
     using M = long long;
     using X = RangeMin::T;
-    static X op(const M &a, const M &b)
+    static M op(const M &a, const M &b)
     { return a + b; }
-    static constexpr X identity()
+    static constexpr M identity()
     { return 0; }
-    static X actInto(const M &m, long long, const X &x)
+    static X actInto(const M & m, long long, const X & x)
     { return m + x; }
   };
   
   struct RangeMinSet {
     using M = long long;
     using X = RangeMin::T;
-    static X op(const M &a, const M &)
+    static M op(const M &a, const M &)
     { return a; }
-    static constexpr X identity()
+    static constexpr M identity()
     { return std::numeric_limits<M>::min(); }
-    static X actInto(const M &m, long long, const X &)
+    static X actInto(const M & m, long long, const X &)
     { return m; }
   };
   
   struct RangeSumAdd {
     using M = long long;
     using X = RangeSum::T;
-    static X op(const M &a, const M &b)
+    static M op(const M &a, const M &b)
     { return a + b; }
-    static constexpr X identity()
+    static constexpr M identity()
     { return 0; }
-    static X actInto(const M &m, long long n, const X &x)
+    static X actInto(const M & m, long long n, const X & x)
     { return m * n + x; }
   };
   
   struct RangeSumSet {
     using M = long long;
     using X = RangeSum::T;
-    static X op(const M &a, const M &)
+    static M op(const M &a, const M &)
     { return a; }
-    static constexpr X identity()
+    static constexpr M identity()
     { return std::numeric_limits<M>::min(); }
-    static X actInto(const M &m, long long n, const X &)
+    static X actInto(const M & m, long long n, const X &)
     { return m * n; }
   };
   
