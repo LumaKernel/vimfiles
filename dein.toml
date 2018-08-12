@@ -301,6 +301,9 @@ hook_add = '''
   \   'javascript': [
   \       'prettier-eslint',
   \   ],
+  \   'cpp': [
+  \       'clang-format',
+  \   ]
   \}
 
   nmap <silent> <Leader>p <Plug>(ale_previous_wrap)
