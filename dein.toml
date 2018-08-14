@@ -310,6 +310,7 @@ hook_add = '''
 
   nmap <silent> <Leader>p <Plug>(ale_previous_wrap)
   nmap <silent> <Leader>n <Plug>(ale_next_wrap)
+  nnoremap <F8> :ALEFix<CR>
 
   function! s:ale_list()
     let g:ale_open_list = 1
@@ -319,7 +320,6 @@ hook_add = '''
   nnoremap <Leader>m :ALEList<CR>
   autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:bd<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
-  nnoremap <F8> :ALEFix<CR>
 '''
 
 hook_source = '''
