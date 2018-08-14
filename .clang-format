@@ -4,4 +4,5 @@ IndentCaseLabels : false
 SpaceAfterCStyleCast : true
 SpacesBeforeTrailingComments : 1
 SpacesInAngles : true
+SpaceBeforeParens : Never
 
