@@ -239,6 +239,9 @@ if has('mac')
 elseif has('win32')
   " nnoremap <silent> <expr> <Leader>e ":!start explorer .\<CR>"
   nnoremap <silent> <Leader>o :!start cmd<CR>
+elseif has('unix')
+  " --working-directory=は必要なし
+  nnoremap <silent> <Leader>o :!gnome-terminal<CR>
 endif
 "}}}
 
