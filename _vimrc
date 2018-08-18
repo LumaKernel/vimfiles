@@ -329,7 +329,8 @@ function! s:cp_cpp()
     execute
           \"nnoremap <silent> <expr><buffer> <Leader><F" . i .
           \'> ":e ' . l:file_expand . '<CR>' .
-          \'ggVG\"' . s:creg . 'P:w!<CR>:bd<CR>' .
+          \'ggVG\"' . s:creg . 'P:w!<CR>2<C-O>' .
+          \':bd ' . l:file_expand . '<CR>' .
           \':echo \"ready, ' . l:file_expand . '\"<CR>"'
   endfor
 
