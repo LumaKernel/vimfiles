@@ -1,18 +1,13 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
-
-# hybrid {{{
 [[plugins]]
-repo = 'w0ng/vim-hybrid'
+repo = 'w0ng/vim-hybrid'# {{{
 hook_add = """
   set background=dark
   au MyAutoCmd VimEnter * nested colorscheme hybrid
-"""
-# }}}
-
-# precious {{{
+"""# }}}
 [[plugins]]
-repo = 'osyo-manga/vim-precious'
+repo = 'osyo-manga/vim-precious'# {{{
 dapends = ['context_filetype.vim']
 if = 'g:light'
 on_ft = ['toml']
@@ -21,42 +16,26 @@ let g:precious_enable_switch_CursorMoved = {
   \  "*" : 0,
   \  "toml" : 1,
   \}
-'''
-
+'''# }}}
 [[plugins]]
-repo = 'Shougo/context_filetype.vim'
+repo = 'Shougo/context_filetype.vim'# {{{
 if = 'g:light'
-on_ft = ['toml']
-# }}}
-
-# toml syntax{{{
+on_ft = ['toml']# }}}
 [[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = 'toml'
-# }}}
-
-# parenmatch{{{
+repo = 'cespare/vim-toml'# {{{
+on_ft = 'toml'# }}}
 [[plugins]]
 repo = 'itchyny/vim-parenmatch'
-# }}}
-
-# cursorword{{{
 [[plugins]]
 repo = 'itchyny/vim-cursorword'
-# }}}
-
-# comment out{{{
 [[plugins]]
-repo = 'tyru/caw.vim'
+repo = 'tyru/caw.vim'# {{{
 hook_add = '''
   nmap <C-I> <Plug>(caw:hatpos:toggle)
   vmap <C-I> <Plug>(caw:hatpos:toggle)
-'''
-# }}}
-
-# unite{{{
+'''# }}}
 [[plugins]]
-repo = 'Shougo/unite.vim'
+repo = 'Shougo/unite.vim'# {{{
 hook_add = '''
   let g:unite_enable_start_insert = 1
 
@@ -85,17 +64,11 @@ hook_add = '''
   endif
   
   " }}}
-'''
-# }}}
-
-# gitgutter{{{
+'''# }}}
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
-# }}}
-
-# NERDTree{{{
 [[plugins]]
-repo = 'scrooloose/nerdtree'
+repo = 'scrooloose/nerdtree'# {{{
 depends = ['vimproc.vim']
 hook_add = '''
   nnoremap <silent> <Leader>s :NERDTree<CR>
@@ -103,25 +76,18 @@ hook_add = '''
     au FileType nerdtree nmap <buffer> za o
     au FileType nerdtree nnoremap <buffer><silent> <Leader>s :q<CR>
   augroup END
-'''
-
+'''# }}}
 [[plugins]]
-repo = 'Xuyuanp/nerdtree-git-plugin'
-depends = ['nerdtree']
-# }}}
-
-# vimshell{{{
+repo = 'Xuyuanp/nerdtree-git-plugin'# {{{
+depends = ['nerdtree']# }}}
 [[plugins]]
-repo = 'Shougo/vimshell.vim'
+repo = 'Shougo/vimshell.vim'# {{{
 depends = ['vimproc.vim']
 hook_add = '''
   nnoremap <silent> <Leader>h :VimShell<CR>
-'''
-# }}}
-
-# neosnippet{{{
+'''# }}}
 [[plugins]]
-repo = 'Shougo/neosnippet.vim'
+repo = 'Shougo/neosnippet.vim'# {{{
 depends = ['neosnippet-snippets']
 hook_add = '''
   let g:neosnippet#snippets_directory='~/vimfiles/snippets/'
@@ -129,17 +95,11 @@ hook_add = '''
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
   smap <C-k> <Plug>(neosnippet_expand_or_jump)
   xmap <C-k> <Plug>(neosnippet_expand_or_target)
-'''
-# }}}
-
-# neosnippet-snippets{{{
+'''# }}}
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
-# }}}
-
-# neocomplete {{{
 [[plugins]]
-repo = 'Shougo/neocomplete.vim'
+repo = 'Shougo/neocomplete.vim'# {{{
 hook_add = '''
   " setup {{{
   let g:acp_enableAtStartup = 0
@@ -242,25 +202,25 @@ hook_add = '''
   " let g:neocomplete#force_omni_input_patterns.cpp =
           " \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
   " }}}
-'''
-# }}}
 
-# indent visualization {{{
+  " js {{{
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  " }}}
+
+'''# }}}
 [[plugins]]
 repo = 'Yggdroot/indentLine'
-# }}}
-
+hook_add = '''
+  let g:indentLine_setConceal = 0
+'''
 # c++ {{{
 [[plugins]]
-repo = 'Mizuchi/STL-Syntax'
-on_ft = 'cpp'
-
+repo = 'Mizuchi/STL-Syntax'# {{{
+on_ft = 'cpp'# }}}
 [[plugins]]
 repo = 'Shougo/unite-outline'
-
-# ALE {{{
 [[plugins]]
-repo = 'w0rp/ale'
+repo = 'w0rp/ale'# {{{
 if = 'has("job") && has("channel") && has("timers")'
 on_ft = ['cpp', 'javascript']
 # 参考 :
@@ -324,17 +284,12 @@ hook_add = '''
 
 hook_source = '''
   call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -Wextra -DDEBUG -DUSE_COUT')
-'''
-
+'''# }}}
 # }}}
-
-# }}}
-
-# CtrlP {{{
+[[plugins]]
+repo = 'ctrlpvim/ctrlp.vim'# {{{
 # 参考 :
 # https://qiita.com/ahiruman5/items/4f3c845500c172a02935
-[[plugins]]
-repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
   let g:ctrlp_match_window = 'bottom,order:ttb,min:1,max:20,results:50'
   let g:ctrlp_show_hidden = 1
@@ -355,13 +310,9 @@ hook_add = '''
     let g:ctrlp_use_caching=0
     let g:ctrlp_user_command='ag %s -i --hidden -g ""'
   endif
-'''
-
-# }}}
-
-# vim-quickrun {{{
+'''#}}}
 [[plugins]]
-repo = 'thinca/vim-quickrun'
+repo = 'thinca/vim-quickrun'# {{{
 hook_add = '''
 let g:quickrun_config = get(g:, 'quickrun_config', {})
 let g:quickrun_config._ = {
@@ -379,42 +330,48 @@ let g:quickrun_config._ = {
   \ 'command' : 'g++',
   \ 'cmdopt' : '-w -std=c++14',
   \ }
-'''
-# }}}
-
-# japanese {{{
+'''# }}}
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
-# }}}
-
-# tagbar {{{
 [[plugins]]
-repo = 'majutsushi/tagbar'
+repo = 'majutsushi/tagbar'# {{{
 hook_add = '''
   let g:tagbar_width = 30
   let g:tagbar_autoshowtag = 1
-'''
-# }}}
-
+'''# }}}
 [[plugins]]
-repo = 'ap/vim-buftabline'
+repo = 'elzr/vim-json'# {{{
+hook_add = '''
+  let g:vim_json_syntax_conceal = 0
+'''# }}}
+[[plugins]]
+repo = 'ap/vim-buftabline'# {{{
 hook_add = '''
   let g:buftabline_show = 1
   let g:buftabline_indicators = 1
-'''
-
+'''# }}}
 [[plugins]]
 repo = 'rhysd/wandbox-vim'
-
 [[plugins]]
-repo = 'Shougo/vimproc.vim'
-build = 'make'
-
+repo = 'Shougo/vimproc.vim'# {{{
+build = 'make'# }}}
 [[plugins]]
-repo = 'pangloss/vim-javascript'
+repo = 'pangloss/vim-javascript'# {{{
+on_ft = ['javascript']# }}}
+[[plugins]]
+repo = 'digitaltoad/vim-pug'# {{{
+on_ft = ['pug', 'jade']# }}}
+[[plugins]]
+repo = 'heavenshell/vim-jsdoc'# {{{
+hook_add = '''
+  let g:jsdoc_enable_es6 = 1
+  au FileType javascript nnoremap <buffer> <Leader>d :JsDoc
+'''# }}}
+[[plugins]]
+repo = 'ternjs/tern_for_vim'# {{{
+build = 'npm install'
 on_ft = ['javascript']
-
-[[plugins]]
-repo = 'digitaltoad/vim-pug'
-on_ft = ['pug', 'jade']
+hook_add = '''
+  au FileType javascript nnoremap <buffer><silent> <Leader>g :TernDef<CR>
+'''# }}}
 

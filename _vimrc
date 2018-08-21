@@ -46,7 +46,8 @@ set notitle
 set wrap
 
 set noshowmatch
-set novisualbell " 画面がガビガビする原因
+set novisualbell " 画面がガビガビする
+set conceallevel=0
 
 "}}}
 
@@ -351,7 +352,6 @@ function! s:cp_cpp()
           \' ":ccl\|QuickRun -input " . expand("%:r") . "_in' . i .
           \'\<CR>"'
   endfor
-
   nnoremap <F1> <Nop>
 endfunction
 
