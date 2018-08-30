@@ -1,11 +1,4 @@
-include cp-cpp/algorithm/*
-include cp-cpp/flow/*
-include cp-cpp/math/*
-include cp-cpp/geometory/*
-include cp-cpp/string/*
-include cp-cpp/graph/*
-include cp-cpp/data-structure/*
-include cp-cpp/other/*
+include cp-cpp/temp.snip
 
 snippet     p
 options     word
@@ -19,16 +12,28 @@ snippet     pb
 options     word
   push_back
 
-snippet     ll
-options     word
-  long long
-
 snippet     s
 options     word
   std::
 
+snippet     all
+options     word
+  begin(${1}), end($1)
+
 snippet     input
 alias       iterator
 options     word
-  template<class InputIter, class = typename std::iterator_traits<InputIter>::value_type>
+  template<class InputIter, class = typename iterator_traits<InputIter>::value_type>
+
+snippet     lib
+options     head
+  // @import header
+  #include <bits/stdc++.h>
+  using namespace std;
+  using ll = long long;
+  
+  // @@
+  // @ ${1}
+  // @snippet ${2}
+  ${0}
 
