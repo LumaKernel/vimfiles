@@ -47,7 +47,10 @@ set wrap
 
 set noshowmatch
 set novisualbell " 画面がガビガビする
-set conceallevel=0
+set conceallevel=1
+au FileType markdown setl conceallevel=0
+au FileType json setl conceallevel=0
+au FileType quickfix setl tabstop=8
 
 "}}}
 
@@ -286,7 +289,7 @@ function! s:expand_namespace()
   elseif s =~# '\<s;$'
     return "\<BS>td::"
   elseif s =~# '\<z;$'
-    return "\<BS>\<BS>std::size_t "
+    return "\<BS>\<BS>size_t "
   else
     return ';'
   endif
