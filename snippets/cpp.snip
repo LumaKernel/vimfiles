@@ -37,3 +37,9 @@ options     head
   // @snippet ${2}
   ${0}
 
+snippet     random
+options     head
+  random_device rnd;
+  mt19937 mt(rnd());
+  uniform_int_distribution<ull> rd(0, ull(-1));
+
