@@ -43,3 +43,10 @@ options     head
   mt19937 mt(rnd());
   uniform_int_distribution<ull> rd(0, ull(-1));
 
+snippet     smin
+alias       smax
+options     head
+  template<class T, class U> inline void smin(T &a, const U &b) { a = a < (T) b ? a : b; }
+  template<class T, class U> inline void smax(T &a, const U &b) { a = a < (T) b ? b : a; }
+
+
