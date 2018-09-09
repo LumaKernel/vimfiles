@@ -49,4 +49,9 @@ options     head
   template<class T, class U> inline void smin(T &a, const U &b) { a = a < (T) b ? a : b; }
   template<class T, class U> inline void smax(T &a, const U &b) { a = a < (T) b ? b : a; }
 
+snippet     uniq
+alias       compress
+options     head
+  #define uniq(v) (sort(begin(v), end(v)), (v).erase(unique(begin(v), end(v)), end(v)))
+  #define compress(mp, b) map<decltype(b[0]), int> mp; { int i = 0; for(auto &e : b) mp[e] = i++; }
 
