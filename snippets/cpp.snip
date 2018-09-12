@@ -53,5 +53,17 @@ snippet     uniq
 alias       compress
 options     head
   #define uniq(v) (sort(begin(v), end(v)), (v).erase(unique(begin(v), end(v)), end(v)))
-  #define compress(mp, b) map<decltype(b[0]), int> mp; { int i = 0; for(auto &e : b) mp[e] = i++; }
+  #define compress(mp, b) map< typename decltype(b)::value_type, int > mp; { int i = 0; for(auto &e : (b)) mp[e] = i++; }
+
+snippet     time_test
+options     head
+  // TIME test {{{
+  #define TIME(label, T, procedure) {\
+    std::cout << #label << " : ";\
+    clock_t beg = clock();\
+    for(int i = 0; i < T; i++) procedure;\
+    clock_t las = clock();\
+    std::cout << double(las - beg) / CLOCKS_PER_SEC << "s" << std::endl;\
+    }
+  // }}}
 
