@@ -283,7 +283,7 @@ hook_add = '''
 '''
 
 hook_source = '''
-  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -Wextra -DDEBUG -DDEBUG_OUT=cout')
+  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -Wextra -DDEBUG -DDEBUG_OUT=cout -DDEBUG_LEFT=\"[\" -DDEBUG_RIGHT=\"]\"')
 '''# }}}
 # }}}
 [[plugins]]
@@ -322,7 +322,7 @@ let g:quickrun_config._ = {
 
   let g:quickrun_config.cpp = {
   \ 'command' : 'g++',
-  \ 'cmdopt' : '-DDEBUG -DDEBUG_OUT=cout -w -std=c++14',
+  \ 'cmdopt' : '-DDEBUG -DDEBUG_OUT=cout -w -std=c++14 -DDEBUG_LEFT=\"[\" -DDEBUG_RIGHT=\"]\"',
   \ }
 
   " TODO : use this

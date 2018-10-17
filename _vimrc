@@ -86,6 +86,8 @@ set belloff=all
 set ttimeout " キーコードに問題はないが
 set notimeout " マッピングのキー列をタイムアウトにしない
 
+set mouse=
+
 "}}}
 
 " IME系{{{
