@@ -264,8 +264,8 @@ if has('gui_running')
   set guioptions-=l
   set guioptions-=L
 
-  set columns=108
-  set lines=40
+  set columns=112
+  set lines=42
 
   if has('unix')
     set guifont=MyricaM\ M\ 14,Source\ Code\ Pro\ for\ Powerline\ 11,Source\ Code\ Pro\ 11
