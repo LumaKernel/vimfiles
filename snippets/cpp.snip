@@ -4,8 +4,7 @@ snippet     p
 options     word
   cout << ${0:TARGET} << endl;
 
-snippet     emp
-options     word
+snippet     emp options     word
   emplace_back
 
 snippet     pb
@@ -43,17 +42,18 @@ options     head
   mt19937 mt(rnd());
   uniform_int_distribution<ull> rd(0, ull(-1));
 
-snippet     smin
-alias       smax
+snippet     random_discard
 options     head
-  template<class T, class U> inline void smin(T &a, const U &b) { a = a < (T) b ? a : b; }
-  template<class T, class U> inline void smax(T &a, const U &b) { a = a < (T) b ? b : a; }
+  discard_block_engine<mt19937, 100, 97> dis(rnd());
 
-snippet     uniq
-alias       compress
+snippet     bigfloat_boost
+alias       boost_bigfloat
 options     head
-  #define uniq(v) (sort(begin(v), end(v)), (v).erase(unique(begin(v), end(v)), end(v)))
-  #define compress(mp, b) map< typename decltype(b)::value_type, int > mp; { int i = 0; for(auto &e : (b)) mp[e] = i++; }
+  #include <boost/multiprecision/cpp_dec_float.hpp>
+  namespace mp = boost::multiprecision;
+  using float100 = mp::cpp_dec_float_100;
+  // using float1000 = mp::number< mp::cpp_dec_float< 1000 > >;
+  // using float1000ex = mp::number< mp::cpp_dec_float< 1000, std::uint64_t > >;
 
 snippet     time_test
 options     head
