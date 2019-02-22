@@ -73,12 +73,13 @@ options     head
   using namespace std;
   using ll = long long;
   
-  const int N = 1e5${0}
-  vector<int> g[N];
+  const int N = 1e5${0};
+  vector<vector<int>> g;
   int n;
   int main() {
     ios::sync_with_stdio(false), cin.tie(0);
     cin >> n;
+    g.resize(n);
     for(int i = 0; i < n - 1; i++) {
       int a, b; cin >> a >> b;
       a--; b--;
@@ -112,12 +113,13 @@ options     head
   using namespace std;
   using ll = long long;
   
-  const int N = 1e5${0}
-  vector<int> g[N];
+  const int N = 1e5${0};
+  vector<vector<int>> g;
   int n, m;
   int main() {
     ios::sync_with_stdio(false), cin.tie(0);
     cin >> n >> m;
+    g.resize(n);
     for(int i = 0; i < m; i++) {
       int a, b; cin >> a >> b;
       a--; b--;
