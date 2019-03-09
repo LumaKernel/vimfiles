@@ -13,9 +13,10 @@ options     head
   #include<cmath>
   #include<random>
   #include<cassert>
+  #include<bitset>
+  #include<cstdlib>
   // #include<deque>
   // #include<multiset>
-  // #include<bitset>
   // #include<cstring>
   // #include<bits/stdc++.h>
   // }}}
@@ -35,9 +36,10 @@ options     head
   #include<cmath>
   #include<random>
   #include<cassert>
+  #include<bitset>
+  #include<cstdlib>
   // #include<deque>
   // #include<multiset>
-  // #include<bitset>
   // #include<cstring>
   // #include<bits/stdc++.h>
   // }}}
@@ -45,7 +47,7 @@ options     head
   using ll = long long;
   
   int main() {
-    ios::sync_with_stdio(false), cin.tie(0);
+    std::ios::sync_with_stdio(false), std::cin.tie(0);
     return 0;
   }
 
@@ -64,9 +66,10 @@ options     head
   #include<cmath>
   #include<random>
   #include<cassert>
+  #include<bitset>
+  #include<cstdlib>
   // #include<deque>
   // #include<multiset>
-  // #include<bitset>
   // #include<cstring>
   // #include<bits/stdc++.h>
   // }}}
@@ -74,14 +77,14 @@ options     head
   using ll = long long;
   
   const int N = 1e5${0};
-  vector<vector<int>> g;
+  std::vector<std::vector<int>> g;
   int n;
   int main() {
-    ios::sync_with_stdio(false), cin.tie(0);
+    std::ios::sync_with_stdio(false), std::cin.tie(0);
     cin >> n;
     g.resize(n);
     for(int i = 0; i < n - 1; i++) {
-      int a, b; cin >> a >> b;
+      int a, b; std::cin >> a >> b;
       a--; b--;
       g[a].emplace_back(b);
       g[b].emplace_back(a);
@@ -114,14 +117,14 @@ options     head
   using ll = long long;
   
   const int N = 1e5${0};
-  vector<vector<int>> g;
+  std::vector<std::vector<int>> g;
   int n, m;
   int main() {
-    ios::sync_with_stdio(false), cin.tie(0);
+    std::ios::sync_with_stdio(false), std::cin.tie(0);
     cin >> n >> m;
     g.resize(n);
     for(int i = 0; i < m; i++) {
-      int a, b; cin >> a >> b;
+      int a, b; std::cin >> a >> b;
       a--; b--;
       g[a].emplace_back(b);
       g[b].emplace_back(a);
