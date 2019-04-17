@@ -7,6 +7,7 @@ endif
 let g:mapleader = " "
 
 " 軽いと思う環境
+" TODO : 使っていない
 let g:light = has("unix")
 
 augroup MyAutoCmd
@@ -87,6 +88,8 @@ set ttimeout " キーコードに問題はないが
 set notimeout " マッピングのキー列をタイムアウトにしない
 
 set mouse=
+
+set viewdir=$HOME/.vim_view/
 
 "}}}
 
@@ -242,7 +245,7 @@ nmap <silent> <ESC><ESC> :nohlsearch<CR><ESC>
 if has('mac')
   nnoremap <silent> <Leader>u :!open .<CR>
   nnoremap <silent> <Leader>o :!open -a Terminal.app .<CR>
-elseif has('win32')
+elseif has('win32') || has('win64')
   nnoremap <silent> <expr> <Leader>u ":!start explorer .\<CR>"
   nnoremap <silent> <Leader>o :!start cmd<CR>
 elseif has('unix')
@@ -351,7 +354,6 @@ function! s:cp_cpp()
   endfor
 
   " <Leader>#{i} で "%:r" . _in#{i} を input として % を実行
-  nnoremap <expr><buffer><Leader>0 ":ccl\|QuickRun\<CR>"
   for i in range(1, 9)
     execute
           \'nnoremap <expr><buffer> <Leader>' . i .
@@ -364,6 +366,86 @@ endfunction
 augroup MyAutoCmd
   autocmd Filetype cpp call <SID>cp_cpp()
 augroup END
+
+" }}}
+
+nnoremap <expr> <Leader>0 ":ccl\|QuickRun\<CR>"
+
+" 一時的な最大化 {{{
+
+nnoremap <silent> m :call MaximizeToggle()<CR>
+
+augroup MaxmizeWindow
+  autocmd!
+  autocmd WinNew,WinLeave,BufLeave,BufDelete * call MaximizeInactivate(1)
+augroup END
+
+nnoremap <silent> m :call MaximizeToggle()<CR>
+
+function! MaximizeInactivate(showMessage)
+  if exists("s:maximize_processing") && s:maximize_processing
+    return
+  endif
+  let s:maximize_processing = 1
+  if exists("s:maximize_session")
+    silent! call delete(s:maximize_session)
+    unlet s:maximize_session
+    let &hidden=s:maximize_hidden_save
+    unlet s:maximize_hidden_save
+    if a:showMessage
+      echo "最大化モードを中止します"
+    endif
+  endif
+  unlet s:maximize_processing
+endfunction
+
+function! MaximizeToggle()
+  if exists("s:maximize_processing") && s:maximize_processing
+    return
+  endif
+  let s:maximize_processing = 1
+  if exists("s:maximize_session")
+
+    " 現在編集しているバッファの状態を保存する
+    " &viewdir の設定が必要
+    mkview
+
+    silent! exec "source " . s:maximize_session
+    silent! call delete(s:maximize_session)
+    unlet s:maximize_session
+    let &hidden=s:maximize_hidden_save
+    unlet s:maximize_hidden_save
+
+    " 編集していたバッファの状態を復元する
+    loadview
+
+    " echo "全画面モードを終了します" " 表示されるがすぐ消える
+  else
+    if winnr('$') == 1
+      echo "windowが一つしかありません. 全画面モードを開始できません"
+    else
+      let s:maximize_hidden_save = &hidden
+      let s:maximize_session = tempname()
+      set hidden
+      exec "mksession! " . s:maximize_session
+
+      let l:foldenable = &foldenable
+
+      if l:foldenable
+        set nofoldenable
+      endif
+
+      only
+
+      if l:foldenable
+        set foldenable
+      endif
+
+      echo "全画面モードを開始します"
+    endif
+  endif
+  unlet s:maximize_processing
+endfunction
 
 " }}}
 
