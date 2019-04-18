@@ -380,8 +380,6 @@ augroup MaxmizeWindow
   autocmd WinNew,WinLeave,BufLeave,BufDelete * call MaximizeInactivate(1)
 augroup END
 
-nnoremap <silent> m :call MaximizeToggle()<CR>
-
 function! MaximizeInactivate(showMessage)
   if exists("s:maximize_processing") && s:maximize_processing
     return
@@ -416,16 +414,36 @@ function! MaximizeToggle()
     let &hidden=s:maximize_hidden_save
     unlet s:maximize_hidden_save
 
+    let l:win = win_getid()
+
+    if s:maximize_nerdtree_open
+      if exists(":NERDTree") == 2
+        :NERDTree
+        cal win_gotoid(l:win)
+      endif
+    endif
+
+    unlet s:maximize_nerdtree_open
+
+
+    if &ft == "qf"
+      copen
+    endif
+
     " 編集していたバッファの状態を復元する
     loadview
 
     " echo "全画面モードを終了します" " 表示されるがすぐ消える
   else
     if winnr('$') == 1
-      echo "windowが一つしかありません. 全画面モードを開始できません"
+      echo "既にウィンドウは1つしかありません. 全画面モードを開始できません"
     else
       let s:maximize_hidden_save = &hidden
       let s:maximize_session = tempname()
+      silent! let s:maximize_nerdtree_open = <SID>CloseNERDTree() > 0
+
+      silent! call <SID>NameAllBuffers()
+
       set hidden
       exec "mksession! " . s:maximize_session
 
@@ -435,7 +453,7 @@ function! MaximizeToggle()
         set nofoldenable
       endif
 
-      only
+      silent! only
 
       if l:foldenable
         set foldenable
@@ -445,6 +463,58 @@ function! MaximizeToggle()
     endif
   endif
   unlet s:maximize_processing
+endfunction
+
+" }}}
+
+" reference : https://stackoverflow.com/questions/3155461/how-to-delete-multiple-buffers-in-vim
+" NERDTREEを閉じて数える {{{
+
+function! <SID>CloseNERDTree()
+  let l:bufNr = bufnr("$")
+  let l:cnt = 0
+  while l:bufNr > 0
+    if bufwinid(l:bufNr) != -1
+      if bufname(l:bufNr) =~? "nerd_tree*"
+        execute "bd ".l:bufNr
+        let l:cnt = l:cnt + 1
+      endif
+    endif
+    let l:bufNr = l:bufNr - 1
+  endwhile
+  return l:cnt
+endfunction
+
+" }}}
+
+" すべてのウィンドウに表示されているバッファに名前をつける {{{
+
+function! <SID>NameAllBuffers()
+  let l:bufNr = bufnr("$")
+  let l:cnt = 0
+  let l:now = bufnr("%")
+
+  while l:bufNr > 0
+    if bufwinid(l:bufNr) != -1
+      if bufname(l:bufNr) == ""
+        exec "buf " . l:bufNr
+        exec "file __auto_" . l:bufNr . <SID>timestamp()
+        let l:cnt = l:cnt + 1
+      endif
+    endif
+    let l:bufNr = l:bufNr - 1
+  endwhile
+
+  exec "buf " . l:now
+  return l:cnt
+endfunction
+
+" }}}
+
+" timestanmp {{{
+
+function! <SID>timestamp()
+  return strftime("%Y/%m/%d (%a) %H:%M")
 endfunction
 
 " }}}
