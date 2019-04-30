@@ -388,8 +388,6 @@ augroup END
 
 " }}}
 
-nnoremap <expr> <Leader>0 ":ccl\|QuickRun\<CR>"
-
 " 一時的な最大化 {{{
 
 nnoremap <silent> m :call MaximizeToggle()<CR>
@@ -464,7 +462,15 @@ function! MaximizeToggle()
       silent! call <SID>NameAllBuffers()
 
       set hidden
+      
+      let l:save_sesssionops = &sessionoptions
+      " options の set guifont は windows においてリサイズと同じで
+      " 副作用があるので無効化
+      set sessionoptions=blank,buffers,folds,help,tabpages,terminal
+
       exec "mksession! " . s:maximize_session
+
+      let &sessionoptions = l:save_sesssionops
 
       let l:foldenable = &foldenable
 

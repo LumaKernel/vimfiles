@@ -351,15 +351,16 @@ let g:quickrun_config._ = {
   \ 'runner' : 'job'
   \ }
 
+  " 'type' : 'cpp/g++' とすることで明示的に 'cpp/g++' の設定を継承する
   let g:quickrun_config.cpp = {
+  \ 'type' : 'cpp/g++',
   \ 'command' : 'g++',
   \ 'cmdopt' : '-DDEBUG -DDEBUG_OUT=std::cout -w -std=c++14',
   \ }
-
-  " TODO : use this
-  let g:quickrun_config['cpp/no-debbug'] = {
+  let g:quickrun_config['cpp-no-debug'] = {
+  \ 'type' : 'cpp/g++',
   \ 'command' : 'g++',
-  \ 'cmdopt' : '-w -std=c++14',
+  \ 'cmdopt' : '-DNDEBUG -w -std=c++14',
   \ }
   if has('win32') || has('win64')
     let g:quickrun_config['python'] = {
@@ -367,6 +368,11 @@ let g:quickrun_config._ = {
     \   "hook/output_encode/encoding" : "cp932",
     \}
   endif
+
+  nnoremap <expr> <Leader>0 ":ccl\|QuickRun\<CR>"
+  augroup MyAutoCmd
+    autocmd FileType cpp nnoremap <buffer><expr> <Leader>l ':ccl\|QuickRun -type "cpp-no-debug"' . "\<CR>"
+  augroup END
 '''# }}}
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
@@ -419,6 +425,8 @@ hook_add = '''
     \       'css' : 0,
     \   }
     \ }
+
+  nnoremap <Leader>z RainbowToggle
   
   augroup MyAutoCmd
     " すぐに登録するとうまくいかない
