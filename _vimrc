@@ -14,6 +14,24 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
+
+function! CheckExternalCommand(cmd)
+  if !executable("python")
+    echohl WarningMsg
+    echomsg "python not found"
+    echohl None
+  endif
+endfunction
+
+function! CheckPythonModule(mod)
+  call system("python -m " . a:mod . " --version")
+  if v:shell_error
+    echohl WarningMsg
+    echomsg "python module \"" . a:mod . "\" not found"
+    echohl None
+  endif
+endfunction
+
 " dein settings {{{
 filetype plugin indent off
 let s:cache_home = expand('~/.cache')
@@ -392,7 +410,7 @@ function! MaximizeInactivate(showMessage)
     let &hidden=s:maximize_hidden_save
     unlet s:maximize_hidden_save
     if a:showMessage
-      echo "最大化モードを中止します"
+      redraw | echo "最大化モードを中止します"
     endif
   endif
   unlet s:maximize_processing
@@ -434,10 +452,10 @@ function! MaximizeToggle()
     " 編集していたバッファの状態を復元する
     loadview
 
-    " echo "全画面モードを終了します" " 表示されるがすぐ消える
+    redraw | echo "全画面モードを終了します"
   else
     if winnr('$') == 1
-      echo "既にウィンドウは1つしかありません. 全画面モードを開始できません"
+      redraw | echo "既にウィンドウは1つしかありません. 全画面モードを開始できません"
     else
       let s:maximize_hidden_save = &hidden
       let s:maximize_session = tempname()
@@ -460,7 +478,7 @@ function! MaximizeToggle()
         set foldenable
       endif
 
-      echo "全画面モードを開始します"
+      redraw | echo "全画面モードを開始します"
     endif
   endif
   unlet s:maximize_processing

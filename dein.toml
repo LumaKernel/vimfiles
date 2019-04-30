@@ -9,7 +9,6 @@ hook_add = """
 [[plugins]]
 repo = 'osyo-manga/vim-precious'# {{{
 dapends = ['context_filetype.vim']
-if = 'g:light'
 on_ft = ['toml']
 hook_add = '''
 let g:precious_enable_switch_CursorMoved = {
@@ -19,7 +18,6 @@ let g:precious_enable_switch_CursorMoved = {
 '''# }}}
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'# {{{
-if = 'g:light'
 on_ft = ['toml']# }}}
 [[plugins]]
 repo = 'cespare/vim-toml'# {{{
@@ -71,12 +69,14 @@ repo = 'airblade/vim-gitgutter'
 repo = 'scrooloose/nerdtree'# {{{
 depends = ['vimproc.vim']
 hook_add = '''
+  let g:NERDTreeShowHidden=1 " show dotfiles
   nnoremap <silent> <Leader>s :NERDTree<CR>
   augroup MyAutoCmd
     au FileType nerdtree nmap <buffer> za o
     au FileType nerdtree nnoremap <buffer><silent> <Leader>s :q<CR>
   augroup END
-'''# }}}
+'''
+# }}}
 [[plugins]]
 repo = 'Xuyuanp/nerdtree-git-plugin'# {{{
 depends = ['nerdtree']# }}}
@@ -224,7 +224,7 @@ repo = 'Shougo/unite-outline'
 repo = 'LumaKernel/ale'
 # repo = 'w0rp/ale'
 if = 'has("job") && has("channel") && has("timers")'
-on_ft = ['cpp', 'javascript', 'python']
+on_ft = ['cpp', 'javascript', 'python', 'cmake']
 # 参考 :
 # https://rcmdnk.com/blog/2017/09/25/computer-vim/
 # https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7#ale
@@ -259,6 +259,9 @@ hook_add = '''
     \      'mypy',
     " \      'pylint', " PEP8 lint
     \  ],
+    \  'cmake' : [
+    \      'cmakelint',
+    \  ],
     \}
 
   let g:ale_javascript_prettier_use_local_config = 1
@@ -274,6 +277,9 @@ hook_add = '''
   \       'add_blank_lines_for_python_control_statements',
   \       'autopep8',
   \       'isort',
+  \   ],
+  \   'cmake': [
+  \       'cmakeformat',
   \   ],
   \}
 
@@ -295,12 +301,16 @@ hook_add = '''
   let g:python3_host_prog = "python"
   let g:ale_python_flake8_executable = g:python3_host_prog
   let g:ale_python_flake8_options = '-m flake8'
-  let g:ale_python_autopep8_executable = g:python3_host_prog
   let g:ale_python_autopep8_options = '-m autopep8'
   let g:ale_python_isort_executable = g:python3_host_prog
   let g:ale_python_isort_options = '-m isort'
   let g:ale_python_mypy_executable = g:python3_host_prog
   let g:ale_python_mypy_options = '-m mypy –ignore-missing-imports'
+
+  call CheckPythonModule("flake8")
+  call CheckPythonModule("autopep8")
+  call CheckPythonModule("isort")
+  call CheckPythonModule("mypy")
 '''
 
 hook_source = '''
@@ -399,7 +409,9 @@ repo = 'tpope/vim-fugitive'
 [[plugins]]
 repo = 'luochen1990/rainbow'
 hook_add = '''
-  let g:rainbow_active = 1
+  let g:my_rainbow_languages = ["python"]
+
+  let g:rainbow_active = 0
   let g:rainbow_conf = {
     \   'separately': {
     \       '*' : {},
@@ -407,12 +419,15 @@ hook_add = '''
     \       'css' : 0,
     \   }
     \ }
-'''
-hook_post_source = '''
-  RainbowToggleOn
+  
   augroup MyAutoCmd
-    autocmd FileType * RainbowToggleOff
-    autocmd FileType python RainbowToggleOn
+    " すぐに登録するとうまくいかない
+    autocmd VimEnter * autocmd MyAutoCmd FileType * RainbowToggleOff
+    for lang in g:my_rainbow_languages
+      exec "autocmd VimEnter * autocmd MyAutoCmd FileType " .
+            \ lang . " " .
+            \ "RainbowToggleOn"
+    endfor
   augroup END
 '''
 
