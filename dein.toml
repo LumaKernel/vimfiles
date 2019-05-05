@@ -426,7 +426,7 @@ hook_add = '''
     \   }
     \ }
 
-  nnoremap <Leader>z RainbowToggle
+  nnoremap <silent> <Leader>z :RainbowToggle<CR>
   
   augroup MyAutoCmd
     " すぐに登録するとうまくいかない
@@ -438,4 +438,6 @@ hook_add = '''
     endfor
   augroup END
 '''
+[[plugins]]
+repo = 'gootorov/q-sharp.vim'
 

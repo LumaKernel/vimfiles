@@ -267,6 +267,7 @@ if has('mac')
 elseif has('win32') || has('win64')
   nnoremap <silent> <expr> <Leader>u ":!start explorer .\<CR>"
   nnoremap <silent> <Leader>o :!start cmd<CR>
+  nnoremap <silent> <expr> <Leader>i ":!start wsl\<CR>"
 elseif has('unix')
   " --working-directory=は必要なし
   nnoremap <silent> <Leader>u :!xdg-open .<CR>
