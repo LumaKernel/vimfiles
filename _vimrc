@@ -4,6 +4,8 @@ if &compatible
   set nocompatible
 endif
 
+call has('python3')  " enforces python3
+
 let g:mapleader = " "
 
 " 軽いと思う環境
@@ -14,9 +16,8 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-
 function! CheckExternalCommand(cmd)
-  if !executable("python")
+  if !executable(cmd)
     echohl WarningMsg
     echomsg "python not found"
     echohl None
@@ -24,7 +25,11 @@ function! CheckExternalCommand(cmd)
 endfunction
 
 function! CheckPythonModule(mod)
-  call system("python -m " . a:mod . " --version")
+  let python_command = "python"
+  if executable("python3")
+    let python_command = "python3"
+  endif
+  call system(python_command . " -m " . a:mod . " --version")
   if v:shell_error
     echohl WarningMsg
     echomsg "python module \"" . a:mod . "\" not found"
@@ -79,7 +84,9 @@ let g:loaded_matchparen = 1
 "}}}
 
 " 基本設定{{{
-set fenc=utf-8 "文字コードをUFT-8に設定
+" http://www-creators.com/archives/1486
+" 左から試される
+set fileencodings=utf-8,cp932,euc-jp,sjis
 set noswapfile " スワップファイルを作らない
 set autoread " 編集中のファイルが変更されたら自動で読み直す
 set hidden " バッファが編集中でもその他のファイルを開けるように
@@ -260,14 +267,27 @@ set hlsearch
 nmap <silent> <ESC><ESC> :nohlsearch<CR><ESC>
 "}}}
 
-" vimとFinder, terminalへの橋渡し{{{
+" Vim と explorer, Finder, terminal への橋渡し{{{
 if has('mac')
   nnoremap <silent> <Leader>u :!open .<CR>
   nnoremap <silent> <Leader>o :!open -a Terminal.app .<CR>
 elseif has('win32') || has('win64')
-  nnoremap <silent> <expr> <Leader>u ":!start explorer .\<CR>"
-  nnoremap <silent> <Leader>o :!start cmd<CR>
-  nnoremap <silent> <expr> <Leader>i ":!start wsl\<CR>"
+  nnoremap <silent> <expr> <Leader>u ":silent !start explorer .\<CR>"
+  nnoremap <silent> <Leader>o :silent !start cmd<CR>
+  nnoremap <silent> <expr> <Leader>i ":silent !start " . $LocalAppData . "\\wsltty\\bin\\mintty.exe --WSL=\"Ubuntu\" --configdir=\"" . $AppData . "\\wsltty\"\<CR>"
+
+  let s:bash_places = [["C:\\msys64\\msys2_shell.cmd", "-where ."], ["C:\\git-sdk-64\\git-bash.exe"]]
+  let s:bash_found_executable = 0
+  for bash_place in s:bash_places
+    if executable(bash_place[0])
+      nnoremap <silent> <expr> <Leader>b ":silent !start " . join(bash_place, ' ') . "\<CR>"
+      let s:bash_found_executable = 1
+      break
+    endif
+  endfor
+  if s:bash_found_executable == 0
+    echo "Error: no executable bash."
+  endif
 elseif has('unix')
   " --working-directory=は必要なし
   nnoremap <silent> <Leader>u :!xdg-open .<CR>

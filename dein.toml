@@ -251,6 +251,9 @@ hook_add = '''
   let g:ale_open_list = 0
   let g:ale_keep_list_window_open = 0
 
+  " TODO : 言語ごとに設定する dein ファイルを分ける
+
+  " --- C++ ---
   let g:ale_linters = {
     \  'cpp': ['gcc'],
     \  'javascript': ['eslint'],
@@ -264,6 +267,7 @@ hook_add = '''
     \  ],
     \}
 
+  " --- javascirpt ---
   let g:ale_javascript_prettier_use_local_config = 1
 
   let g:ale_fixers = {
@@ -276,7 +280,6 @@ hook_add = '''
   \   'python': [
   \       'add_blank_lines_for_python_control_statements',
   \       'autopep8',
-  \       'isort',
   \   ],
   \   'cmake': [
   \       'cmakeformat',
@@ -284,6 +287,7 @@ hook_add = '''
   \}
 
   let g:ale_javascript_prettier_use_local_config = 1
+  " --- ---
 
   nmap <silent> <Leader>p <Plug>(ale_previous_wrap)
   nmap <silent> <Leader>n <Plug>(ale_next_wrap)
@@ -298,6 +302,7 @@ hook_add = '''
   autocmd MyAutoCmd FileType qf nnoremap <silent> <buffer> q :let g:ale_open_list = 0<CR>:bd<CR>
   autocmd MyAutoCmd FileType help,qf,man,ref let b:ale_enabled = 0
 
+  " --- python3 ---
   let g:python3_host_prog = "python"
   let g:ale_python_flake8_executable = g:python3_host_prog
   let g:ale_python_flake8_options = '-m flake8'
@@ -306,15 +311,11 @@ hook_add = '''
   let g:ale_python_isort_options = '-m isort'
   let g:ale_python_mypy_executable = g:python3_host_prog
   let g:ale_python_mypy_options = '-m mypy –ignore-missing-imports'
-
-  call CheckPythonModule("flake8")
-  call CheckPythonModule("autopep8")
-  call CheckPythonModule("isort")
-  call CheckPythonModule("mypy")
+  " --- ---
 '''
 
 hook_source = '''
-  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -Wextra -DDEBUG -DDEBUG_OUT=std::cout')
+  call ale#Set('cpp_gcc_options', '-std=c++14 -Wall -Wextra -Wpedantic -DDEBUG -DDEBUG_OUT=std::cout')
 '''# }}}
 # }}}
 [[plugins]]
@@ -352,6 +353,8 @@ let g:quickrun_config._ = {
   \ }
 
   " 'type' : 'cpp/g++' とすることで明示的に 'cpp/g++' の設定を継承する
+
+  " -w : Inhibit all warning messages. : すべての警告を禁止する
   let g:quickrun_config.cpp = {
   \ 'type' : 'cpp/g++',
   \ 'command' : 'g++',
@@ -440,4 +443,37 @@ hook_add = '''
 '''
 [[plugins]]
 repo = 'gootorov/q-sharp.vim'
+
+# syntax highlight
+[[plugins]]
+repo = 'tounaishouta/coq.vim'
+
+# [[plugins]]
+# repo = 'vim-scripts/CoqIDE'
+
+# [[plugins]]
+# repo = 'https://framagit.org/manu/coq-au-vim'
+# on_ft = 'coq'
+
+[[plugins]]
+repo = "let-def/vimbufsync"
+on_ft = "coq"
+
+[[plugins]]
+repo = "LumaKernel/coquille"
+on_ft = "coq"
+depends = ["vimbufsync"]
+hook_source = """
+  hi CheckedByCoq guibg=#111130
+  hi SentToCoq guibg=#336633
+
+  let g:coquille_auto_move='true'
+
+  nnoremap <unique> <silent> <Leader>; :only<CR>:vs<CR><C-w>l:b Goals<CR>:sp<CR><C-w>j:b Infos<CR><C-w>h
+  nnoremap <unique> <silent> <C-c> :CoqLaunch<CR>
+  nnoremap <unique> <silent> <Leader>j :CoqNext<CR>
+  nnoremap <unique> <silent> <Leader>k :CoqUndo<CR>
+  nnoremap <unique> <silent> <Leader>l :CoqToCursor<CR>
+"""
+
 
