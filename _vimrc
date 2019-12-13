@@ -229,7 +229,7 @@ endfunction
 " Tab系{{{
 set list " 不可視文字表示
 " 不可視文字を可視化
-set listchars=tab:\»-,eol:\\,extends:»,precedes:«,nbsp:%
+set listchars=tab:\≫-,eol:\\,extends:≫,precedes:≪,nbsp:%
 set expandtab " Tab文字を半角スペースにする
 set tabstop=2 " 行頭以外のTab文字の表示幅(スペースいくつ分)
 set shiftwidth=2 " 行頭でのTab文字の表示幅
@@ -272,21 +272,18 @@ if has('mac')
   nnoremap <silent> <Leader>u :!open .<CR>
   nnoremap <silent> <Leader>o :!open -a Terminal.app .<CR>
 elseif has('win32') || has('win64')
-  nnoremap <silent> <expr> <Leader>u ":silent !start explorer .\<CR>"
-  nnoremap <silent> <Leader>o :silent !start cmd<CR>
-  nnoremap <silent> <expr> <Leader>i ":silent !start " . $LocalAppData . "\\wsltty\\bin\\mintty.exe --WSL=\"Ubuntu\" --configdir=\"" . $AppData . "\\wsltty\"\<CR>"
+  if has('gui')
+    nnoremap <silent> <expr> <Leader>u ":silent !start explorer .\<CR>"
+    nnoremap <silent> <Leader>o :silent !start cmd<CR>
+    nnoremap <silent> <expr> <Leader>i ":silent !start " . $LocalAppData . "\\wsltty\\bin\\mintty.exe --WSL=\"Ubuntu\" --configdir=\"" . $AppData . "\\wsltty\"\<CR>"
 
-  let s:bash_places = [["C:\\msys64\\msys2_shell.cmd", "-where ."], ["C:\\git-sdk-64\\git-bash.exe"]]
-  let s:bash_found_executable = 0
-  for bash_place in s:bash_places
-    if executable(bash_place[0])
-      nnoremap <silent> <expr> <Leader>b ":silent !start " . join(bash_place, ' ') . "\<CR>"
-      let s:bash_found_executable = 1
-      break
+    let s:msys_path = "C:/msys64/msys2_shell.cmd"
+    if executable(s:msys_path)
+      let s:to_reset = ["VIM", "VIMRUNTIME", "MYVIMRC", "MYGVIMRC"]
+      let s:env_reset = join(map(s:to_reset, '"set \"" . v:val . "=\" && "'), "")
+      let g:msys_run_cmd = ":silent !start cmd /k " . s:env_reset . s:msys_path . " -where . -mingw64 -mintty -no-start && exit" . "\<CR>"
+      nnoremap <silent> <expr> <Leader>b g:msys_run_cmd
     endif
-  endfor
-  if s:bash_found_executable == 0
-    echo "Error: no executable bash."
   endif
 elseif has('unix')
   " --working-directory=は必要なし
